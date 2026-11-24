@@ -9,7 +9,10 @@
   "scripts": {
     "dev": "concurrently \"npm run start --workspace=client\" \"npm run dev --workspace=server\"",
     "install:all": "npm install",
-    "doctor": "npx react-doctor@latest"
+    "doctor": "npx react-doctor@latest",
+    "meesho:login": "npm run meesho:login --workspace=server",
+    "meesho:check": "npm run meesho:check --workspace=server",
+    "meesho:phase3a": "node server/src/integrations/meesho/meeshoPhase3ARunner.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.0",
