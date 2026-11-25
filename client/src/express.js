@@ -257,11 +257,19 @@ export const express = {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
         body: JSON.stringify({ status })
       });
-      return res.json();
+      const rawText = await res.text().catch(() => '');
+      let data = null;
+      try {
+        data = rawText ? JSON.parse(rawText) : null;
+      } catch (_) {}
+      if (!res.ok) {
+        throw new Error(data?.message || data?.error || rawText || `Failed to update status (${res.status})`);
+      }
+      return data;
     }
   }
 };

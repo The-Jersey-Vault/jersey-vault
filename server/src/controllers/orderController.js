@@ -1,6 +1,6 @@
 import { supabase } from '../config/supabase.js';
 import { calculateDelhiveryRate, calculateLiveDeliveryRate, trackDelhiveryShipment } from '../services/delhivery.service.js';
-import { getR2Table, updateSizeStockInR2 } from '../services/r2Service.js';
+import { getR2Table, updateR2Table, updateSizeStockInR2 } from '../services/r2Service.js';
 
 // Fallback COD Fee
 const COD_FEE = 30;
@@ -196,13 +196,15 @@ export const getOrders = async (req, res) => {
 // @route   PUT /api/orders/:id/status
 export const updateOrderStatus = async (req, res) => {
   try {
-    const newStatus = req.body.status;
-    const updateData = { status: newStatus };
-
-    if (newStatus === 'delivered') {
-      updateData.is_delivered = true;
-      updateData.delivered_at = new Date();
+    const newStatus = typeof req.body.status === 'string' ? req.body.status.trim() : '';
+    if (!newStatus) {
+      return res.status(400).json({ message: 'Order status is required.' });
     }
+
+    const updateData = {
+      status: newStatus,
+      updated_at: new Date().toISOString(),
+    };
 
     // 1. Fetch existing order to determine if we need to restore inventory
     let existingOrder = null;
@@ -211,7 +213,7 @@ export const updateOrderStatus = async (req, res) => {
         .from('orders')
         .select('status, items')
         .eq('id', req.params.id)
-        .single();
+        .maybeSingle();
       if (data) existingOrder = data;
     } catch (_) {}
 
@@ -240,29 +242,40 @@ export const updateOrderStatus = async (req, res) => {
       }
     }
 
-    // 3. Update Supabase
+    // 3. Update Supabase (only update columns present on the orders table)
     let updatedOrder = null;
+    let supaUpdated = false;
+    let supaError = null;
     try {
       const { data, error } = await supabase
         .from('orders')
         .update(updateData)
         .eq('id', req.params.id)
         .select()
-        .single();
+        .maybeSingle();
 
-      if (!error && data) updatedOrder = data;
+      if (error) {
+        supaError = error;
+        console.warn('[updateOrderStatus] Supabase update warning:', error.message);
+      } else if (data) {
+        updatedOrder = data;
+        supaUpdated = true;
+      }
     } catch (supaErr) {
-      console.warn('[updateOrderStatus] Supabase update warning:', supaErr.message);
+      supaError = supaErr;
+      console.warn('[updateOrderStatus] Supabase update exception:', supaErr.message);
     }
 
     // 4. Update Cloudflare R2 orders backup table
+    let r2Updated = false;
     try {
       const r2Orders = await getR2Table('orders');
       if (Array.isArray(r2Orders)) {
         const idx = r2Orders.findIndex(o => String(o.id) === String(req.params.id));
         if (idx !== -1) {
-          r2Orders[idx] = { ...r2Orders[idx], ...updateData, updated_at: new Date().toISOString() };
+          r2Orders[idx] = { ...r2Orders[idx], ...updateData };
           await updateR2Table('orders', r2Orders);
+          r2Updated = true;
           if (!updatedOrder) updatedOrder = r2Orders[idx];
         }
       }
@@ -270,11 +283,14 @@ export const updateOrderStatus = async (req, res) => {
       console.warn('[updateOrderStatus] R2 orders update warning:', r2Err.message);
     }
 
-    if (!updatedOrder) {
-      updatedOrder = { id: req.params.id, ...updateData };
+    if (!supaUpdated && !r2Updated) {
+      if (supaError) {
+        return res.status(500).json({ message: supaError.message || 'Unable to update order status.' });
+      }
+      return res.status(404).json({ message: 'Order not found.' });
     }
 
-    res.json(updatedOrder);
+    res.json(updatedOrder || { id: req.params.id, ...updateData });
   } catch (error) {
     console.error('updateOrderStatus Error:', error);
     res.status(500).json({ message: 'Unable to update order status.' });

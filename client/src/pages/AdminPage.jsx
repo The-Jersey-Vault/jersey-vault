@@ -14,6 +14,8 @@ import { fetchProductReviews, addProductReview, toggleReviewPublishStatus, delet
 const statusOptions = ["pending", "inventory_pending", "preparing", "shipped", "delivered", "cancelled"];
 const statusColors = {
   pending: "#f39c12",
+  pending_verification: "#f39c12",
+  confirmed: "#2ecc71",
   inventory_pending: "#e74c3c", // Red to highlight manual intervention
   preparing: "#3498db",
   shipped: "#9b59b6",
@@ -70,6 +72,7 @@ export default function AdminPage() {
   const [adminProductSearch, setAdminProductSearch] = useState("");
   const [activeTab, setActiveTab] = useState("orders");
   const [updatingId, setUpdatingId] = useState(null);
+  const [statusError, setStatusError] = useState("");
 
   // ── Order notifications ──
   const { permissionStatus, isSubscribed, isAdmin: isNotifAdmin, enableNotifications } = useAdminOrderNotifications();
@@ -537,36 +540,77 @@ export default function AdminPage() {
   // ── Handlers ──
   const updateStatus = async (orderId, newStatus) => {
     setUpdatingId(orderId);
+    setStatusError("");
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
-      await express.admin.updateOrderStatus(orderId, newStatus, token);
-    } catch (_) {}
-    await supabase.from("orders").update({ status: newStatus }).eq("id", orderId).catch(() => {});
-    setOrders(prev => {
-      const updated = prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o);
-      const totalRev = updated
-        .filter(o => o.status !== "cancelled")
-        .reduce((acc, order) => acc + (order.total ?? 0), 0);
-        
-      const cashCollected = updated.reduce((acc, order) => {
-        const paid = order.amount_paid != null ? Number(order.amount_paid) : ((String(order.pay_method).toLowerCase() === 'cod') ? 149 : (Number(order.total) || 0));
-        return acc + paid;
-      }, 0);
 
-      const pendingCash = updated
-        .filter(o => o.status !== "cancelled")
-        .reduce((acc, order) => {
+      let backendUpdated = false;
+      let backendHasLegacyDeliveredBug = false;
+      let backendErr = null;
+
+      try {
+        const updatedRow = await express.admin.updateOrderStatus(orderId, newStatus, token);
+        if (updatedRow && updatedRow.status === newStatus) {
+          backendHasLegacyDeliveredBug = newStatus === "delivered" && updatedRow.is_delivered !== undefined && !updatedRow.created_at;
+          backendUpdated = !backendHasLegacyDeliveredBug;
+        }
+      } catch (err) {
+        backendErr = err;
+      }
+
+      let supaUpdated = false;
+      let supaErr = null;
+      if (!backendUpdated || backendHasLegacyDeliveredBug) {
+        try {
+          const { data: supaData, error: supaError } = await supabase
+            .from("orders")
+            .update({ status: newStatus, updated_at: new Date().toISOString() })
+            .eq("id", orderId)
+            .select("id, status")
+            .maybeSingle();
+
+          if (supaError) {
+            supaErr = supaError;
+          } else if (supaData && supaData.status === newStatus) {
+            supaUpdated = true;
+          }
+        } catch (err) {
+          supaErr = err;
+        }
+      }
+
+      if (!backendUpdated && !supaUpdated) {
+        setStatusError(backendErr?.message || supaErr?.message || "Failed to update order status. Please refresh and try again.");
+        return;
+      }
+
+      setOrders(prev => {
+        const updated = prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o);
+        const totalRev = updated
+          .filter(o => o.status !== "cancelled")
+          .reduce((acc, order) => acc + (order.total ?? 0), 0);
+
+        const cashCollected = updated.reduce((acc, order) => {
           const paid = order.amount_paid != null ? Number(order.amount_paid) : ((String(order.pay_method).toLowerCase() === 'cod') ? 149 : (Number(order.total) || 0));
-          const bal = order.balance_due != null ? Number(order.balance_due) : Math.max(0, (Number(order.total) || 0) - paid);
-          return acc + bal;
+          return acc + paid;
         }, 0);
 
-      const pendingCount = updated.filter(o => o.status === "pending").length;
-      setStats(s => ({ ...s, totalRevenue: totalRev, gmv: totalRev, cashCollected, pendingCash, pendingOrders: pendingCount }));
-      return updated;
-    });
-    setUpdatingId(null);
+        const pendingCash = updated
+          .filter(o => o.status !== "cancelled")
+          .reduce((acc, order) => {
+            const paid = order.amount_paid != null ? Number(order.amount_paid) : ((String(order.pay_method).toLowerCase() === 'cod') ? 149 : (Number(order.total) || 0));
+            const bal = order.balance_due != null ? Number(order.balance_due) : Math.max(0, (Number(order.total) || 0) - paid);
+            return acc + bal;
+          }, 0);
+
+        const pendingCount = updated.filter(o => o.status === "pending").length;
+        setStats(s => ({ ...s, totalRevenue: totalRev, gmv: totalRev, cashCollected, pendingCash, pendingOrders: pendingCount }));
+        return updated;
+      });
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   const handleSaveSettings = async () => {
@@ -1304,18 +1348,26 @@ export default function AdminPage() {
         {/* ══════════ ORDERS TAB ══════════ */}
         {activeTab === "orders" && (
           <div>
+            {statusError && (
+              <div style={{ background: "#ff444415", border: "1px solid #ff444440", color: "#ff4444", fontSize: 12, letterSpacing: 1, padding: "10px 14px", marginBottom: 14, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+                <span>⚠ {statusError}</span>
+                <button type="button" onClick={() => setStatusError("")} style={{ background: "none", border: "none", color: "#ff4444", cursor: "pointer", fontWeight: 900 }}>✕</button>
+              </div>
+            )}
             {orders.length === 0 ? (
               <div style={{ textAlign: "center", padding: "80px 0", color: "#333" }}>
                 <div style={{ fontSize: 60 }}>📦</div>
                 <p style={{ marginTop: 16, letterSpacing: 3, fontSize: 14 }}>NO ORDERS YET</p>
               </div>
-            ) : orders.map(order => (
+            ) : orders.map(order => {
+              const badgeColor = statusColors[order.status] || "#888";
+              return (
               <div key={order.id} className="order-card">
                 <div className="order-card-inner">
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8, flexWrap: "wrap" }}>
                       <span style={{ fontWeight: 900, fontSize: 18, letterSpacing: 2 }}>{order.id}</span>
-                      <span style={{ background: statusColors[order.status] + "22", border: `1px solid ${statusColors[order.status]}44`, color: statusColors[order.status], fontSize: 12, fontWeight: 900, letterSpacing: 2, padding: "3px 8px" }}>
+                      <span style={{ background: badgeColor + "22", border: `1px solid ${badgeColor}44`, color: badgeColor, fontSize: 12, fontWeight: 900, letterSpacing: 2, padding: "3px 8px" }}>
                         {order.status?.toUpperCase()}
                       </span>
                     </div>
@@ -1376,7 +1428,10 @@ export default function AdminPage() {
                   <div className="order-status-block">
                     <div style={{ fontSize: 28, fontWeight: 900, color: "#39ff14", marginBottom: 12 }}>₹{order.total?.toLocaleString()}</div>
                     <div className="status-label" style={{ fontSize: 12, letterSpacing: 2, color: "#555", marginBottom: 6 }}>UPDATE STATUS</div>
-                    <select className="status-select" value={order.status} disabled={updatingId === order.id} onChange={e => updateStatus(order.id, e.target.value)}>
+                    <select className="status-select" value={order.status || "pending"} disabled={updatingId === order.id} onChange={e => updateStatus(order.id, e.target.value)}>
+                      {order.status && !statusOptions.includes(order.status) && (
+                        <option value={order.status}>{order.status.toUpperCase()}</option>
+                      )}
                       {statusOptions.map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
                     </select>
                     {updatingId === order.id && <div style={{ color: "#39ff14", fontSize: 12, marginTop: 6, letterSpacing: 2 }}>UPDATING...</div>}
@@ -1398,7 +1453,8 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
