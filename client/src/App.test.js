@@ -44,3 +44,12 @@ test("robots.txt crawler rules allow search bots while protecting private routes
   expect(robots).toContain("User-agent: OAI-SearchBot\nAllow: /");
   expect(robots).toContain("Sitemap: https://www.thejerseyvault.in/sitemap.xml");
 });
+
+test("cookie consent banner renders accessible choice controls", () => {
+  const CookieConsentBanner = require("./components/CookieConsentBanner").default;
+  renderPage(<CookieConsentBanner />);
+
+  expect(screen.getByRole("region", { name: /cookie consent banner/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /accept all/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /essential only/i })).toBeInTheDocument();
+});

@@ -16,6 +16,7 @@ import Teams from "./pages/Teams";
 import TeamPage from "./pages/TeamPage";
 import Reviews from "./pages/Reviews";
 import SupportChat from "./components/SupportChat";
+import CookieConsentBanner from "./components/CookieConsentBanner";
 import Collection from "./pages/Collection";
 import ProductPage from "./pages/ProductPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -371,6 +372,7 @@ function AppContent() {
         </Suspense>
       </ErrorBoundary>
       <SupportChat />
+      <CookieConsentBanner />
     </>
   );
 }
