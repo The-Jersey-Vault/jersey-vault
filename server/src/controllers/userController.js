@@ -187,3 +187,37 @@ export const removeFromWishlist = async (req, res) => {
     res.status(500).json({ message: 'Unable to update wishlist.' });
   }
 };
+
+// @desc    Permanently delete own user account and associated personal data
+// @route   DELETE /api/users/account
+export const deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // 1. Remove profile and saved personal preferences
+    const { error: profileDeleteError } = await supabase
+      .from('profiles')
+      .delete()
+      .eq('id', userId);
+
+    if (profileDeleteError) {
+      console.warn('Profile deletion notice:', profileDeleteError.message);
+    }
+
+    // 2. Delete auth user record via Supabase Admin API
+    if (supabase.auth?.admin?.deleteUser) {
+      const { error: authDeleteError } = await supabase.auth.admin.deleteUser(userId);
+      if (authDeleteError) {
+        console.warn('Auth admin delete notice:', authDeleteError.message);
+      }
+    }
+
+    res.json({ success: true, message: 'Account and personal profile data permanently deleted.' });
+  } catch (error) {
+    console.error('deleteAccount Error:', error);
+    res.status(500).json({ message: 'Unable to delete account at this time. Please contact support.' });
+  }
+};

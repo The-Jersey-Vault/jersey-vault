@@ -51,12 +51,12 @@ const sections = [
     ],
   },
   {
-    title: "Your Rights",
+    title: "Your Rights & Account Deletion",
     points: [
-      "You may request access to the personal data we hold about you at any time.",
-      "You can request correction or deletion of your data by contacting us.",
-      "You may opt out of marketing emails at any time via the unsubscribe link.",
-      "To exercise any of these rights, email us at support@thejerseyvault.in.",
+      "You have the right to access, review, and request updates to the personal data associated with your JerseyVault account.",
+      "You may opt out of promotional messages, newsletters, or marketing communications at any time.",
+      "Right to Erasure (Account Deletion): You can permanently delete your account, saved profile, and stored personal data directly from your My Orders / Account dashboard or by submitting a verified request to support@thejerseyvault.in.",
+      "Upon account deletion, your login credentials, saved addresses, wishlist items, and personal identifiers are immediately removed from our active database. Note that transaction and invoice records required by statutory Indian tax and accounting regulations may be retained in an anonymized or archived format for legal audit compliance.",
     ],
   },
   {

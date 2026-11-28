@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../supabase";
 import { getFirstImage } from "../utils/imageHelpers";
+import { API_BASE } from "../config/api";
 
 
 const statusColors = {
@@ -19,6 +20,9 @@ export default function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -46,6 +50,37 @@ export default function MyOrders() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const totalSpent = orders.filter(o => o.status !== "cancelled").reduce((s, o) => s + (o.total || 0), 0);
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    setDeleteError("");
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      
+      const res = await fetch(`${API_BASE}/api/users/account`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        }
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || "Failed to delete account");
+      }
+
+      await supabase.auth.signOut();
+      alert("Your account and personal profile data have been permanently deleted.");
+      navigate("/");
+    } catch (err) {
+      console.error("Account deletion failed:", err);
+      setDeleteError(err.message || "Error deleting account. Please contact support@thejerseyvault.in");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", background: "#0a0a0a", minHeight: "100vh", color: "#fff" }}>
@@ -260,6 +295,109 @@ export default function MyOrders() {
                   </div>
                 </div>
               ))
+            )}
+
+            {/* Account Settings & Privacy Management */}
+            <div style={{ marginTop: 40, borderTop: "1px solid #222", paddingTop: 24 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 2, color: "#888" }}>DATA & PRIVACY PREFERENCES</div>
+                  <div style={{ fontSize: 12, color: "#555", fontFamily: "'Barlow', sans-serif", marginTop: 4 }}>
+                    Manage your personal data in accordance with our <Link to="/privacy" style={{ color: "#39ff14", textDecoration: "underline" }}>Privacy Policy</Link>.
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteModal(true)}
+                  style={{
+                    background: "transparent",
+                    border: "1px solid #ff444440",
+                    color: "#ff4444",
+                    padding: "8px 18px",
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: 2,
+                    cursor: "pointer",
+                    transition: "all 0.2s"
+                  }}
+                  onMouseEnter={e => { e.target.style.background = "#ff444420"; e.target.style.borderColor = "#ff4444"; }}
+                  onMouseLeave={e => { e.target.style.background = "transparent"; e.target.style.borderColor = "#ff444440"; }}
+                >
+                  DELETE ACCOUNT
+                </button>
+              </div>
+            </div>
+
+            {/* Confirmation Modal for Account Deletion */}
+            {showDeleteModal && (
+              <div style={{
+                position: "fixed",
+                inset: 0,
+                background: "rgba(0,0,0,0.85)",
+                backdropFilter: "blur(4px)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 1000,
+                padding: 16
+              }}>
+                <div style={{
+                  background: "#111",
+                  border: "1px solid #ff4444",
+                  padding: "32px 24px",
+                  maxWidth: 440,
+                  width: "100%",
+                  textAlign: "center"
+                }}>
+                  <div style={{ fontSize: 40, marginBottom: 12 }}>⚠️</div>
+                  <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: 2, color: "#fff", marginBottom: 8 }}>
+                    PERMANENT ACCOUNT DELETION
+                  </div>
+                  <p style={{ color: "#aaa", fontSize: 13, fontFamily: "'Barlow', sans-serif", lineHeight: 1.6, marginBottom: 20 }}>
+                    Are you sure you want to delete your account? This action is irreversible and will permanently wipe your profile, wishlist, and active user credentials.
+                  </p>
+                  {deleteError && (
+                    <div style={{ color: "#ff4444", fontSize: 13, marginBottom: 16 }}>
+                      {deleteError}
+                    </div>
+                  )}
+                  <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                    <button
+                      type="button"
+                      disabled={deleting}
+                      onClick={() => setShowDeleteModal(false)}
+                      style={{
+                        background: "#222",
+                        border: "1px solid #333",
+                        color: "#fff",
+                        padding: "10px 24px",
+                        fontWeight: 700,
+                        letterSpacing: 2,
+                        cursor: "pointer"
+                      }}
+                    >
+                      CANCEL
+                    </button>
+                    <button
+                      type="button"
+                      disabled={deleting}
+                      onClick={handleDeleteAccount}
+                      style={{
+                        background: "#ff4444",
+                        border: "none",
+                        color: "#fff",
+                        padding: "10px 24px",
+                        fontWeight: 900,
+                        letterSpacing: 2,
+                        cursor: deleting ? "not-allowed" : "pointer"
+                      }}
+                    >
+                      {deleting ? "DELETING..." : "CONFIRM DELETE"}
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </>
         )}

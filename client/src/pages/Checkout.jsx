@@ -64,6 +64,8 @@ export default function CheckoutPage() {
   const [paymentStatus, setPaymentStatus] = useState('idle');
   // idle | processing | verifying | success | failed | dismissed | error | recovering
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", city: "", state: "", pincode: "" });
+  const [consents, setConsents] = useState({ terms: false, privacy: false, marketing: false });
+  const [consentError, setConsentError] = useState("");
   const [errors, setErrors] = useState({});
   const [warnings, setWarnings] = useState({});
 
@@ -192,6 +194,11 @@ export default function CheckoutPage() {
   };
 
   const handlePlace = async () => {
+    if (!consents.terms || !consents.privacy) {
+      setConsentError("Please agree to both the Terms of Service and Privacy Policy before proceeding to payment.");
+      return;
+    }
+    setConsentError("");
     setLoading(true);
     setPaymentStatus('idle');
     try {
@@ -785,6 +792,68 @@ export default function CheckoutPage() {
                     <div style={{ fontWeight: 600, flexShrink: 0, fontFamily: "'Barlow', sans-serif" }}>₹{item.price * item.qty}</div>
                   </div>
                 ))}
+              </div>
+
+              {/* ── Consent & Agreements Checklist (Separate, Unticked) ── */}
+              <div style={{ background: "#111", border: "1px solid #1a1a1a", padding: 20 }}>
+                <div className="checkout-section-label" style={{ color: "#39ff14", marginBottom: 12 }}>
+                  LEGAL & CHECKOUT CONSENT
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={consents.terms}
+                      onChange={e => {
+                        const val = e.target.checked;
+                        setConsents(p => ({ ...p, terms: val }));
+                        if (val && consents.privacy) setConsentError("");
+                      }}
+                      style={{ marginTop: 2, accentColor: "#39ff14", cursor: "pointer", width: 16, height: 16 }}
+                    />
+                    <span style={{ color: "#bbb", fontSize: 13, fontFamily: "'Barlow', sans-serif", lineHeight: 1.4 }}>
+                      I agree to the <Link to="/terms" target="_blank" rel="noopener noreferrer" style={{ color: "#39ff14", textDecoration: "underline" }}>Terms of Service</Link> and conditions of sale. <span style={{ color: "#ff4444" }}>*</span>
+                    </span>
+                  </label>
+
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={consents.privacy}
+                      onChange={e => {
+                        const val = e.target.checked;
+                        setConsents(p => ({ ...p, privacy: val }));
+                        if (val && consents.terms) setConsentError("");
+                      }}
+                      style={{ marginTop: 2, accentColor: "#39ff14", cursor: "pointer", width: 16, height: 16 }}
+                    />
+                    <span style={{ color: "#bbb", fontSize: 13, fontFamily: "'Barlow', sans-serif", lineHeight: 1.4 }}>
+                      I have read and consent to the <Link to="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#39ff14", textDecoration: "underline" }}>Privacy Policy</Link> and data processing. <span style={{ color: "#ff4444" }}>*</span>
+                    </span>
+                  </label>
+
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={consents.marketing}
+                      onChange={e => {
+                        const val = e.target.checked;
+                        setConsents(p => ({ ...p, marketing: val }));
+                      }}
+                      style={{ marginTop: 2, accentColor: "#39ff14", cursor: "pointer", width: 16, height: 16 }}
+                    />
+                    <span style={{ color: "#888", fontSize: 13, fontFamily: "'Barlow', sans-serif", lineHeight: 1.4 }}>
+                      (Optional) Receive exclusive offers, new kit launches, and order updates via WhatsApp / Email.
+                    </span>
+                  </label>
+                </div>
+
+                {consentError && (
+                  <div style={{ color: "#ff4444", fontSize: 13, marginTop: 12, fontFamily: "'Barlow', sans-serif", fontWeight: 600 }}>
+                    ⚠️ {consentError}
+                  </div>
+                )}
               </div>
 
               <button type="button" className="next-btn" onClick={handlePlace} disabled={loading}>

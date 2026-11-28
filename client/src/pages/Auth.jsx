@@ -18,6 +18,7 @@ export default function AuthPage() {
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", countryCode: "+91", password: "", confirm: "" });
+  const [consents, setConsents] = useState({ terms: false, privacy: false, marketing: false });
   const [errors, setErrors] = useState({});
   const [warnings, setWarnings] = useState({});
 
@@ -203,6 +204,10 @@ export default function AuthPage() {
     if (mode === "signup" && !/^[6-9]\d{9}$/.test(form.phone)) e.phone = "Enter valid 10-digit phone number";
     if (form.password.length < 6) e.password = "Minimum 6 characters";
     if (mode === "signup" && form.password !== form.confirm) e.confirm = "Passwords don't match";
+    if (mode === "signup") {
+      if (!consents.terms) e.terms = "You must agree to the Terms of Service";
+      if (!consents.privacy) e.privacy = "You must agree to the Privacy Policy";
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -230,11 +235,21 @@ export default function AuthPage() {
         ReactGA.event("login", { method: "Email" });
         navigate(targetDestination, { replace: true });
       } else {
+        const consentTimestamp = new Date().toISOString();
         const { data, error } = await supabase.auth.signUp({
           email: normalizedEmail,
           password: form.password,
           options: {
-            data: { full_name: form.name.trim(), phone: `${form.countryCode}${form.phone}` },
+            data: { 
+              full_name: form.name.trim(), 
+              phone: `${form.countryCode}${form.phone}`,
+              terms_accepted: consents.terms,
+              terms_accepted_at: consentTimestamp,
+              privacy_accepted: consents.privacy,
+              privacy_accepted_at: consentTimestamp,
+              marketing_accepted: consents.marketing,
+              marketing_accepted_at: consents.marketing ? consentTimestamp : null
+            },
             emailRedirectTo: `${window.location.origin}/auth`
           }
         });
@@ -608,9 +623,63 @@ export default function AuthPage() {
               </button>
 
               {mode === "signup" && (
-                <p className="auth-terms">
-                  By signing up you agree to our <Link to="/terms" className="auth-text-link">Terms of Service</Link> and <Link to="/privacy" className="auth-text-link">Privacy Policy</Link>
-                </p>
+                <div style={{ marginTop: 18, borderTop: "1px solid #222", paddingTop: 16 }}>
+                  <div style={{ fontSize: 12, letterSpacing: 2, color: "#39ff14", fontWeight: 700, marginBottom: 10 }}>
+                    CONSENT & AGREEMENTS
+                  </div>
+
+                  {/* Terms Checkbox */}
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", marginBottom: 10 }}>
+                    <input
+                      type="checkbox"
+                      checked={consents.terms}
+                      onChange={e => {
+                        const val = e.target.checked;
+                        setConsents(p => ({ ...p, terms: val }));
+                        if (val) setErrors(errs => ({ ...errs, terms: "" }));
+                      }}
+                      style={{ marginTop: 2, accentColor: "#39ff14", cursor: "pointer", width: 16, height: 16 }}
+                    />
+                    <span style={{ color: "#bbb", fontSize: 13, fontFamily: "'Barlow', sans-serif", lineHeight: 1.4 }}>
+                      I agree to the <Link to="/terms" target="_blank" rel="noopener noreferrer" style={{ color: "#39ff14", textDecoration: "underline" }}>Terms of Service</Link> <span style={{ color: "#ff4444" }}>*</span>
+                    </span>
+                  </label>
+                  {errors.terms && <div className="auth-error mb" style={{ marginLeft: 26 }}>{errors.terms}</div>}
+
+                  {/* Privacy Policy Checkbox */}
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", marginBottom: 10 }}>
+                    <input
+                      type="checkbox"
+                      checked={consents.privacy}
+                      onChange={e => {
+                        const val = e.target.checked;
+                        setConsents(p => ({ ...p, privacy: val }));
+                        if (val) setErrors(errs => ({ ...errs, privacy: "" }));
+                      }}
+                      style={{ marginTop: 2, accentColor: "#39ff14", cursor: "pointer", width: 16, height: 16 }}
+                    />
+                    <span style={{ color: "#bbb", fontSize: 13, fontFamily: "'Barlow', sans-serif", lineHeight: 1.4 }}>
+                      I have read and agree to the <Link to="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: "#39ff14", textDecoration: "underline" }}>Privacy Policy</Link> and data processing <span style={{ color: "#ff4444" }}>*</span>
+                    </span>
+                  </label>
+                  {errors.privacy && <div className="auth-error mb" style={{ marginLeft: 26 }}>{errors.privacy}</div>}
+
+                  {/* Marketing Communications Checkbox (Optional) */}
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", marginBottom: 8 }}>
+                    <input
+                      type="checkbox"
+                      checked={consents.marketing}
+                      onChange={e => {
+                        const val = e.target.checked;
+                        setConsents(p => ({ ...p, marketing: val }));
+                      }}
+                      style={{ marginTop: 2, accentColor: "#39ff14", cursor: "pointer", width: 16, height: 16 }}
+                    />
+                    <span style={{ color: "#888", fontSize: 13, fontFamily: "'Barlow', sans-serif", lineHeight: 1.4 }}>
+                      (Optional) Send me exclusive jersey drops, member discounts, and club updates via email/WhatsApp
+                    </span>
+                  </label>
+                </div>
               )}
 
               <p style={{ textAlign: "center", marginTop: 20, color: "#444", fontSize: 13, letterSpacing: 1 }}>

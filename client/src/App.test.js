@@ -6,6 +6,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 jest.mock("react-router-dom", () => ({
   Link: ({ to, children, ...props }) => require("react").createElement("a", { href: to, ...props }, children),
+  useNavigate: () => jest.fn(),
 }), { virtual: true });
 
 function renderPage(ui) {
@@ -52,4 +53,13 @@ test("cookie consent banner renders accessible choice controls", () => {
   expect(screen.getByRole("region", { name: /cookie consent banner/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /accept all/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /essential only/i })).toBeInTheDocument();
+});
+
+test("privacy policy page renders account deletion and erasure rights", () => {
+  const Privacy = require("./pages/Privacy").default;
+  renderPage(<Privacy />);
+
+  expect(screen.getByRole("heading", { name: /privacy policy/i })).toBeInTheDocument();
+  expect(screen.getByText(/your rights & account deletion/i)).toBeInTheDocument();
+  expect(screen.getByText(/right to erasure \(account deletion\)/i)).toBeInTheDocument();
 });
