@@ -23,23 +23,65 @@ import dbRoutes from './routes/dbRoutes.js';
 
 const app = express();
 
-// Rate Limiting (Security)
-const limiter = rateLimit({
+// Rate Limiting (Security - Defense-in-depth)
+const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again after 15 minutes',
+  max: 150, // limit each IP to 150 requests per 15 minutes
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many requests from this IP, please try again after 15 minutes' },
 });
-app.use('/api/', limiter);
+
+// Stricter rate limiting on sensitive authentication and payment initiation endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // 20 requests per 15 minutes to thwart brute-force & credential stuffing
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many authentication attempts. Please try again after 15 minutes.' },
+});
+
+const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // 30 order creation attempts per 15 minutes
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many payment creation requests. Please try again later.' },
+});
+
+app.use('/api/', apiLimiter);
+app.use('/api/users/', authLimiter);
+app.use('/api/payment/create-order', paymentLimiter);
 
 // Standard Middlewares
 app.set('trust proxy', 1);
 
-// Security Headers (Defense-in-depth)
+// Security Headers (Defense-in-depth & Strict HTTPS enforcement)
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(self)');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  
+  // Enforce HTTPS in production environments behind proxies (e.g. Render/Vercel)
+  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(301, `https://${req.headers.host}${req.url}`);
+  }
+  
+  next();
+});
+
+// Logging suspicious activity (anomalous headers, traversal attempts, malformed inputs)
+app.use((req, res, next) => {
+  const url = req.originalUrl || req.url;
+  const isSuspicious = /(\.\.[\/\\]|wp-login|eval\(|<script|select.*from|<.*>)/i.test(url);
+  if (isSuspicious) {
+    console.warn(`[SECURITY ALERT] Suspicious request detected from IP ${req.ip} targeting ${url} at ${new Date().toISOString()}`);
+  }
   next();
 });
 
