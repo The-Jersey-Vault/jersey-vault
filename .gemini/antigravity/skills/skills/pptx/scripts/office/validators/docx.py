@@ -2,6 +2,7 @@
 Validator for Word document XML files against XSD schemas.
 """
 
+import logging
 import random
 import re
 import tempfile
@@ -15,6 +16,8 @@ import lxml.etree
 from helpers import one_line, safe_extract
 
 from .base import BaseSchemaValidator
+
+logger = logging.getLogger(__name__)
 
 
 class DOCXSchemaValidator(BaseSchemaValidator):

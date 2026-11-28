@@ -15,6 +15,7 @@ No dependencies beyond the Python stdlib are required.
 import argparse
 import base64
 import json
+import logging
 import mimetypes
 import os
 import re
@@ -26,6 +27,8 @@ import webbrowser
 from functools import partial
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Files to exclude from output listings
 METADATA_FILES = {"transcript.md", "user_notes.md", "metrics.json"}

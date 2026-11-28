@@ -8,7 +8,11 @@ generated frames, with automatic optimization for Slack's requirements.
 
 from pathlib import Path
 
-import imageio.v3 as imageio
+try:
+    import imageio.v3 as imageio
+except ImportError:
+    imageio = None
+
 import numpy as np
 from PIL import Image
 
@@ -222,13 +226,24 @@ class GIFBuilder:
         # Calculate frame duration in milliseconds
         frame_duration = 1000 / self.fps
 
-        # Save GIF
-        imageio.imwrite(
-            output_path,
-            optimized_frames,
-            duration=frame_duration,
-            loop=0,  # Infinite loop
-        )
+        # Save GIF using imageio.v3 if available, falling back to PIL if not installed
+        if imageio is not None:
+            imageio.imwrite(
+                output_path,
+                optimized_frames,
+                duration=frame_duration,
+                loop=0,  # Infinite loop
+            )
+        else:
+            pil_frames = [Image.fromarray(f) for f in optimized_frames]
+            pil_frames[0].save(
+                output_path,
+                save_all=True,
+                append_images=pil_frames[1:],
+                duration=int(frame_duration),
+                loop=0,
+                optimize=True,
+            )
 
         # Get file info
         file_size_kb = output_path.stat().st_size / 1024
