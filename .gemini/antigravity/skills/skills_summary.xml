@@ -861,6 +861,10 @@
     <description>Expert in secure mobile coding practices specializing in input</description>
   </skill>
   <skill>
+    <name>mobsf-security-audit</name>
+    <description>Mobile application security assessment, static and dynamic analysis (SAST/DAST), API security, hardcoded secrets detection, and transport layer security verification based on Mobile Security Framework (MobSF).</description>
+  </skill>
+  <skill>
     <name>modern-javascript-patterns</name>
     <description>Master ES6+ features including async/await, destructuring, spread operators, arrow functions, promises, modules, iterators, generators, and functional programming patterns for writing clean, efficient JavaScript code. Use when refactoring legacy code, implementing modern patterns, or optimizing JavaScript applications.</description>
   </skill>
@@ -1107,6 +1111,10 @@
   <skill>
     <name>rust-pro</name>
     <description>Master Rust 1.75+ with modern async patterns, advanced type system</description>
+  </skill>
+  <skill>
+    <name>safeline-waf-defense</name>
+    <description>Web Application Firewall (WAF) defensive architecture, reverse proxy traffic filtering, SQL injection, XSS, SSRF, path traversal mitigation, and automated bot challenge defenses based on Chaitin SafeLine WAF.</description>
   </skill>
   <skill>
     <name>saga-orchestration</name>
@@ -1515,5 +1523,9 @@
   <skill>
     <name>xlsx</name>
     <description>&quot;Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .xltx, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path — even casually (like \&quot;the xlsx in my downloads\&quot;) — and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved.&quot;</description>
+  </skill>
+  <skill>
+    <name>zaproxy-web-security-scan</name>
+    <description>Dynamic application security testing (DAST), automated vulnerability scanning, OWASP Top 10 auditing, active/passive HTTP analysis, and security verification based on OWASP ZAP (Zed Attack Proxy).</description>
   </skill>
 </skills>
