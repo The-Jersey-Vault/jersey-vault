@@ -52,7 +52,10 @@ playwright.config.local.js
 # Cloud, Deployment & Workspace Caches
 .vercel/
 supabase/.temp/
-.gemini/
+.gemini/*
+!.gemini/antigravity/
+.gemini/antigravity/*
+!.gemini/antigravity/skills/
 .aider*
 graphify-out/
 scratch/
