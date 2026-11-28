@@ -17,12 +17,18 @@ if (!fs.existsSync(uploadDir)) {
 // Use memory storage for direct buffer access without disk ENOENT issues
 const storage = multer.memoryStorage();
 
-// File filter to accept image uploads reliably
+// Strict file filter for image uploads: only allow genuine image extensions and mimetypes
+const ALLOWED_MIMES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
+const ALLOWED_EXTS = new Set(['jpg', 'jpeg', 'png', 'webp', 'gif']);
+
 const fileFilter = (req, file, cb) => {
-  if (!file.mimetype || file.mimetype.startsWith('image/') || file.mimetype === 'application/octet-stream') {
+  const mime = (file.mimetype || '').toLowerCase();
+  const ext = (file.originalname || '').split('.').pop().toLowerCase();
+
+  if (ALLOWED_MIMES.has(mime) && ALLOWED_EXTS.has(ext)) {
     cb(null, true);
   } else {
-    cb(new Error('Only image files are allowed!'), false);
+    cb(new Error('Only image files (JPEG, PNG, WEBP, GIF) are permitted.'), false);
   }
 };
 

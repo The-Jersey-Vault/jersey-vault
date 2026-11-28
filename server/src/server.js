@@ -33,7 +33,37 @@ app.use('/api/', limiter);
 
 // Standard Middlewares
 app.set('trust proxy', 1);
-app.use(cors());
+
+// Security Headers (Defense-in-depth)
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  next();
+});
+
+// Allowed CORS origins (production storefronts + localhost dev)
+const ALLOWED_ORIGINS = [
+  'https://www.thejerseyvault.in',
+  'https://thejerseyvault.in',
+  'https://jersey-vault.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5000',
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow non-browser requests (e.g. mobile apps, curl, server-to-server) or approved origins
+    if (!origin || ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    return callback(new Error('Blocked by CORS policy'));
+  },
+  credentials: true,
+}));
 
 // Raw body for Razorpay webhook signature verification (must be before express.json)
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));

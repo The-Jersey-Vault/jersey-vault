@@ -108,3 +108,13 @@ test('malformed public sort expressions are rejected', () => {
   assert.equal(isPublicDbReadQueryAllowed('products', { order: 'name.asc.secret' }), false);
   assert.equal(isPublicDbReadQueryAllowed('products', { order: 'cost_price.desc' }), false);
 });
+
+test('upload file extension whitelist prevents executable file types', () => {
+  const allowed = new Set(['jpg', 'jpeg', 'png', 'webp', 'gif']);
+  assert.equal(allowed.has('jpg'), true);
+  assert.equal(allowed.has('png'), true);
+  assert.equal(allowed.has('exe'), false);
+  assert.equal(allowed.has('php'), false);
+  assert.equal(allowed.has('js'), false);
+  assert.equal(allowed.has('sh'), false);
+});

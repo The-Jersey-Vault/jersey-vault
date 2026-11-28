@@ -12,9 +12,12 @@ router.post('/', upload.single('image'), async (req, res) => {
     }
 
     const file = req.file;
-    const fileExt = file.originalname ? file.originalname.split('.').pop() : 'jpg';
-    const folder = req.query.folder || (req.body && req.body.folder) || 'products';
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+    const rawExt = file.originalname ? file.originalname.split('.').pop().toLowerCase() : 'jpg';
+    const safeExt = ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(rawExt) ? rawExt : 'jpg';
+    const folder = ['products', 'reviews', 'teams'].includes(req.query.folder || req.body?.folder)
+      ? (req.query.folder || req.body?.folder)
+      : 'products';
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${safeExt}`;
     const key = `${folder}/${fileName}`;
 
     let buffer = file.buffer;
