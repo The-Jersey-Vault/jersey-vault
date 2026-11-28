@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef, memo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, memo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../supabase";
@@ -147,6 +147,7 @@ export default function ProductPage() {
   const [relatableJerseys, setRelatableJerseys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   // User & Auth States
   const [user, setUser] = useState(null);
@@ -251,6 +252,10 @@ export default function ProductPage() {
     let active = true;
     setLoading(true);
     setNotFound(false);
+    setLoadError(false);
+    setProduct(null);
+    setTeam(null);
+    setRelatableJerseys([]);
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     (async () => {
@@ -260,7 +265,15 @@ export default function ProductPage() {
           .select("id,name,price,stock,size_stock,image_url,status,type,team_id,category,sub_category,description,featured")
           .eq("status", "active");
 
-        if (pErr || !allProducts || allProducts.length === 0) {
+        if (pErr) {
+          if (active) {
+            setLoadError(true);
+            setLoading(false);
+          }
+          return;
+        }
+
+        if (!allProducts || allProducts.length === 0) {
           if (active) {
             setNotFound(true);
             setLoading(false);
@@ -333,7 +346,7 @@ export default function ProductPage() {
         }
       } catch (err) {
         console.error("ProductPage load error:", err);
-        if (active) setNotFound(true);
+        if (active) setLoadError(true);
       } finally {
         if (active) setLoading(false);
       }
@@ -495,7 +508,6 @@ export default function ProductPage() {
       <Helmet>
         <title>{product ? `${product.name} | The Jersey Vault` : "Jersey Product | The Jersey Vault"}</title>
         <meta name="description" content={product?.description || "Shop official football and cricket jerseys in India. Authentic Thailand Dry-Fit quality, COD available with fast nationwide shipping."} />
-        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       {/* STYLES & ANIMATIONS */}
@@ -709,6 +721,13 @@ export default function ProductPage() {
             <style>{`@keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }`}</style>
             <p style={{ marginTop: 16, color: "#888", letterSpacing: 2, fontSize: 13 }}>LOADING PRODUCT DETAILS...</p>
           </div>
+        ) : loadError ? (
+          <div role="alert" style={{ textAlign: "center", padding: "100px 20px" }}>
+            <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, letterSpacing: 3, marginTop: 12 }}>PRODUCT COULD NOT BE LOADED</h1>
+            <p style={{ color: "#aaa", fontSize: 14, maxWidth: 440, margin: "10px auto 24px" }}>We couldn’t retrieve this product just now. Please try again, or return to the shop.</p>
+            <button type="button" onClick={() => window.location.reload()} style={{ background: "#39ff14", color: "#000", border: 0, fontWeight: 900, fontSize: 14, letterSpacing: 2, padding: "12px 28px", borderRadius: 4, cursor: "pointer", marginRight: 10 }}>TRY AGAIN</button>
+            <Link to="/" style={{ display: "inline-block", color: "#39ff14", textDecoration: "none", fontWeight: 900, fontSize: 14, letterSpacing: 2, padding: "12px 20px" }}>RETURN TO HOME</Link>
+          </div>
         ) : notFound || !product ? (
           <div style={{ textAlign: "center", padding: "100px 20px" }}>
             <div style={{ fontSize: 56 }}>🔍</div>
@@ -780,309 +799,343 @@ export default function ProductPage() {
                   </span>
 
                   {isOutOfStock ? (
-                    <span style={{ background: "rgba(255, 0, 0, 0.2)", border: "1px solid #ff4444", color: "#ff4444", fontSize: 11, fontWeight: 900, padding: "4px 8px", borderRadius: 3, letterSpacing: 1 }}>
-                      OUT OF STOCK
+                    <span style={{ color: "#ff4444", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                      ● SOLD OUT
+                    </span>
+                  ) : selectedSizeStock <= 3 && selectedSizeStock > 0 ? (
+                    <span style={{ color: "#ffaa00", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                      🔥 ONLY {selectedSizeStock} LEFT IN SIZE {selectedSize}!
                     </span>
                   ) : (
-                    <span style={{ background: "rgba(57, 255, 20, 0.15)", border: "1px solid #39ff14", color: "#39ff14", fontSize: 11, fontWeight: 900, padding: "4px 8px", borderRadius: 3, letterSpacing: 1 }}>
-                      ✓ IN STOCK
-                    </span>
-                  )}
-
-                  {product.featured && (
-                    <span style={{ background: "rgba(255, 183, 0, 0.15)", border: "1px solid #ffb700", color: "#ffb700", fontSize: 11, fontWeight: 900, padding: "4px 8px", borderRadius: 3, letterSpacing: 1 }}>
-                      ★ FEATURED
+                    <span style={{ color: "#39ff14", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                      ● IN STOCK & READY TO SHIP
                     </span>
                   )}
                 </div>
 
                 {/* Title */}
-                <h1 style={{ fontFamily: "'Bebas Neue', 'Barlow Condensed', sans-serif", fontSize: "clamp(28px, 4vw, 42px)", fontWeight: 900, letterSpacing: 2, lineHeight: 1.1, margin: "0 0 12px 0", color: "#fff" }}>
+                <h1 style={{ fontFamily: "'Bebas Neue', 'Barlow Condensed', sans-serif", fontSize: "clamp(32px, 4vw, 44px)", letterSpacing: 2, lineHeight: 1.05, margin: "0 0 12px", color: "#fff" }}>
                   {product.name}
                 </h1>
 
-                {/* Rating Snippet */}
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                  <div style={{ color: "#ffb700", fontSize: 14 }}>
-                    {"★".repeat(5)}
-                  </div>
-                  <a
-                    href="#reviews-section"
-                    style={{ color: "#888", fontSize: 12, letterSpacing: 1, textDecoration: "underline", cursor: "pointer", fontFamily: "'Barlow Condensed', sans-serif" }}
-                  >
-                    ({jerseyReviews.length} Verified Customer Reviews)
-                  </a>
+                {/* Rating Preview */}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                  <span style={{ color: "#39ff14", fontSize: 14 }}>★★★★★</span>
+                  <span style={{ color: "#aaa", fontSize: 13, fontWeight: 600 }}>
+                    {jerseyReviews.length > 0
+                      ? `${(jerseyReviews.reduce((acc, r) => acc + (r.rating || 5), 0) / jerseyReviews.length).toFixed(1)} (${jerseyReviews.length} reviews)`
+                      : "5.0 (Customer Favorite)"}
+                  </span>
                 </div>
 
                 {/* Price Display */}
-                <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 20 }}>
-                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, fontWeight: 900, color: "#39ff14", letterSpacing: 2 }}>
-                    ₹{product.price?.toLocaleString("en-IN")}
+                <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 20 }}>
+                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, color: "#39ff14", letterSpacing: 1 }}>
+                    ₹{product.price}
                   </span>
-                  <span style={{ textDecoration: "line-through", color: "#555", fontSize: 20, fontFamily: "'Bebas Neue', sans-serif" }}>
-                    ₹{Math.round(product.price * 1.45)?.toLocaleString("en-IN")}
+                  <span style={{ fontSize: 18, color: "#666", textDecoration: "line-through", fontFamily: "'Bebas Neue', sans-serif" }}>
+                    ₹{Math.round(product.price * 1.5)}
                   </span>
-                  <span style={{ background: "rgba(57, 255, 20, 0.15)", color: "#39ff14", border: "1px solid #39ff14", fontSize: 11, fontWeight: 900, padding: "2px 8px", borderRadius: 3, letterSpacing: 1 }}>
-                    SAVE 30%
+                  <span style={{ background: "rgba(57,255,20,0.15)", color: "#39ff14", fontSize: 11, fontWeight: 900, padding: "2px 8px", borderRadius: 3, letterSpacing: 1 }}>
+                    33% OFF
                   </span>
                 </div>
 
-                {/* SIZE SELECTOR */}
-                <div style={{ margin: "24px 0" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 13, letterSpacing: 2, textTransform: "uppercase", color: "#ddd" }}>
+                {/* Size Selection */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <label style={{ fontSize: 12, fontWeight: 800, letterSpacing: 2, color: "#ccc", fontFamily: "'Barlow Condensed', sans-serif", textTransform: "uppercase" }}>
                       SELECT SIZE: <span style={{ color: "#39ff14" }}>{selectedSize}</span>
-                    </span>
-
+                    </label>
                     <button
                       type="button"
                       onClick={() => setShowSizeChart(true)}
-                      style={{
-                        background: "transparent",
-                        border: "1px dashed #444",
-                        color: "#39ff14",
-                        fontSize: 11,
-                        fontWeight: 800,
-                        padding: "4px 10px",
-                        borderRadius: 3,
-                        cursor: "pointer",
-                        letterSpacing: 1,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 4
-                      }}
-                      onMouseOver={e => e.currentTarget.style.borderColor = "#39ff14"}
-                      onMouseOut={e => e.currentTarget.style.borderColor = "#444"}
+                      style={{ background: "none", border: "none", color: "#39ff14", fontSize: 12, fontWeight: 800, letterSpacing: 1, cursor: "pointer", textDecoration: "underline", padding: 0 }}
                     >
                       📏 SIZE CHART
                     </button>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 }}>
-                    {SIZES.map((s) => {
-                      const stock = getSizeStock(product, s);
-                      const isSelected = selectedSize === s;
-                      const isOutOfStockSize = stock === 0;
-
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {SIZES.map((sz) => {
+                      const stock = getSizeStock(product, sz);
+                      const isSelected = selectedSize === sz;
+                      const isAvail = stock > 0;
                       return (
                         <button
-                          key={s}
+                          key={sz}
                           type="button"
-                          disabled={isOutOfStockSize}
-                          onClick={() => {
-                            setSelectedSize(s);
-                            setQuantity(1);
-                          }}
+                          disabled={!isAvail}
+                          onClick={() => setSelectedSize(sz)}
                           style={{
-                            position: "relative",
-                            padding: "12px 4px",
-                            textAlign: "center",
-                            background: isSelected ? "#39ff14" : isOutOfStockSize ? "#0c0c0c" : "#111",
-                            color: isSelected ? "#000" : isOutOfStockSize ? "#444" : "#fff",
-                            border: isSelected ? "1px solid #39ff14" : isOutOfStockSize ? "1px solid #1a1a1a" : "1px solid #2a2a2a",
+                            minWidth: 52,
+                            height: 44,
+                            padding: "0 12px",
+                            background: isSelected ? "#39ff14" : isAvail ? "#111" : "#0d0d0d",
+                            color: isSelected ? "#000" : isAvail ? "#fff" : "#444",
+                            border: isSelected ? "2px solid #39ff14" : isAvail ? "1px solid #282828" : "1px dashed #222",
                             borderRadius: 4,
-                            cursor: isOutOfStockSize ? "not-allowed" : "pointer",
-                            fontWeight: 900,
-                            fontSize: 15,
                             fontFamily: "'Barlow Condensed', sans-serif",
+                            fontSize: 15,
+                            fontWeight: 900,
                             letterSpacing: 1,
-                            transition: "all 0.15s"
+                            cursor: isAvail ? "pointer" : "not-allowed",
+                            transition: "all 0.15s ease",
+                            position: "relative"
                           }}
                         >
-                          {s}
-                          {isOutOfStockSize && (
-                            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                              <div style={{ width: "80%", height: "1px", background: "#444", transform: "rotate(-30deg)" }} />
-                            </div>
+                          {sz}
+                          {!isAvail && (
+                            <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#666", fontSize: 11 }}>
+                              ✕
+                            </span>
                           )}
                         </button>
                       );
                     })}
                   </div>
-
-                  {/* Stock Warning */}
-                  {selectedSizeStock > 0 && selectedSizeStock <= 5 && (
-                    <div style={{ marginTop: 8, fontSize: 12, color: "#ffb700", fontWeight: 700, letterSpacing: 1, display: "flex", alignItems: "center", gap: 4 }}>
-                      ⚡ Only {selectedSizeStock} left in stock for size {selectedSize}!
-                    </div>
+                  {isPlayerVersion && (
+                    <p style={{ fontSize: 12, color: "#888", marginTop: 8, lineHeight: 1.4 }}>
+                      ℹ <strong>Fit Tip:</strong> Player version jerseys have an athletic, slim-fit cut. We recommend choosing one size larger than your regular t-shirt size.
+                    </p>
                   )}
                 </div>
 
-                {/* QUANTITY & ADD TO CART */}
-                <div style={{ display: "flex", gap: 12, marginBottom: 20 }}>
-                  {/* Quantity selector */}
-                  <div style={{ display: "flex", alignItems: "center", background: "#111", border: "1px solid #282828", borderRadius: 4, overflow: "hidden" }}>
+                {/* Quantity */}
+                <div style={{ marginBottom: 24 }}>
+                  <label style={{ display: "block", fontSize: 12, fontWeight: 800, letterSpacing: 2, color: "#ccc", fontFamily: "'Barlow Condensed', sans-serif", textTransform: "uppercase", marginBottom: 8 }}>
+                    QUANTITY:
+                  </label>
+                  <div style={{ display: "inline-flex", alignItems: "center", background: "#111", border: "1px solid #282828", borderRadius: 4, overflow: "hidden" }}>
                     <button
                       type="button"
                       disabled={quantity <= 1 || isOutOfStock}
                       onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                      style={{ width: 44, height: 52, background: "none", border: "none", color: quantity <= 1 ? "#444" : "#fff", fontSize: 20, cursor: quantity <= 1 ? "not-allowed" : "pointer", fontWeight: 900 }}
+                      style={{ width: 40, height: 40, background: "transparent", border: "none", color: "#fff", fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
                       −
                     </button>
-                    <span style={{ width: 40, textAlign: "center", fontWeight: 900, fontSize: 18, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                    <span style={{ width: 40, textAlign: "center", fontFamily: "'Barlow Condensed', sans-serif", fontSize: 16, fontWeight: 900 }}>
                       {quantity}
                     </span>
                     <button
                       type="button"
                       disabled={quantity >= selectedSizeStock || isOutOfStock}
-                      onClick={() => setQuantity(q => Math.min(selectedSizeStock, q + 1))}
-                      style={{ width: 44, height: 52, background: "none", border: "none", color: quantity >= selectedSizeStock ? "#444" : "#fff", fontSize: 20, cursor: quantity >= selectedSizeStock ? "not-allowed" : "pointer", fontWeight: 900 }}
+                      onClick={() => setQuantity(q => q + 1)}
+                      style={{ width: 40, height: 40, background: "transparent", border: "none", color: "#fff", fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
                       +
                     </button>
                   </div>
+                </div>
 
-                  {/* Primary CTA Button */}
+                {/* ADD TO CART ACTION BUTTON */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
                   <button
                     type="button"
                     disabled={isOutOfStock || selectedSizeStock === 0}
                     onClick={handleAddToCart}
                     className="pdp-cta-btn"
                   >
-                    {isOutOfStock || selectedSizeStock === 0 ? "OUT OF STOCK" : `ADD TO CART — ₹${(product.price * quantity).toLocaleString("en-IN")}`}
+                    {isOutOfStock || selectedSizeStock === 0 ? "SOLD OUT IN THIS SIZE" : "ADD TO CART"}
                   </button>
-                </div>
 
-                {/* Share Actions */}
-                <div style={{ display: "flex", gap: 10, marginBottom: 24 }}>
-                  <button
-                    type="button"
-                    onClick={handleWhatsAppShare}
-                    style={{
-                      flex: 1,
-                      background: "#0c0c0c",
-                      border: "1px solid #222",
-                      color: "#25D366",
-                      padding: "10px",
-                      borderRadius: 4,
-                      fontWeight: 800,
-                      fontSize: 12,
-                      letterSpacing: 1,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 6
-                    }}
-                    onMouseOver={e => e.currentTarget.style.borderColor = "#25D366"}
-                    onMouseOut={e => e.currentTarget.style.borderColor = "#222"}
-                  >
-                    <span>💬</span> SHARE ON WHATSAPP
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCopyLink}
-                    style={{
-                      flex: 1,
-                      background: "#0c0c0c",
-                      border: "1px solid #222",
-                      color: "#aaa",
-                      padding: "10px",
-                      borderRadius: 4,
-                      fontWeight: 800,
-                      fontSize: 12,
-                      letterSpacing: 1,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 6
-                    }}
-                    onMouseOver={e => { e.currentTarget.style.borderColor = "#39ff14"; e.currentTarget.style.color = "#39ff14"; }}
-                    onMouseOut={e => { e.currentTarget.style.borderColor = "#222"; e.currentTarget.style.color = "#aaa"; }}
-                  >
-                    <span>🔗</span> COPY PRODUCT LINK
-                  </button>
-                </div>
-
-                {/* TRUST BADGES */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, background: "#0a0a0a", border: "1px solid #161616", padding: 14, borderRadius: 4, marginBottom: 24 }}>
-                  {[
-                    { icon: "🚚", title: "Fast Delivery", desc: "4-7 business days across India" },
-                    { icon: "💵", title: "Cash on Delivery", desc: "Pay at your doorstep" },
-                    { icon: "🔄", title: "7-Day Exchange", desc: "Hassle-free size swaps" },
-                    { icon: "🛡️", title: "Master Quality", desc: "Authentic Thailand Dry-Fit" },
-                  ].map((badge, idx) => (
-                    <div key={idx} style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                      <span style={{ fontSize: 20 }}>{badge.icon}</span>
-                      <div>
-                        <div style={{ fontSize: 12, fontWeight: 900, color: "#fff", letterSpacing: 0.5 }}>{badge.title}</div>
-                        <div style={{ fontSize: 10, color: "#777" }}>{badge.desc}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* PRODUCT SPECIFICATIONS */}
-                <div style={{ background: "#090909", border: "1px solid #1c1c1c", borderRadius: 4, padding: 16 }}>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 14, fontWeight: 900, letterSpacing: 1.5, textTransform: "uppercase", color: "#39ff14", marginBottom: 10 }}>
-                    📋 PRODUCT SPECIFICATIONS & DETAILS
-                  </div>
-                  <ul style={{ margin: 0, paddingLeft: 18, color: "#ccc", fontSize: 13, lineHeight: 1.8 }}>
-                    <li><strong>Origin:</strong> Made in Thailand</li>
-                    <li><strong>Fabric:</strong> Breathable, sweat-wicking Dry-Fit technology</li>
-                    <li><strong>Crest / Logo:</strong> {isPlayerVersion ? "Heat-transferred 3D authentic rubber badge" : "High-density precision embroidered crest"}</li>
-                    <li><strong>Includes:</strong> Matching Thailand shorts included in kit</li>
-                  </ul>
-                  <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px dashed #222", color: "#888", fontSize: 12, lineHeight: 1.6 }}>
-                    {product.description || (isPlayerVersion
-                      ? "Authentic Match / Player Edition jersey engineered with Thailand superior ultra-lightweight Dry-Fit performance fabric, heat-transferred authentic rubberised 3D club crests, and precision athletic slim-fit tailoring as worn on pitch by professional players."
-                      : "Premium Fan Edition football jersey imported from Thailand. Features breathable Dry-Fit fabric technology for maximum comfort, high-density embroidered club logos, and comes complete with matching shorts included.")}
+                  {/* Share buttons */}
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      type="button"
+                      onClick={handleWhatsAppShare}
+                      style={{
+                        flex: 1,
+                        background: "#128C7E",
+                        color: "#fff",
+                        border: "none",
+                        padding: "10px 14px",
+                        borderRadius: 4,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        letterSpacing: 1,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 6,
+                        fontFamily: "'Barlow Condensed', sans-serif"
+                      }}
+                    >
+                      <span>💬</span> SHARE ON WHATSAPP
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCopyLink}
+                      style={{
+                        background: "#1a1a1a",
+                        color: "#ccc",
+                        border: "1px solid #333",
+                        padding: "10px 16px",
+                        borderRadius: 4,
+                        fontSize: 13,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        fontFamily: "'Barlow Condensed', sans-serif",
+                        letterSpacing: 1
+                      }}
+                      title="Copy Link"
+                    >
+                      🔗 COPY LINK
+                    </button>
                   </div>
                 </div>
+
+                {/* PERKS / TRUST STRIP */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "16px 0", borderTop: "1px solid #1a1a1a", borderBottom: "1px solid #1a1a1a" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#ccc" }}>
+                    <span style={{ fontSize: 18, color: "#39ff14" }}>✓</span>
+                    <span><strong>Free Shipping</strong> above ₹1099</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#ccc" }}>
+                    <span style={{ fontSize: 18, color: "#39ff14" }}>✓</span>
+                    <span><strong>COD Available</strong> Pan-India</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#ccc" }}>
+                    <span style={{ fontSize: 18, color: "#39ff14" }}>✓</span>
+                    <span><strong>Easy 30-Day</strong> Size Exchange</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#ccc" }}>
+                    <span style={{ fontSize: 18, color: "#39ff14" }}>✓</span>
+                    <span><strong>100% Thailand Master</strong> Fabric</span>
+                  </div>
+                </div>
+
+                {/* DESCRIPTION */}
+                {product.description && (
+                  <div style={{ marginTop: 24 }}>
+                    <h3 style={{ fontSize: 13, fontWeight: 800, letterSpacing: 2, color: "#888", textTransform: "uppercase", marginBottom: 8, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                      PRODUCT DETAILS
+                    </h3>
+                    <p style={{ color: "#aaa", fontSize: 14, lineHeight: 1.7, margin: 0, whiteSpace: "pre-line" }}>
+                      {product.description}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* ── CUSTOMER REVIEWS SECTION ── */}
-            <div id="reviews-section" style={{ marginTop: 60, borderTop: "1px solid #181818", paddingTop: 40 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
-                <div>
-                  <h2 style={{ fontFamily: "'Bebas Neue', 'Barlow Condensed', sans-serif", fontSize: 28, letterSpacing: 2, margin: 0, color: "#fff" }}>
-                    CUSTOMER REVIEWS ({jerseyReviews.length})
-                  </h2>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, color: "#39ff14", fontSize: 13, fontWeight: 700 }}>
-                    <span>⭐⭐⭐⭐⭐</span>
-                    <span>(5.0 / 5.0 Rating • 100% Verified Customers)</span>
+            {/* RELATABLE / MORE FROM TEAM */}
+            {relatableJerseys.length > 0 && (
+              <div style={{ marginTop: 64, borderTop: "1px solid #1a1a1a", paddingTop: 32 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 16 }}>
+                  <div>
+                    <p style={{ color: "#39ff14", fontSize: 12, fontWeight: 900, letterSpacing: 2, margin: 0, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                      DISCOVER MORE
+                    </p>
+                    <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, letterSpacing: 2, margin: "4px 0 0", color: "#fff" }}>
+                      {team ? `MORE ${team.name.toUpperCase()} JERSEYS` : "SIMILAR POPULAR JERSEYS"}
+                    </h2>
                   </div>
+                  <Link
+                    to={team ? `/teams/${team.name.toLowerCase().replace(/\s+/g, "-")}` : "/#shop"}
+                    style={{ color: "#39ff14", fontSize: 13, fontWeight: 800, letterSpacing: 1.5, textDecoration: "none", fontFamily: "'Barlow Condensed', sans-serif" }}
+                  >
+                    VIEW ALL →
+                  </Link>
                 </div>
 
+                <div className="pdp-relatable-grid">
+                  {relatableJerseys.slice(0, 6).map((rj) => {
+                    const rjSlug = generateProductSlug(rj.name);
+                    const rjImg = getFirstImage(rj.image_url);
+                    return (
+                      <div
+                        key={rj.id}
+                        className="pdp-card"
+                        onClick={() => navigate(`/product/${rjSlug}`)}
+                      >
+                        <div style={{ width: "100%", aspectRatio: "1/1", background: "#111", overflow: "hidden", position: "relative" }}>
+                          {rjImg ? (
+                            <img src={rjImg} alt={rj.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          ) : (
+                            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>👕</div>
+                          )}
+                          <span style={{ position: "absolute", top: 8, left: 8, background: "rgba(0,0,0,0.75)", color: "#39ff14", fontSize: 10, fontWeight: 900, padding: "2px 6px", borderRadius: 2, letterSpacing: 1 }}>
+                            {rj.type || "FAN VERSION"}
+                          </span>
+                        </div>
+                        <div style={{ padding: "12px", display: "flex", flexDirection: "column", gap: 6 }}>
+                          <h3 style={{ fontSize: 14, fontWeight: 800, margin: 0, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1 }}>
+                            {rj.name}
+                          </h3>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                            <span style={{ color: "#39ff14", fontWeight: 900, fontSize: 15 }}>₹{rj.price}</span>
+                            <span style={{ color: "#666", fontSize: 11, textDecoration: "line-through" }}>₹{Math.round(rj.price * 1.5)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* REVIEWS & VERIFIED CUSTOMER EXPERIENCE */}
+            <div style={{ marginTop: 64, borderTop: "1px solid #1a1a1a", paddingTop: 32 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
+                <div>
+                  <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, letterSpacing: 2, margin: 0, color: "#fff" }}>
+                    CUSTOMER REVIEWS & PHOTOS
+                  </h2>
+                  <p style={{ color: "#888", fontSize: 13, margin: "4px 0 0" }}>
+                    Verified feedback from real customers across India.
+                  </p>
+                </div>
                 <button
                   type="button"
-                  onClick={() => setShowWriteReviewForm(o => !o)}
+                  onClick={() => setShowWriteReviewForm((s) => !s)}
                   style={{
-                    background: showWriteReviewForm ? "rgba(255, 68, 68, 0.15)" : "rgba(57, 255, 20, 0.12)",
-                    border: showWriteReviewForm ? "1px solid rgba(255, 68, 68, 0.4)" : "1px solid #39ff14",
-                    color: showWriteReviewForm ? "#ff4444" : "#39ff14",
-                    padding: "8px 18px",
-                    borderRadius: "4px",
-                    fontWeight: 800,
-                    fontSize: "13px",
-                    letterSpacing: "1px",
-                    cursor: "pointer",
-                    transition: "all 0.2s"
+                    background: showWriteReviewForm ? "#222" : "#39ff14",
+                    color: showWriteReviewForm ? "#fff" : "#000",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: 4,
+                    fontWeight: 900,
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    letterSpacing: 1.5,
+                    cursor: "pointer"
                   }}
                 >
-                  {showWriteReviewForm ? "✕ CLOSE FORM" : "✍️ WRITE A REVIEW"}
+                  {showWriteReviewForm ? "CANCEL" : "★ WRITE A REVIEW"}
                 </button>
               </div>
 
-              {/* WRITE A REVIEW FORM */}
+              {/* WRITE A REVIEW ACCORDION */}
               {showWriteReviewForm && (
                 <form
                   onSubmit={handlePostCustomerReview}
-                  style={{ background: "#0c0c0c", border: "1px solid #39ff14", borderRadius: 6, padding: 20, marginBottom: 28, boxShadow: "0 0 24px rgba(57,255,20,0.15)" }}
+                  style={{
+                    background: "#0c0c0c",
+                    border: "1px solid #222",
+                    borderRadius: 6,
+                    padding: 20,
+                    marginBottom: 32,
+                    maxWidth: 600
+                  }}
                 >
-                  <div style={{ fontWeight: 900, fontSize: 16, letterSpacing: 1, color: "#fff", marginBottom: 14 }}>
-                    ✍️ WRITE & POST A REVIEW
-                  </div>
+                  <h3 style={{ margin: "0 0 16px", fontSize: 18, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: 1.5, color: "#39ff14" }}>
+                    SHARE YOUR EXPERIENCE
+                  </h3>
 
-                  {/* Rating Stars */}
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ display: "block", fontSize: 12, color: "#aaa", letterSpacing: 1, marginBottom: 6, fontWeight: 700 }}>
+                  {reviewSubmitError && (
+                    <div style={{ background: "rgba(255,68,68,0.15)", border: "1px solid #ff4444", color: "#ff4444", padding: "8px 12px", borderRadius: 4, fontSize: 13, marginBottom: 12 }}>
+                      {reviewSubmitError}
+                    </div>
+                  )}
+
+                  {/* Rating Selector */}
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#ccc", marginBottom: 6, letterSpacing: 1 }}>
                       YOUR RATING:
                     </label>
-                    <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    <div style={{ display: "flex", gap: 8 }}>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
                           key={star}
@@ -1093,114 +1146,86 @@ export default function ProductPage() {
                             border: "none",
                             fontSize: 24,
                             cursor: "pointer",
-                            color: star <= newReviewRating ? "#ffb700" : "#444",
-                            padding: 0,
-                            transition: "transform 0.1s"
+                            color: star <= newReviewRating ? "#39ff14" : "#444",
+                            padding: 0
                           }}
                         >
                           ★
                         </button>
                       ))}
-                      <span style={{ marginLeft: 8, fontSize: 13, color: "#aaa", fontWeight: 700 }}>
-                        ({newReviewRating} / 5 Stars)
-                      </span>
                     </div>
                   </div>
 
-                  {/* Name Input */}
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ display: "block", fontSize: 12, color: "#aaa", letterSpacing: 1, marginBottom: 6, fontWeight: 700 }}>
-                      YOUR NAME / NICKNAME:
+                  {/* Name */}
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#ccc", marginBottom: 6, letterSpacing: 1 }}>
+                      YOUR NAME (OPTIONAL):
                     </label>
                     <input
                       type="text"
+                      placeholder="e.g. Rahul S."
                       value={newReviewerName}
                       onChange={(e) => setNewReviewerName(e.target.value)}
-                      placeholder="e.g. Rahul S. (or leave empty for 'Customer')"
                       style={{
                         width: "100%",
-                        padding: "10px 14px",
+                        padding: "10px 12px",
                         background: "#161616",
                         border: "1px solid #333",
-                        color: "#fff",
                         borderRadius: 4,
+                        color: "#fff",
                         fontSize: 14,
+                        outline: "none",
                         boxSizing: "border-box"
                       }}
                     />
                   </div>
 
-                  {/* Comments textarea */}
-                  <div style={{ marginBottom: 14 }}>
-                    <label style={{ display: "block", fontSize: 12, color: "#aaa", letterSpacing: 1, marginBottom: 6, fontWeight: 700 }}>
-                      YOUR REVIEW / FEEDBACK:
+                  {/* Comment */}
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#ccc", marginBottom: 6, letterSpacing: 1 }}>
+                      YOUR REVIEW:
                     </label>
                     <textarea
                       rows={3}
+                      placeholder="How is the quality, fabric, fit, and delivery?"
                       value={newReviewComment}
                       onChange={(e) => setNewReviewComment(e.target.value)}
-                      placeholder="Share details about jersey quality, fabric, printing, sizing fit..."
-                      required
                       style={{
                         width: "100%",
-                        padding: "10px 14px",
+                        padding: "10px 12px",
                         background: "#161616",
                         border: "1px solid #333",
-                        color: "#fff",
                         borderRadius: 4,
+                        color: "#fff",
                         fontSize: 14,
-                        boxSizing: "border-box",
-                        resize: "vertical"
+                        outline: "none",
+                        resize: "vertical",
+                        boxSizing: "border-box"
                       }}
                     />
                   </div>
 
-                  {/* Photos Upload */}
+                  {/* Photo Upload */}
                   <div style={{ marginBottom: 16 }}>
-                    <label style={{ display: "block", fontSize: 12, color: "#aaa", letterSpacing: 1, marginBottom: 6, fontWeight: 700 }}>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#ccc", marginBottom: 6, letterSpacing: 1 }}>
                       ADD PHOTOS (OPTIONAL):
                     </label>
-                    <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-                      <label style={{
-                        background: "#1a1a1a",
-                        border: "1px dashed #39ff14",
-                        color: "#39ff14",
-                        padding: "8px 14px",
-                        borderRadius: 4,
-                        cursor: "pointer",
-                        fontSize: 12,
-                        fontWeight: 700,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6
-                      }}>
-                        <span>📷</span> {uploadingReviewPhoto ? "UPLOADING..." : "UPLOAD PHOTO"}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          disabled={uploadingReviewPhoto}
-                          onChange={handleReviewPhotoUpload}
-                          style={{ display: "none" }}
-                        />
-                      </label>
-
-                      {newReviewPhotos.map((url, i) => (
-                        <div key={i} style={{ position: "relative" }}>
-                          <img src={url} alt="Review upload" style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 4, border: "1px solid #39ff14" }} />
-                          <button
-                            type="button"
-                            onClick={() => setNewReviewPhotos(prev => prev.filter((_, idx) => idx !== i))}
-                            style={{ position: "absolute", top: -6, right: -6, background: "#ff4444", color: "#fff", border: "none", borderRadius: "50%", width: 18, height: 18, fontSize: 10, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadingReviewPhoto}
+                      onChange={handleReviewPhotoUpload}
+                      style={{ fontSize: 12, color: "#aaa" }}
+                    />
+                    {uploadingReviewPhoto && <span style={{ marginLeft: 8, fontSize: 12, color: "#39ff14" }}>Uploading photo...</span>}
+                    {newReviewPhotos.length > 0 && (
+                      <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                        {newReviewPhotos.map((url, i) => (
+                          <img key={i} src={url} alt="Uploaded review preview" style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 4, border: "1px solid #39ff14" }} />
+                        ))}
+                      </div>
+                    )}
                   </div>
-
-                  {reviewSubmitError && <div style={{ color: "#ff4444", fontSize: 12, marginBottom: 10 }}>{reviewSubmitError}</div>}
-                  {reviewSubmitSuccess && <div style={{ color: "#39ff14", fontSize: 12, marginBottom: 10 }}>{reviewSubmitSuccess}</div>}
 
                   <button
                     type="submit"
@@ -1209,67 +1234,75 @@ export default function ProductPage() {
                       background: "#39ff14",
                       color: "#000",
                       border: "none",
-                      padding: "10px 24px",
-                      fontWeight: 900,
-                      fontSize: 14,
-                      letterSpacing: 1.5,
+                      padding: "12px 24px",
                       borderRadius: 4,
+                      fontWeight: 900,
+                      fontFamily: "'Bebas Neue', sans-serif",
+                      letterSpacing: 1.5,
+                      fontSize: 16,
                       cursor: submittingCustomerReview ? "not-allowed" : "pointer"
                     }}
                   >
-                    {submittingCustomerReview ? "SUBMITTING..." : "POST REVIEW →"}
+                    {submittingCustomerReview ? "SUBMITTING..." : "SUBMIT REVIEW"}
                   </button>
                 </form>
               )}
 
+              {reviewSubmitSuccess && (
+                <div style={{ background: "rgba(57,255,20,0.12)", border: "1px solid #39ff14", color: "#39ff14", padding: "10px 16px", borderRadius: 4, fontSize: 14, marginBottom: 20 }}>
+                  {reviewSubmitSuccess}
+                </div>
+              )}
+
               {/* Reviews List */}
               {loadingReviews ? (
-                <div style={{ color: "#666", padding: "20px 0", textAlign: "center" }}>Loading customer reviews...</div>
+                <p style={{ color: "#666", fontSize: 14 }}>Loading reviews...</p>
               ) : jerseyReviews.length === 0 ? (
-                <div style={{ background: "#0a0a0a", border: "1px dashed #222", padding: "32px 20px", textAlign: "center", borderRadius: 4 }}>
-                  <div style={{ fontSize: 32, marginBottom: 6 }}>💬</div>
-                  <div style={{ color: "#ccc", fontSize: 14, fontWeight: 700, letterSpacing: 1 }}>Be the first to review this premium jersey</div>
-                  <div style={{ color: "#666", fontSize: 12, marginTop: 4 }}>Verified customer reviews will appear here.</div>
+                <div style={{ padding: "32px 20px", background: "#0a0a0a", border: "1px solid #1a1a1a", borderRadius: 4, textAlign: "center" }}>
+                  <p style={{ color: "#888", fontSize: 14, margin: "0 0 12px" }}>
+                    Be the first verified fan to review the {product.name}!
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowWriteReviewForm(true)}
+                    style={{ background: "#1a1a1a", border: "1px solid #333", color: "#39ff14", padding: "8px 16px", borderRadius: 4, fontSize: 12, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}
+                  >
+                    LEAVE THE FIRST REVIEW
+                  </button>
                 </div>
               ) : (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-                  {jerseyReviews.map((rev) => (
-                    <div key={rev.id} style={{ background: "#0a0a0a", border: "1px solid #1a1a1a", padding: "16px", borderRadius: 4, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                      <div>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <span style={{ fontWeight: 800, fontSize: 14, color: "#fff" }}>{rev.reviewer_name}</span>
-                            <span style={{ background: "rgba(57, 255, 20, 0.12)", border: "1px solid rgba(57, 255, 20, 0.25)", color: "#39ff14", fontSize: 10, fontWeight: 800, padding: "2px 6px", borderRadius: 3 }}>
-                              ✓ VERIFIED
-                            </span>
-                          </div>
-                          <span style={{ color: "#ffb700", fontSize: 12 }}>
-                            {"★".repeat(rev.rating || 5)}{"☆".repeat(5 - (rev.rating || 5))}
-                          </span>
-                        </div>
-
-                        <p style={{ color: "#b8b8b8", fontSize: 13, lineHeight: 1.5, margin: "6px 0 12px 0" }}>
-                          {rev.comment}
-                        </p>
-
-                        {Array.isArray(rev.photos) && rev.photos.length > 0 && (
-                          <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
-                            {rev.photos.map((photo, pIdx) => (
-                              <img
-                                key={pIdx}
-                                src={photo}
-                                alt={`Customer attachment ${pIdx + 1}`}
-                                onClick={() => setPreviewReviewPhoto(photo)}
-                                style={{ width: 56, height: 56, objectFit: "cover", borderRadius: 4, border: "1px solid #282828", cursor: "pointer" }}
-                              />
-                            ))}
-                          </div>
-                        )}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+                  {jerseyReviews.map((rev, idx) => (
+                    <div key={idx} style={{ background: "#0c0c0c", border: "1px solid #181818", borderRadius: 4, padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ color: "#39ff14", fontSize: 13 }}>
+                          {"★".repeat(rev.rating || 5)}
+                          <span style={{ color: "#444" }}>{"★".repeat(5 - (rev.rating || 5))}</span>
+                        </span>
+                        <span style={{ fontSize: 11, color: "#666" }}>
+                          {rev.created_at ? new Date(rev.created_at).toLocaleDateString("en-IN") : "Verified Purchase"}
+                        </span>
                       </div>
-
-                      <div style={{ textAlign: "right", marginTop: 10 }}>
-                        <span style={{ color: "#555", fontSize: 11 }}>
-                          {rev.created_at ? new Date(rev.created_at).toLocaleDateString() : "Recently verified"}
+                      <p style={{ color: "#ddd", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
+                        "{rev.comment}"
+                      </p>
+                      {rev.photos && rev.photos.length > 0 && (
+                        <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                          {rev.photos.map((p, pIdx) => (
+                            <img
+                              key={pIdx}
+                              src={p}
+                              alt="Customer review photo"
+                              onClick={() => setPreviewReviewPhoto(p)}
+                              style={{ width: 48, height: 48, objectFit: "cover", borderRadius: 4, border: "1px solid #222", cursor: "zoom-in" }}
+                            />
+                          ))}
+                        </div>
+                      )}
+                      <div style={{ marginTop: "auto", paddingTop: 8, borderTop: "1px solid #151515", display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ color: "#39ff14", fontSize: 12 }}>✓</span>
+                        <span style={{ fontSize: 11, color: "#888", fontWeight: 700, letterSpacing: 0.5 }}>
+                          {rev.reviewer_name || "Verified Fan"}
                         </span>
                       </div>
                     </div>
@@ -1278,284 +1311,232 @@ export default function ProductPage() {
               )}
             </div>
 
-            {/* ── "YOU MAY ALSO LIKE" (RELATABLE JERSEYS OF THAT TEAM) ── */}
-            <div style={{ marginTop: 64, borderTop: "2px solid #1a1a1a", paddingTop: 40 }}>
-              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
-                <div>
-                  <div style={{ color: "#39ff14", fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, fontWeight: 900, letterSpacing: 3, textTransform: "uppercase" }}>
-                    RECOMMENDED OFFICIAL KITS
-                  </div>
-                  <h2 style={{ fontFamily: "'Bebas Neue', 'Barlow Condensed', sans-serif", fontSize: "clamp(26px, 4vw, 36px)", letterSpacing: 2, margin: "2px 0 0 0", color: "#fff" }}>
-                    YOU MAY ALSO LIKE
-                  </h2>
-                  <p style={{ color: "#777", fontSize: 13, margin: "4px 0 0 0" }}>
-                    More official kits & editions from {team?.name || "this collection"}
-                  </p>
-                </div>
-
-                {team && (
-                  <Link
-                    to={`/teams/${slug}`}
-                    style={{ color: "#39ff14", textDecoration: "none", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "'Barlow Condensed', sans-serif" }}
-                  >
-                    VIEW ALL {team.name} JERSEYS →
-                  </Link>
-                )}
-              </div>
-
-              {relatableJerseys.length === 0 ? (
-                <div style={{ background: "#0a0a0a", border: "1px solid #161616", padding: "30px", textAlign: "center", borderRadius: 4, color: "#666" }}>
-                  More jerseys coming soon for this squad!
-                </div>
-              ) : (
-                <div className="pdp-relatable-grid">
-                  {relatableJerseys.map((rel) => {
-                    const relSlug = generateProductSlug(rel.name);
-                    const relImg = getFirstImage(rel.image_url);
-                    const relIsPlayer = rel.name.toUpperCase().includes("PLAYER") || rel.type?.toUpperCase().includes("PLAYER");
-
-                    return (
-                      <div
-                        key={rel.id}
-                        className="pdp-card"
-                        onClick={() => navigate(`/product/${relSlug}`)}
-                      >
-                        {/* Image Wrap */}
-                        <div style={{ position: "relative", width: "100%", aspectRatio: "1/1", background: "#0f0f0f", overflow: "hidden" }}>
-                          <img
-                            src={relImg}
-                            alt={rel.name}
-                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                          />
-                          <div style={{ position: "absolute", top: 8, left: 8, background: "rgba(0,0,0,0.8)", border: relIsPlayer ? "1px solid #ff4444" : "1px solid #39ff14", color: relIsPlayer ? "#ff4444" : "#39ff14", fontSize: 9, fontWeight: 900, padding: "2px 6px", borderRadius: 2, letterSpacing: 1 }}>
-                            {rel.type || (relIsPlayer ? "PLAYER" : "FAN")}
-                          </div>
-                          {rel.stock === 0 && (
-                            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ff4444", fontWeight: 900, fontSize: 13, letterSpacing: 1 }}>
-                              OUT OF STOCK
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Card Info */}
-                        <div style={{ padding: "12px", display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-between" }}>
-                          <div>
-                            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 14, color: "#fff", lineHeight: 1.2, marginBottom: 6 }}>
-                              {rel.name}
-                            </div>
-                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: "#39ff14", letterSpacing: 1 }}>
-                              ₹{rel.price?.toLocaleString("en-IN")}
-                            </div>
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/product/${relSlug}`);
-                            }}
-                            style={{
-                              marginTop: 10,
-                              background: "transparent",
-                              border: "1px solid #39ff14",
-                              color: "#39ff14",
-                              padding: "6px",
-                              borderRadius: 3,
-                              fontWeight: 900,
-                              fontSize: 11,
-                              fontFamily: "'Barlow Condensed', sans-serif",
-                              letterSpacing: 1,
-                              cursor: "pointer",
-                              transition: "background 0.2s, color 0.2s"
-                            }}
-                            onMouseOver={e => { e.currentTarget.style.background = "#39ff14"; e.currentTarget.style.color = "#000"; }}
-                            onMouseOut={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#39ff14"; }}
-                          >
-                            VIEW JERSEY →
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* SEO STRUCTURED DATA */}
+            {/* COMPREHENSIVE SEO & SCHEMA LAYER */}
             <ProductSEO jersey={product} reviews={jerseyReviews} />
           </>
         )}
       </div>
 
-      {/* FOOTER */}
-      <footer style={{ background: "#040404", borderTop: "1px solid #141414", padding: "40px 24px", textAlign: "center" }}>
-        <div style={{ fontWeight: 900, fontSize: 26, letterSpacing: 5, marginBottom: 8, fontFamily: "'Bebas Neue',sans-serif" }}>
-          JERSEY<span style={{ color: "#39ff14" }}>VAULT</span>
-        </div>
-        <p style={{ color: "#555", fontSize: 12, letterSpacing: 3 }}>© 2026 JERSEYVAULT. ALL RIGHTS RESERVED.</p>
-        <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 16, flexWrap: "wrap" }}>
-          {[["HOME", "/"], ["SHOP", "/#shop"], ["TEAMS", "/teams"], ["TRACK", "/tracking"], ["PRIVACY", "/privacy"], ["TERMS", "/terms"], ["CONTACT", "/contact"], ["FAQ", "/faq"]].map(([l, h]) => (
-            <Link
-              key={l}
-              to={h}
-              style={{ color: "#555", fontSize: 12, letterSpacing: 2, textDecoration: "none", transition: "color 0.2s" }}
-              onMouseEnter={e => e.target.style.color = "#39ff14"}
-              onMouseLeave={e => e.target.style.color = "#555"}
-            >
-              {l}
-            </Link>
-          ))}
-        </div>
-      </footer>
+      {/* SIZE CHART MODAL */}
+      {showSizeChart && (
+        <div className="pdp-modal-bg">
+          <button type="button" className="pdp-modal-dim" aria-label="Close modal" onClick={() => setShowSizeChart(false)} />
+          <div className="pdp-modal" style={{ maxWidth: 600, padding: 24 }}>
+            <button type="button" className="pdp-modal-close" onClick={() => setShowSizeChart(false)}>✕</button>
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, letterSpacing: 2, margin: "0 0 8px", color: "#39ff14" }}>
+              JERSEY SIZE GUIDE (INCHES)
+            </h2>
+            <p style={{ color: "#888", fontSize: 13, margin: "0 0 20px" }}>
+              Measurements refer to body width (chest pit-to-pit) and jersey length.
+            </p>
 
-      {/* CART DRAWER */}
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, textAlign: "left", marginBottom: 20 }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid #333", color: "#aaa" }}>
+                  <th style={{ padding: "8px 12px" }}>SIZE</th>
+                  <th style={{ padding: "8px 12px" }}>CHEST (IN)</th>
+                  <th style={{ padding: "8px 12px" }}>LENGTH (IN)</th>
+                  <th style={{ padding: "8px 12px" }}>BODY WEIGHT (KG)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: "XS", c: "36 - 38", l: "26", w: "50 - 58" },
+                  { s: "S", c: "38 - 40", l: "27", w: "58 - 66" },
+                  { s: "M", c: "40 - 42", l: "28", w: "66 - 75" },
+                  { s: "L", c: "42 - 44", l: "29", w: "75 - 84" },
+                  { s: "XL", c: "44 - 46", l: "30", w: "84 - 92" },
+                  { s: "XXL", c: "46 - 48", l: "31", w: "92 - 102" }
+                ].map((row) => (
+                  <tr key={row.s} style={{ borderBottom: "1px solid #1a1a1a" }}>
+                    <td style={{ padding: "10px 12px", color: "#39ff14", fontWeight: 900 }}>{row.s}</td>
+                    <td style={{ padding: "10px 12px", color: "#ddd" }}>{row.c}</td>
+                    <td style={{ padding: "10px 12px", color: "#ddd" }}>{row.l}</td>
+                    <td style={{ padding: "10px 12px", color: "#888" }}>{row.w}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div style={{ background: "#111", padding: 14, borderRadius: 4, border: "1px solid #222", fontSize: 12, color: "#aaa", lineHeight: 1.6 }}>
+              <p style={{ margin: "0 0 6px", color: "#fff", fontWeight: 700 }}>Version Comparison:</p>
+              <ul style={{ margin: 0, paddingLeft: 18 }}>
+                <li><strong>Fan Version:</strong> Standard relaxed cut. Order your regular size.</li>
+                <li><strong>Player Version:</strong> Ultra-slim athletic cut. Order 1 size up.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FULL RESOLUTION REVIEW PHOTO PREVIEW */}
+      {previewReviewPhoto && (
+        <div className="pdp-modal-bg" onClick={() => setPreviewReviewPhoto(null)}>
+          <button type="button" className="pdp-modal-dim" aria-label="Close image preview" />
+          <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh", zIndex: 2001 }}>
+            <button
+              type="button"
+              className="pdp-modal-close"
+              onClick={() => setPreviewReviewPhoto(null)}
+              style={{ top: -16, right: -16 }}
+            >
+              ✕
+            </button>
+            <img
+              src={previewReviewPhoto}
+              alt="Full view"
+              style={{ maxWidth: "100%", maxHeight: "90vh", objectFit: "contain", borderRadius: 4, boxShadow: "0 0 30px rgba(0,0,0,0.9)" }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* SLIDE-OUT CART PANEL */}
       {cartOpen && (
         <div className="cart-overlay">
-          <button type="button" className="cart-backdrop" onClick={() => setCartOpen(false)} aria-label="Close cart" />
+          <button
+            type="button"
+            className="cart-backdrop"
+            aria-label="Close cart"
+            onClick={() => setCartOpen(false)}
+          />
           <div className="cart-panel">
             {/* Header */}
-            <div style={{ padding: "18px 20px", borderBottom: "1px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, letterSpacing: 2 }}>
-                SHOPPING CART ({cartCount})
-              </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderBottom: "1px solid #1a1a1a" }}>
+              <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, letterSpacing: 2, margin: 0, color: "#fff" }}>
+                YOUR CART ({cartCount})
+              </h2>
               <button
                 type="button"
                 onClick={() => setCartOpen(false)}
-                style={{ background: "none", border: "none", color: "#888", fontSize: 22, cursor: "pointer", padding: 4 }}
+                style={{ background: "none", border: "none", color: "#aaa", fontSize: 20, cursor: "pointer", padding: 4 }}
               >
                 ✕
               </button>
             </div>
 
-            {/* Items */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
+            {/* Free Shipping Progress */}
+            {(() => {
+              const subtotal = cart.reduce((s, it) => s + (it.price * (it.qty || 1)), 0);
+              const remaining = Math.max(0, 1099 - subtotal);
+              const pct = Math.min(100, (subtotal / 1099) * 100);
+              return (
+                <div style={{ background: "#111", padding: "10px 20px", borderBottom: "1px solid #1a1a1a" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: 800, letterSpacing: 1, color: remaining === 0 ? "#39ff14" : "#ccc", marginBottom: 6 }}>
+                    <span>{remaining === 0 ? "🎉 YOU QUALIFY FOR FREE SHIPPING!" : `ADD ₹${remaining} MORE FOR FREE SHIPPING`}</span>
+                    <span>{Math.round(pct)}%</span>
+                  </div>
+                  <div style={{ width: "100%", height: 4, background: "#222", borderRadius: 2, overflow: "hidden" }}>
+                    <div style={{ width: `${pct}%`, height: "100%", background: "#39ff14", transition: "width 0.3s ease" }} />
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Cart Items List */}
+            <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px", display: "flex", flexDirection: "column", gap: 14 }}>
               {cart.length === 0 ? (
                 <div style={{ textAlign: "center", padding: "60px 0", color: "#666" }}>
                   <div style={{ fontSize: 48, marginBottom: 12 }}>🛒</div>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 16, letterSpacing: 1 }}>YOUR CART IS EMPTY</div>
+                  <p style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>YOUR CART IS EMPTY</p>
+                  <p style={{ margin: "6px 0 16px", fontSize: 13, color: "#888" }}>Explore our latest club and national team drops.</p>
+                  <button
+                    type="button"
+                    onClick={() => { setCartOpen(false); navigate("/#shop"); }}
+                    style={{ background: "#39ff14", color: "#000", border: "none", padding: "10px 20px", borderRadius: 4, fontWeight: 900, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, cursor: "pointer" }}
+                  >
+                    CONTINUE SHOPPING
+                  </button>
                 </div>
               ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  {cart.map((item, idx) => (
-                    <div key={`${item.id}-${item.size}-${idx}`} style={{ display: "flex", gap: 12, background: "#0e0e0e", border: "1px solid #181818", padding: 10, borderRadius: 4 }}>
-                      <img src={item.image_url} alt={item.name} style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 3 }} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", lineHeight: 1.2 }}>{item.name}</div>
-                        <div style={{ fontSize: 11, color: "#39ff14", marginTop: 4, letterSpacing: 1 }}>SIZE: {item.size} • ₹{item.price}</div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
-                          <span style={{ fontSize: 11, color: "#888" }}>QTY: {item.qty}</span>
+                cart.map((item, idx) => (
+                  <div key={`${item.id}-${item.size}-${idx}`} style={{ display: "flex", gap: 12, paddingBottom: 14, borderBottom: "1px solid #161616" }}>
+                    <img src={item.image_url} alt={item.name} style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 4, background: "#111" }} />
+                    <div style={{ flex: 1 }}>
+                      <h4 style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 800, color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 0.5 }}>
+                        {item.name}
+                      </h4>
+                      <p style={{ margin: "0 0 8px", fontSize: 12, color: "#888" }}>
+                        Size: <span style={{ color: "#39ff14", fontWeight: 700 }}>{item.size}</span> · ₹{item.price}
+                      </p>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid #282828", borderRadius: 3, background: "#0e0e0e" }}>
                           <button
                             type="button"
-                            onClick={() => setCart(prev => prev.filter((_, i) => i !== idx))}
-                            style={{ background: "none", border: "none", color: "#ff4444", fontSize: 11, cursor: "pointer", textDecoration: "underline", padding: 0 }}
+                            onClick={() => {
+                              setCart(prev => prev.map((it, i) => i === idx ? { ...it, qty: Math.max(1, (it.qty || 1) - 1) } : it));
+                            }}
+                            style={{ width: 26, height: 26, background: "transparent", border: "none", color: "#fff", cursor: "pointer" }}
                           >
-                            Remove
+                            −
+                          </button>
+                          <span style={{ width: 24, textAlign: "center", fontSize: 12, fontWeight: 800 }}>{item.qty || 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCart(prev => prev.map((it, i) => i === idx ? { ...it, qty: (it.qty || 1) + 1 } : it));
+                            }}
+                            style={{ width: 26, height: 26, background: "transparent", border: "none", color: "#fff", cursor: "pointer" }}
+                          >
+                            +
                           </button>
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCart(prev => prev.filter((_, i) => i !== idx));
+                          }}
+                          style={{ background: "none", border: "none", color: "#ff4444", fontSize: 12, cursor: "pointer", textDecoration: "underline" }}
+                        >
+                          Remove
+                        </button>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))
               )}
             </div>
 
-            {/* Footer */}
+            {/* Cart Footer */}
             {cart.length > 0 && (
-              <div style={{ padding: "18px 20px", borderTop: "1px solid #1a1a1a", background: "#0c0c0c" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 16, letterSpacing: 1, color: "#aaa" }}>SUBTOTAL:</span>
-                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 26, color: "#39ff14", letterSpacing: 1 }}>
-                    ₹{cart.reduce((sum, item) => sum + (item.price * (item.qty || 1)), 0).toLocaleString("en-IN")}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => { setCartOpen(false); navigate("/checkout"); }}
-                  style={{
-                    width: "100%",
-                    background: "#39ff14",
-                    color: "#000",
-                    border: "none",
-                    padding: "14px",
-                    fontWeight: 900,
-                    fontFamily: "'Bebas Neue', 'Barlow Condensed', sans-serif",
-                    fontSize: 20,
-                    letterSpacing: 2,
-                    borderRadius: 4,
-                    cursor: "pointer"
-                  }}
-                >
-                  PROCEED TO CHECKOUT →
-                </button>
+              <div style={{ padding: "16px 20px", borderTop: "1px solid #1a1a1a", background: "#0d0d0d" }}>
+                {(() => {
+                  const subtotal = cart.reduce((s, it) => s + (it.price * (it.qty || 1)), 0);
+                  const isFreeShip = subtotal >= 1099;
+                  const shipping = isFreeShip ? 0 : 99;
+                  const total = subtotal + shipping;
+                  return (
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#888", marginBottom: 6 }}>
+                        <span>Subtotal</span>
+                        <span style={{ color: "#fff", fontWeight: 700 }}>₹{subtotal}</span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#888", marginBottom: 12 }}>
+                        <span>Estimated Shipping</span>
+                        <span style={{ color: isFreeShip ? "#39ff14" : "#fff", fontWeight: 700 }}>
+                          {isFreeShip ? "FREE" : `₹${shipping}`}
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, color: "#fff", fontWeight: 900, marginBottom: 16, borderTop: "1px solid #1f1f1f", paddingTop: 10, fontFamily: "'Barlow Condensed', sans-serif" }}>
+                        <span>TOTAL</span>
+                        <span style={{ color: "#39ff14" }}>₹{total}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCartOpen(false);
+                          navigate("/checkout");
+                        }}
+                        className="pdp-cta-btn"
+                        style={{ fontSize: 18, padding: "14px 20px" }}
+                      >
+                        PROCEED TO CHECKOUT →
+                      </button>
+                    </>
+                  );
+                })()}
               </div>
             )}
-          </div>
-        </div>
-      )}
-
-      {/* SIZE CHART MODAL POPUP */}
-      {showSizeChart && (
-        <div className="pdp-modal-bg">
-          <button type="button" className="pdp-modal-dim" aria-label="Close size chart" onClick={() => setShowSizeChart(false)} />
-          <div className="pdp-modal" style={{ maxWidth: "520px", border: "1px solid #39ff14" }}>
-            <button type="button" className="pdp-modal-close" onClick={() => setShowSizeChart(false)}>✕</button>
-            <div style={{ background: "#39ff14", color: "#000", padding: "14px 20px", textAlign: "center", fontWeight: "900", fontSize: "24px", fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "3px" }}>
-              SIZE CHART
-            </div>
-            <div style={{ padding: "24px 20px 16px" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", fontSize: "14px", textAlign: "center", border: "1px solid #222" }}>
-                <thead>
-                  <tr style={{ background: "#111", borderBottom: "2px solid #39ff14" }}>
-                    <th style={{ padding: "12px 8px", border: "1px solid #222" }}>SIZE</th>
-                    <th style={{ padding: "12px 8px", border: "1px solid #222", color: "#ccc" }}>
-                      CHEST <span style={{ color: "#39ff14", fontSize: 11, display: "block" }}>(FAN VERSION) (in.")</span>
-                    </th>
-                    <th style={{ padding: "12px 8px", border: "1px solid #222", color: "#ccc" }}>
-                      CHEST <span style={{ color: "#39ff14", fontSize: 11, display: "block" }}>(PLAYER VERSION) (in.")</span>
-                    </th>
-                    <th style={{ padding: "12px 8px", border: "1px solid #222", color: "#ccc" }}>
-                      LENGTH <span style={{ color: "#aaa", fontSize: 11, display: "block" }}>(in.")</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { size: "S", fan: "38", player: "36", len: "27" },
-                    { size: "M", fan: "40", player: "38", len: "28" },
-                    { size: "L", fan: "42", player: "40", len: "29" },
-                    { size: "XL", fan: "44", player: "42", len: "30" },
-                    { size: "XXL", fan: "46", player: "44", len: "31" },
-                  ].map((row, idx) => (
-                    <tr key={row.size} style={{ background: idx % 2 === 0 ? "#070707" : "#0c0c0c" }}>
-                      <td style={{ padding: "12px 8px", fontWeight: "900", color: "#39ff14", fontSize: "16px", border: "1px solid #222" }}>{row.size}</td>
-                      <td style={{ padding: "12px 8px", fontWeight: "700", border: "1px solid #222" }}>{row.fan}</td>
-                      <td style={{ padding: "12px 8px", fontWeight: "700", border: "1px solid #222" }}>{row.player}</td>
-                      <td style={{ padding: "12px 8px", fontWeight: "700", border: "1px solid #222" }}>{row.len}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div style={{ marginTop: 16, padding: 12, background: "#111", border: "1px solid #1e1e1e", borderRadius: 2, fontSize: 12, color: "#aaa", lineHeight: 1.5 }}>
-                <strong style={{ color: "#39ff14" }}>Fit Tip:</strong> Fan version jerseys offer a regular, comfortable fit. Player version jerseys have a tighter athletic fit; if you prefer extra room, choose one size up.
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* LIGHTBOX FOR REVIEW PHOTOS */}
-      {previewReviewPhoto && (
-        <div className="pdp-modal-bg" style={{ zIndex: 2200 }}>
-          <button type="button" className="pdp-modal-dim" onClick={() => setPreviewReviewPhoto(null)} aria-label="Close photo preview" />
-          <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh", margin: "auto", background: "#000", border: "1px solid #39ff14", padding: 8, zIndex: 2201 }}>
-            <button
-              type="button"
-              style={{ position: "absolute", top: 12, right: 12, background: "#39ff14", color: "#000", border: "none", width: 32, height: 32, fontWeight: 900, cursor: "pointer", zIndex: 10 }}
-              onClick={() => setPreviewReviewPhoto(null)}
-            >
-              ✕
-            </button>
-            <img src={previewReviewPhoto} alt="Customer review preview" style={{ maxWidth: "100%", maxHeight: "80vh", display: "block", objectFit: "contain", margin: "0 auto" }} />
           </div>
         </div>
       )}

@@ -12,8 +12,8 @@ export default function ProductSEO({ jersey, reviews = [] }) {
   const brandName = "Jersey Vault";
 
   const breadcrumbs = [
-    { name: "Home", url: "https://www.thejerseyvault.in/" },
-    { name: "Collections", url: "https://www.thejerseyvault.in/teams" },
+    { name: "Home", url: "https://www.thejerseyvault.in/", to: "/" },
+    { name: "Collections", url: "https://www.thejerseyvault.in/teams", to: "/teams" },
     { name: productName, url: `https://www.thejerseyvault.in/product/${generateProductSlug(jersey.name)}` }
   ];
 
@@ -165,7 +165,7 @@ export default function ProductSEO({ jersey, reviews = [] }) {
             {i === breadcrumbs.length - 1 ? (
               <span style={{ color: "#fff", fontWeight: 700 }}>{b.name}</span>
             ) : (
-              <Link to="/" style={{ color: "#39ff14", textDecoration: "none" }}>{b.name}</Link>
+              <Link to={b.to} style={{ color: "#39ff14", textDecoration: "none" }}>{b.name}</Link>
             )}
           </React.Fragment>
         ))}
@@ -239,7 +239,7 @@ export default function ProductSEO({ jersey, reviews = [] }) {
         <div style={{ flex: "1 1 300px", background: "#0c0c0c", padding: "20px", borderRadius: "6px", border: "1px solid #222" }}>
           <h3 style={{ fontSize: 16, fontWeight: 900, marginBottom: 16, color: "#fff", fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1 }}>HELPFUL GUIDES</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <Link to="/pages/player-vs-fan" style={{ color: "#39ff14", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>Player vs Fan Version →</Link>
+            <Link to="/pages/player-version-vs-fan-version" style={{ color: "#39ff14", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>Player vs Fan Version →</Link>
             <Link to="/pages/size-guide" style={{ color: "#39ff14", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>Complete Size Guide →</Link>
             <Link to="/pages/care-guide" style={{ color: "#39ff14", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>Washing & Care Guide →</Link>
             <Link to="/pages/returns-guide" style={{ color: "#39ff14", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>Returns Policy →</Link>

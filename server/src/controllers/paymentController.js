@@ -3,6 +3,11 @@ import razorpay from '../config/razorpay.js';
 import { supabase } from '../config/supabase.js';
 import { generatePDFBuffer } from '../utils/pdfGenerator.js';
 import { getR2Table, updateSizeStockInR2 } from '../services/r2Service.js';
+import {
+  isRazorpayPaymentCaptured,
+  verifyRazorpayPaymentSignature,
+  verifyRazorpayWebhookSignature,
+} from '../utils/paymentSecurity.js';
 
 // ─── POST /api/payment/create-order ────────────────────────────────────────
 export const ENFORCE_SECURITY = true;
@@ -85,13 +90,11 @@ export const verifyPayment = async (req, res) => {
       return res.status(400).json({ message: 'Missing payment fields' });
     }
 
-    // HMAC-SHA256 signature check
-    const expected = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-      .digest('hex');
-
-    if (expected !== razorpay_signature) {
+    const paymentSecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!paymentSecret) {
+      return res.status(503).json({ message: 'Payment verification is not configured.' });
+    }
+    if (!verifyRazorpayPaymentSignature(razorpay_order_id, razorpay_payment_id, razorpay_signature, paymentSecret)) {
       return res.status(400).json({ message: 'Invalid payment signature' });
     }
 
@@ -107,6 +110,9 @@ export const verifyPayment = async (req, res) => {
           const rpPayment = await razorpay.payments.fetch(razorpay_payment_id);
           if (rpPayment.order_id !== razorpay_order_id) {
             return res.status(400).json({ message: 'Order ID mismatch' });
+          }
+          if (!isRazorpayPaymentCaptured(rpPayment)) {
+            return res.status(409).json({ message: 'Payment has not been captured.' });
           }
           amountPaid = rpPayment.amount / 100;
         } catch (fetchErr) {
@@ -188,20 +194,15 @@ Match: ${isMatch ? 'YES' : 'NO'}`);
 export const razorpayWebhook = async (req, res) => {
   try {
     const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      return res.status(503).json({ message: 'Payment webhook verification is not configured.' });
+    }
 
-    if (webhookSecret) {
-      const signature = req.headers['x-razorpay-signature'];
-      const body = req.body; // raw Buffer
-
-      const expected = crypto
-        .createHmac('sha256', webhookSecret)
-        .update(body)
-        .digest('hex');
-
-      if (expected !== signature) {
-        console.warn('Webhook: invalid signature');
-        return res.status(400).json({ message: 'Invalid webhook signature' });
-      }
+    const signature = req.headers['x-razorpay-signature'];
+    const body = req.body; // raw Buffer
+    if (!verifyRazorpayWebhookSignature(body, signature, webhookSecret)) {
+      console.warn('Webhook: invalid signature');
+      return res.status(400).json({ message: 'Invalid webhook signature' });
     }
 
     const event = JSON.parse(req.body.toString());
@@ -209,6 +210,9 @@ export const razorpayWebhook = async (req, res) => {
 
     if (eventName === 'payment.captured' || eventName === 'order.paid') {
       const payment = payload.payment?.entity;
+      if (!isRazorpayPaymentCaptured(payment)) {
+        return res.status(400).json({ message: 'Webhook payment is not captured.' });
+      }
       const order_id = payment?.order_id;
       const payment_id = payment?.id;
       const amount = payment?.amount ? payment.amount / 100 : 0;
@@ -613,6 +617,3 @@ export const placeCodOrder = async (req, res) => {
     res.status(500).json({ message: err.message || 'Failed to place COD order.' });
   }
 };
-
-
-

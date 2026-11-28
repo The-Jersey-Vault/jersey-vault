@@ -14,10 +14,14 @@ Whenever the user prompts with the exact phrase "update docs folder" (or similar
 
 
 
-# Skills Catalog Usage Rule
+# Skills Catalog & Execution Guidance Rule
 
-Whenever you need to use a skill from the `antigravity-skills` repository to help with a task, follow this workflow to save tokens:
+Whenever you need to use skills from the `skills` repository to help with any task, follow this workflow:
 
-1. **Read the Summary First**: DO NOT search through the individual `SKILL.md` files. Instead, first read the `c:\Users\Saptarshi\Desktop\MainFolder\Hackathon\jersey-vault\jersey-vault-navneel\v10\jersey-vault\.gemini\antigravity\skills\skills_summary.xml` file to find the appropriate skill and its description.
-2. **Execute the Skill**: Once you have identified the required skill from the summary, navigate directly to `c:\Users\Saptarshi\Desktop\MainFolder\Hackathon\jersey-vault\jersey-vault-navneel\v10\jersey-vault\.gemini\antigravity\skills\skills\<skill_name>\SKILL.md`, read its instructions, and execute it properly.
-3. **Remember Context**: This catalog lookup will provide you with the correct skill to use without having to read hundreds of files, keeping the token usage efficient across the chat history.
+1. **Read Guidance & Summary First**:
+   - Check `c:\Users\Saptarshi\Desktop\MainFolder\Hackathon\jersey-vault\jersey-vault-navneel\v11\jersey-vault\.gemini\antigravity\skills\skills\SKILLS_GUIDANCE.md` for multi-skill routing and orchestration rules.
+   - Read `c:\Users\Saptarshi\Desktop\MainFolder\Hackathon\jersey-vault\jersey-vault-navneel\v11\jersey-vault\.gemini\antigravity\skills\skills_summary.xml` to quickly identify the skills and their descriptions without searching through individual folders.
+2. **Multi-Skill Orchestration**:
+   - When a task requires multiple competencies (e.g. debugging a payment flow with test-driven development and security review), select and co-activate all applicable skills (e.g. `systematic-debugging` + `test-driven-development` + `payment-integration-patterns`).
+3. **Execute the Skill**:
+   - Navigate directly to `c:\Users\Saptarshi\Desktop\MainFolder\Hackathon\jersey-vault\jersey-vault-navneel\v11\jersey-vault\.gemini\antigravity\skills\skills\<skill_name>\SKILL.md` for each needed skill, read its specific instructions, and apply the required patterns and verification steps.

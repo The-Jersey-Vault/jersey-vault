@@ -15,11 +15,40 @@ import {
   getFileStreamFromR2,
 } from '../services/r2Service.js';
 import upload from '../middlewares/uploadMiddleware.js';
+import { supabase } from '../config/supabase.js';
+import {
+  createDbReadAccessMiddleware,
+  isPublicDbReadQueryAllowed,
+  isPublicDbReadTable,
+  projectPublicDbRows,
+} from '../utils/dbReadAccess.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = express.Router();
+
+// Verify admin authorization for Cloudflare database access.
+const verifyAdminForMutations = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({
+      data: null,
+      error: { message: 'Unauthorized: Admin authorization token is required.' }
+    });
+  }
+  const token = authHeader.split(' ')[1];
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  const adminEmail = (process.env.ADMIN_EMAIL || 'navneeldutta@gmail.com').toLowerCase();
+  if (error || !user || user.email?.toLowerCase() !== adminEmail) {
+    return res.status(403).json({
+      data: null,
+      error: { message: 'Unauthorized: Admin permission is required.' }
+    });
+  }
+  req.user = user;
+  next();
+};
 
 // Helper to filter and project array data
 function applyFilters(items, query) {
@@ -98,50 +127,35 @@ function applyFilters(items, query) {
 }
 
 // ── GET /api/db/:table ──────────────────────────────────────────────────────
-router.get('/:table', async (req, res) => {
+router.get('/:table', createDbReadAccessMiddleware(verifyAdminForMutations), async (req, res) => {
   try {
     const { table } = req.params;
+    const publicRead = isPublicDbReadTable(table);
+    if (publicRead && !isPublicDbReadQueryAllowed(table, req.query)) {
+      return res.status(400).json({
+        data: null,
+        error: { message: 'The requested public catalog query is not allowed.' }
+      });
+    }
+
     const items = await getR2Table(table);
 
     const filtered = applyFilters(items, req.query);
+    const result = publicRead ? projectPublicDbRows(table, filtered) : filtered;
 
     if (req.query.single === 'true') {
-      if (filtered.length === 0) {
+      if (result.length === 0) {
         return res.status(404).json({ data: null, error: { message: 'Row not found', code: 'PGRST116' } });
       }
-      return res.json({ data: filtered[0], error: null });
+      return res.json({ data: result[0], error: null });
     }
 
-    res.json({ data: filtered, error: null });
+    res.json({ data: result, error: null });
   } catch (err) {
     console.error(`[dbRoutes:GET /${req.params.table}] Error:`, err);
     res.status(500).json({ data: null, error: { message: err.message } });
   }
 });
-
-import { supabase } from '../config/supabase.js';
-
-// Verify admin authorization for Cloudflare database mutations
-const verifyAdminForMutations = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({
-      data: null,
-      error: { message: 'Unauthorized: Admin authorization token is required.' }
-    });
-  }
-  const token = authHeader.split(' ')[1];
-  const { data: { user }, error } = await supabase.auth.getUser(token);
-  const adminEmail = (process.env.ADMIN_EMAIL || 'navneeldutta@gmail.com').toLowerCase();
-  if (error || !user || user.email?.toLowerCase() !== adminEmail) {
-    return res.status(403).json({
-      data: null,
-      error: { message: 'Unauthorized: Only navneeldutta@gmail.com has admin permission to modify Cloudflare database.' }
-    });
-  }
-  req.user = user;
-  next();
-};
 
 // ── POST /api/db/:table ─────────────────────────────────────────────────────
 router.post('/:table', verifyAdminForMutations, async (req, res) => {

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "test": "node --test test/*.test.js",
     "meesho:login": "node src/integrations/meesho/meeshoAuthLauncher.js",
     "meesho:check": "node src/integrations/meesho/meeshoHealthCheck.js",
     "meesho:dryrun": "node src/integrations/meesho/meeshoDryRunRunner.js",

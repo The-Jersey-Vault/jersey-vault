@@ -62,6 +62,7 @@ ui_optimization_scratchpad.md
 localhost_*-*.json
 *.tmp
 *.temp
+updates/
 
 # Automation & Integration Sessions
 .meesho_session/

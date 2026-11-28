@@ -18,8 +18,10 @@ import Reviews from "./pages/Reviews";
 import SupportChat from "./components/SupportChat";
 import Collection from "./pages/Collection";
 import ProductPage from "./pages/ProductPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import { GlobalDataProvider } from "./context/GlobalDataContext";
 
+const GuideIndex = lazy(() => import("./pages/guides/GuideIndex"));
 const SizeGuide = lazy(() => import("./pages/guides/SizeGuide"));
 const PlayerVsFan = lazy(() => import("./pages/guides/PlayerVsFan"));
 const BuyingGuide = lazy(() => import("./pages/guides/BuyingGuide"));
@@ -252,6 +254,7 @@ function AppContent() {
             <Route path="/product/:slug" element={<ProductPage />} />
             <Route path="/reviews" element={<Reviews />} />
             
+            <Route path="/pages/guides" element={<GuideIndex />} />
             <Route path="/pages/size-guide" element={<SizeGuide />} />
             <Route path="/pages/player-version-vs-fan-version" element={<PlayerVsFan />} />
             <Route path="/pages/buying-guide" element={<BuyingGuide />} />
@@ -363,6 +366,7 @@ function AppContent() {
             <Route path="/pages/macron-s-dominance-in-lower-leagues" element={<Macronsdominanceinlowerleagues />} />
             <Route path="/pages/hummel-s-unique-chevron-designs" element={<Hummelsuniquechevrondesigns />} />
 
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
