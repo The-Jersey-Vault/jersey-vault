@@ -15,6 +15,13 @@ export const generateInvoice = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
+    // IDOR protection: only allow order owner or admin to download invoice
+    const isOwner = req.user?.id && (order.user_id === req.user.id || order.customer_email?.toLowerCase() === req.user.email?.toLowerCase());
+    const isAdmin = req.user?.role === 'admin';
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ message: 'Forbidden: You do not have permission to access this invoice.' });
+    }
+
     const pdfBuffer = await generatePDFBuffer(order);
 
     res.setHeader('Content-Type', 'application/pdf');

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../config/supabase.js';
 import { getR2Table } from '../services/r2Service.js';
 
 // Admin panel stores status as strings: pending, preparing, shipped, delivered
@@ -10,14 +10,7 @@ const statusLabels = {
   cancelled: "CANCELLED",
 };
 
-// Initialize Supabase Client
-const supabaseUrl = process.env.SUPABASE_URL || 'https://gpyzxpefddvxmjzxyhzy.supabase.co';
-// Use service role key if available, otherwise fall back to the public anon key for auth-based querying
-const supabaseKey = (process.env.SUPABASE_SERVICE_ROLE_KEY && !process.env.SUPABASE_SERVICE_ROLE_KEY.includes('YOUR_'))
-  ? process.env.SUPABASE_SERVICE_ROLE_KEY
-  : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdweXp4cGVmZGR2eG1qenh5aHp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDIzNTYsImV4cCI6MjEwMzk3ODM1Nn0.9DzJOrDNIXYJAmTzdVfHPmqkk8w0TFiLqpUS282KOIY';
-
-const localSupabase = createClient(supabaseUrl, supabaseKey);
+const localSupabase = supabase;
 
 function extractOrderOrTrackingId(text) {
   if (!text) return null;

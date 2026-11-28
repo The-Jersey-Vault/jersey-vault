@@ -17,6 +17,6 @@ router.get('/track/:trackingId', trackingLimiter, trackOrder);
 router.get('/user/:id', protect, getUserOrders);
 router.get('/', protect, adminOnly, getOrders);
 router.put('/:id/status', protect, adminOnly, updateOrderStatus);
-router.get('/:id/invoice', generateInvoice);
+router.get('/:id/invoice', protect, generateInvoice);
 
 export default router;

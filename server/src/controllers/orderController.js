@@ -84,8 +84,16 @@ export const createOrder = async (req, res) => {
       paymentResult = {};
     }
 
-    if (orderItems && orderItems.length === 0) {
+    if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
       return res.status(400).json({ message: 'No order items' });
+    }
+
+    // Threat Scenario 5 Validation: Strict integer bounds on quantity
+    for (const it of orderItems) {
+      const q = Number(it.qty);
+      if (!Number.isInteger(q) || q < 1 || q > 20) {
+        return res.status(400).json({ message: `Invalid item quantity for ${it.name || 'item'}. Must be an integer between 1 and 20.` });
+      }
     }
 
     // Check stock for all items from Cloudflare R2

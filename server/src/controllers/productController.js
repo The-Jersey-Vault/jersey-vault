@@ -151,13 +151,19 @@ export const addReview = async (req, res) => {
       try { current = JSON.parse(settingsList[existingIndex].value); } catch (_) {}
     }
 
+    const rawName = String(reviewer_name || 'Customer').trim();
+    const safeName = rawName.replace(/<[^>]*>/g, '').slice(0, 60);
+    const rawComment = String(comment || '').trim();
+    const safeComment = rawComment.replace(/<[^>]*>/g, '').slice(0, 1000);
+    const numRating = Math.max(1, Math.min(5, Math.round(Number(rating) || 5)));
+
     const newReview = {
       id: `rev_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       product_id: String(productId),
-      reviewer_name: reviewer_name || 'Customer',
-      rating: Number(rating) || 5,
-      comment: comment || '',
-      photos: Array.isArray(photos) ? photos : [],
+      reviewer_name: safeName || 'Customer',
+      rating: numRating,
+      comment: safeComment,
+      photos: Array.isArray(photos) ? photos.slice(0, 5) : [],
       is_published: is_published !== false,
       created_at: new Date().toISOString(),
     };

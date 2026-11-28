@@ -32,6 +32,11 @@ async function recalculateCart(items, payMethod = 'razorpay') {
   const products = await getR2Table('products');
 
   for (const item of items) {
+    const q = Number(item.qty);
+    if (!Number.isInteger(q) || q < 1 || q > 20) {
+      throw new Error(`Invalid item quantity for ${item.name || 'item'}. Must be an integer between 1 and 20.`);
+    }
+
     const p = (products || []).find(prod => String(prod.id) === String(item.id) || (item.name && prod.name === item.name));
     if (p) {
       const price = Number(p.price) || 0;

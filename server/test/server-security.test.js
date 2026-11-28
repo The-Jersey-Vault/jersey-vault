@@ -118,3 +118,36 @@ test('upload file extension whitelist prevents executable file types', () => {
   assert.equal(allowed.has('js'), false);
   assert.equal(allowed.has('sh'), false);
 });
+
+test('quantity validator rejects invalid, non-integer, and out-of-bound quantities', () => {
+  const isValidQty = (q) => {
+    const n = Number(q);
+    return Number.isInteger(n) && n >= 1 && n <= 20;
+  };
+  assert.equal(isValidQty(1), true);
+  assert.equal(isValidQty(20), true);
+  assert.equal(isValidQty(0), false);
+  assert.equal(isValidQty(-1), false);
+  assert.equal(isValidQty(1.5), false);
+  assert.equal(isValidQty(21), false);
+  assert.equal(isValidQty('abc'), false);
+  assert.equal(isValidQty(NaN), false);
+});
+
+test('IDOR invoice check permits only order owner or admin', () => {
+  const isInvoiceAuthorized = (user, order) => {
+    const isOwner = user?.id && (order.user_id === user.id || order.customer_email?.toLowerCase() === user.email?.toLowerCase());
+    const isAdmin = user?.role === 'admin';
+    return Boolean(isOwner || isAdmin);
+  };
+
+  const userA = { id: 'u1', email: 'alice@example.com', role: 'user' };
+  const userB = { id: 'u2', email: 'bob@example.com', role: 'user' };
+  const admin = { id: 'admin1', email: 'navneeldutta@gmail.com', role: 'admin' };
+  const orderA = { id: 'ord1', user_id: 'u1', customer_email: 'alice@example.com' };
+
+  assert.equal(isInvoiceAuthorized(userA, orderA), true);
+  assert.equal(isInvoiceAuthorized(userB, orderA), false);
+  assert.equal(isInvoiceAuthorized(admin, orderA), true);
+  assert.equal(isInvoiceAuthorized(null, orderA), false);
+});
