@@ -26,12 +26,12 @@ export default function ProductSEO({ jersey, reviews = [] }) {
     "@type": "Product",
     "name": jersey.name,
     "image": jersey.image_url,
-    "sku": jersey.id || `JV-${generateProductSlug(jersey.name).substring(0, 10).toUpperCase()}`,
-    "description": jersey.description || `Buy the official ${jersey.name} in India. Premium quality ${jerseyType} football kit with secure delivery.`,
+    "description": jersey.description || `Buy the ${jersey.name} online in India. Premium quality ${jerseyType} football kit with secure delivery.`,
     "brand": {
       "@type": "Brand",
       "name": brandName
     },
+    ...(jersey.sku ? { "sku": jersey.sku } : (jersey.id ? { "sku": String(jersey.id) } : {})),
     "offers": {
       "@type": "Offer",
       "url": `https://www.thejerseyvault.in/product/${generateProductSlug(jersey.name)}`,

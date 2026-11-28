@@ -1405,18 +1405,18 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
         </Helmet>
       ) : (
         <Helmet>
-          <title>The Jersey Vault | Buy Authentic Football Jerseys in India</title>
-          <meta name="description" content="Buy premium quality player version, fan version, and retro football jerseys online in India. Authentic club and national team kits at The Jersey Vault." />
+          <title>The Jersey Vault | Buy Football Jerseys Online in India</title>
+          <meta name="description" content="Buy premium quality player version, fan version, and retro football jerseys online in India. Cash on delivery and pan-India shipping at The Jersey Vault." />
           <link rel="canonical" href="https://www.thejerseyvault.in/" />
-          <meta property="og:title" content="The Jersey Vault | Buy Authentic Football Jerseys" />
-          <meta property="og:description" content="Buy premium quality player version, fan version, and retro football jerseys online in India." />
+          <meta property="og:title" content="The Jersey Vault | Premium Football Jerseys in India" />
+          <meta property="og:description" content="Buy premium quality player version, fan version, and retro football jerseys online in India. Cash on delivery and pan-India shipping." />
           <meta property="og:type" content="website" />
           <meta property="og:url" content="https://www.thejerseyvault.in/" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="The Jersey Vault | Buy Authentic Football Jerseys" />
+          <meta name="twitter:title" content="The Jersey Vault | Premium Football Jerseys in India" />
           <meta name="twitter:description" content="Buy premium quality player version, fan version, and retro football jerseys online in India." />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({"@context":"https://schema.org","@type":"WebSite","name":"The Jersey Vault","url":"https://www.thejerseyvault.in/","potentialAction":{"@type":"SearchAction","target":"https://www.thejerseyvault.in/?search={search_term_string}","query-input":"required name=search_term_string"}}) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({"@context":"https://schema.org","@type":"Organization","name":"The Jersey Vault","url":"https://www.thejerseyvault.in/","logo":"https://www.thejerseyvault.in/logo192.png","sameAs":["https://www.instagram.com/thejerseyvault.in/"]}) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({"@context":"https://schema.org","@type":"OnlineStore","name":"The Jersey Vault","url":"https://www.thejerseyvault.in/","logo":"https://www.thejerseyvault.in/logo192.png","image":"https://www.thejerseyvault.in/logo192.png","description":"Online store for premium player version and fan version football jerseys in India with pan-India delivery and COD.","sameAs":["https://www.instagram.com/the_jerseyvault/"],"contactPoint":{"@type":"ContactPoint","telephone":"+91-7029786817","contactType":"Customer Support","contactOption":"WhatsApp","areaServed":"IN","availableLanguage":["English","Hindi"]}}) }} />
         </Helmet>
       )}
       <div id="jv-root" style={{ fontFamily: "'Barlow Condensed', sans-serif", background: "#0a0a0a", minHeight: "100vh", color: "#fff", overflowX: "hidden" }}>

@@ -6,4 +6,12 @@ Disallow: /myorders
 Disallow: /auth
 Disallow: /success
 
+# AI Crawlers Policy: Disallow training scrapers while allowing search assistants
+User-agent: GPTBot
+Disallow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
 Sitemap: https://www.thejerseyvault.in/sitemap.xml
+

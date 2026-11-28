@@ -30,3 +30,17 @@ test("guide index links to the declared foundational guide routes", () => {
     "/pages/player-version-vs-fan-version"
   );
 });
+
+test("robots.txt crawler rules allow search bots while protecting private routes", () => {
+  const fs = require("fs");
+  const path = require("path");
+  const robots = fs.readFileSync(path.join(__dirname, "../public/robots.txt"), "utf8").replace(/\r\n/g, "\n");
+
+  expect(robots).toContain("User-agent: *");
+  expect(robots).toContain("Disallow: /admin");
+  expect(robots).toContain("Disallow: /checkout");
+  expect(robots).toContain("Disallow: /myorders");
+  expect(robots).toContain("User-agent: GPTBot\nDisallow: /");
+  expect(robots).toContain("User-agent: OAI-SearchBot\nAllow: /");
+  expect(robots).toContain("Sitemap: https://www.thejerseyvault.in/sitemap.xml");
+});
