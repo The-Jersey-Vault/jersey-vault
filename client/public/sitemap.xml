@@ -36,6 +36,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.thejerseyvault.in/pages/guides</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.thejerseyvault.in/pages/size-guide</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -646,6 +651,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.thejerseyvault.in/collections/inter-miami</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://www.thejerseyvault.in/collections/bayern-munich</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -726,12 +736,22 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/collections/mexico</loc>
+    <loc>https://www.thejerseyvault.in/collections/usa</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/collections/usa</loc>
+    <loc>https://www.thejerseyvault.in/collections/india-cricket</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/collections/rcb</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/collections/csk</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -896,127 +916,182 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/france-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/barcelona-26-27-away-jersey-fan-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/brazil-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/argentina-home-wc-jersey-clearance-sale</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/portugal-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/brazil-away-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/portugal-special-edition-jersey-25-26</loc>
+    <loc>https://www.thejerseyvault.in/product/real-madrid-26-27-third-kit-jersey</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/mexico-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/england-away-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/argentina-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/portugal-25-26-special-edition-jersey</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/portugal-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/uruguay-away-wc-jersey-fan-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/real-madrid-25-26</loc>
+    <loc>https://www.thejerseyvault.in/product/france-away-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/croatia-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/france-away-wc-jersey-clearance-sale</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/spain-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/spain-away-wc-jersey-fan-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/england-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/argentina-away-wc-jersey-fan-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/uruguay-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/spain-away-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/france-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/portugal-home-wc-jersey-fan-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/argentina-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/barcelona-26-27-away-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/brazil-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/spain-home-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/england-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/england-home-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/germany-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/uruguay-away-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/uruguay-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/real-madrid-26-27-away-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/sapin-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/portugal-away-wc-jersey-clearance-sale</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/barcelona-home-25-26</loc>
+    <loc>https://www.thejerseyvault.in/product/brazil-home-wc-jersey-clearance-sale</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/real-madrid-26-27-home</loc>
+    <loc>https://www.thejerseyvault.in/product/brazil-home-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/mexico-away-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/england-away-wc-jersey-fan-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/norway-home-wc-jersey</loc>
+    <loc>https://www.thejerseyvault.in/product/germany-home-wc-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/real-madrid-third-kit-26-27</loc>
+    <loc>https://www.thejerseyvault.in/product/mexico-home-wc-jersey-fan-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.thejerseyvault.in/product/barcelona-home-26-27</loc>
+    <loc>https://www.thejerseyvault.in/product/barcelona-26-27-home-jersey-player-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/barcelona-26-27-home-jersey-fan-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/real-madrid-26-27-home-jersey-fan-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/brazil-away-wc-jersey-fan-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/england-home-wc-jersey-fan-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/real-madrid-25-26-home-jersey-fan-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/argentina-home-wc-jersey-player-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/portugal-home-wc-jersey-player-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/argentina-away-wc-jersey-player-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/uruguay-home-wc-jersey-player-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/france-home-wc-jersey-fan-version</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.thejerseyvault.in/product/barcelona-25-26-home-jersey-player-version</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

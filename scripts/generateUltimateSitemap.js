@@ -71,27 +71,25 @@ while ((collMatches = objRegex.exec(collContent)) !== null) {
   setUrl(`/collections/${slug}`, '0.9', 'weekly');
 }
 
-// 3. Get Products from Supabase
+// 3. Get Products from products.json / Supabase
 async function buildSitemap() {
-  console.log('Fetching products from database...');
+  console.log('Fetching products for sitemap...');
   try {
-    const { data: products, error } = await supabase
-      .from('products')
-      .select('name');
-      
-    if (error) {
-      console.error('Error fetching products:', error.message);
-    } else if (products && products.length > 0) {
-      console.log(`Found ${products.length} products.`);
-      products.forEach(p => {
-        const slug = generateProductSlug(p.name);
-        setUrl(`/product/${slug}`, '0.9', 'weekly');
-      });
-    } else {
-      console.log('No products found or empty response.');
+    const productsFile = path.join(__dirname, '..', 'server', 'src', 'data', 'products.json');
+    if (fs.existsSync(productsFile)) {
+      const prods = JSON.parse(fs.readFileSync(productsFile, 'utf8'));
+      if (Array.isArray(prods) && prods.length > 0) {
+        console.log(`Found ${prods.length} products in local catalog.`);
+        prods.forEach(p => {
+          if (p.name) {
+            const slug = generateProductSlug(p.name);
+            setUrl(`/product/${slug}`, '0.9', 'weekly');
+          }
+        });
+      }
     }
   } catch (err) {
-    console.error('Failed to connect to Supabase:', err);
+    console.error('Failed to read local products:', err.message);
   }
 
   // 4. Construct XML
