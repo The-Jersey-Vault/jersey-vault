@@ -114,14 +114,42 @@ export default function TrackingPage() {
             value={inputId}
             onChange={(e) => setInputId(e.target.value.toUpperCase())}
             onKeyDown={(e) => e.key === "Enter" && handleTrack()}
-            placeholder="ENTER ORDER ID"
+            placeholder="ENTER ORDER ID (e.g. TRK-..., JV-..., pay_...)"
           />
           <button type="button" className="track-btn" onClick={handleTrack}>
             {loading ? "..." : "TRACK →"}
           </button>
         </div>
 
-        {error && <p style={{ color: "#ff4444", marginTop: 12, fontSize: 13, letterSpacing: 1 }}>{error}</p>}
+        <div style={{ marginTop: 8, fontSize: 12, color: "#777", letterSpacing: 0.5, fontFamily: "'Barlow',sans-serif" }}>
+          Tip: Enter your Order ID (starts with <code style={{ color: "#39ff14" }}>pay_</code>, <code style={{ color: "#39ff14" }}>order_</code>, <code style={{ color: "#39ff14" }}>COD-</code>) or Courier Tracking ID.
+        </div>
+
+        {error && (
+          <div style={{ background: "#1f1212", border: "1px solid #7f1d1d", padding: "14px 16px", marginTop: 14, borderRadius: 4 }}>
+            <p style={{ color: "#f87171", margin: 0, fontSize: 13, letterSpacing: 0.5, fontFamily: "'Barlow',sans-serif" }}>
+              {error}
+            </p>
+            <div style={{ marginTop: 8, fontSize: 12, color: "#aaa", fontFamily: "'Barlow',sans-serif" }}>
+              Need urgent help? Reach out directly on WhatsApp at{" "}
+              <a
+                href="https://wa.me/917029786817"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#39ff14", fontWeight: 700, textDecoration: "underline" }}
+              >
+                +91 70297 86817
+              </a>
+              {" "}or email{" "}
+              <a
+                href="mailto:support@thejerseyvault.in"
+                style={{ color: "#39ff14", fontWeight: 700, textDecoration: "underline" }}
+              >
+                support@thejerseyvault.in
+              </a>.
+            </div>
+          </div>
+        )}
 
         {order && (() => {
           const isCancelled = String(order?.status).toLowerCase() === "cancelled";

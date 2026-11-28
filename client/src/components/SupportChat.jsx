@@ -25,7 +25,7 @@ function getOfflineSupportResponse(text) {
     return `Here is our Return & Refund Policy:\n` +
            `- 🔄 **3-Days Return Policy:** Returns/exchanges are accepted within **3 days** of delivery, only if the product is manufacturer-damaged, torn, or if there is an ordered size mismatch.\n` +
            `- 📹 **Unboxing Video Mandatory:** A continuous, unedited unboxing video from start to finish is a **must** to claim any return or refund.\n` +
-           `- ✉️ **Initiation Period:** At least **7 days** are required to process and initiate a return. You must request the return by emailing us at **support.jerseyvault@gmail.com**.\n\n` +
+           `- ✉️ **Initiation Period:** At least **7 days** are required to process and initiate a return. You must request the return by emailing us at **support@thejerseyvault.in**.\n\n` +
            `For further details, visit our **[FAQ Page](/faq)** or contact support on WhatsApp at **+91 70297 86817**.`;
   }
   if (msg.includes('shipping') || msg.includes('charge') || msg.includes('cost') || msg.includes('free')) {
@@ -47,7 +47,7 @@ function getOfflineSupportResponse(text) {
            `📞 **WhatsApp Support (India):** +91 70297 86817\n` +
            `🌎 **WhatsApp (International):** +1 (579) 475-9370 or +1 (604) 200-9964\n` +
            `📸 **Instagram DM:** @the_jerseyvault.in\n` +
-           `✉️ **Email:** support.jerseyvault@gmail.com\n\n` +
+           `✉️ **Email:** support@thejerseyvault.in\n\n` +
            `Support hours are Monday – Saturday (10:00 AM – 8:00 PM IST) and Sunday (11:00 AM – 5:00 PM IST).`;
   }
   if (msg.includes('track') || msg.includes('order') || msg.includes('status')) {

@@ -558,7 +558,7 @@ export default function ProductPage() {
         <div style={{ display: "inline-flex", animation: "marquee 20s linear infinite" }}>
           {[...Array(2)].map((_, i) => (
             <span key={i} style={{ display: "inline-flex" }}>
-              {["★ FREE SHIPPING ABOVE ₹1099", "★ AUTHENTIC LICENSED JERSEYS", "★ EASY 30-DAY RETURNS", "★ COD AVAILABLE", "★ SIZES XS TO XXL"].map(t => (
+              {["★ FREE SHIPPING ABOVE ₹1099", "★ PREMIUM FAN & PLAYER EDITIONS", "★ EASY 30-DAY RETURNS", "★ COD AVAILABLE", "★ SIZES XS TO XXL"].map(t => (
                 <span key={t} style={{ fontWeight: 900, letterSpacing: 2, fontSize: 13, padding: "0 28px" }}>{t}</span>
               ))}
             </span>

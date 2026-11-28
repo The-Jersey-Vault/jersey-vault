@@ -129,7 +129,7 @@ export default function Reviews() {
 
   const averageRating = allReviews.length > 0
     ? (allReviews.reduce((sum, r) => sum + (r.rating || 5), 0) / allReviews.length).toFixed(1)
-    : "5.0";
+    : null;
 
   return (
     <div style={{ background: "#0a0a0a", minHeight: "100vh", color: "#fff", fontFamily: "'Barlow', sans-serif" }}>
@@ -153,10 +153,18 @@ export default function Reviews() {
 
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
             <div style={{ background: "#111", border: "1px solid #222", borderRadius: "6px", padding: "10px 20px", display: "inline-flex", alignItems: "center", gap: "10px" }}>
-              <span style={{ fontSize: "20px", color: "#ffb700" }}>★ {averageRating}</span>
-              <span style={{ fontSize: "13px", color: "#bbb", fontWeight: 700 }}>
-                Average Rating ({allReviews.length} Reviews)
-              </span>
+              {averageRating ? (
+                <>
+                  <span style={{ fontSize: "20px", color: "#ffb700" }}>★ {averageRating}</span>
+                  <span style={{ fontSize: "13px", color: "#bbb", fontWeight: 700 }}>
+                    Average Rating ({allReviews.length} Reviews)
+                  </span>
+                </>
+              ) : (
+                <span style={{ fontSize: "13px", color: "#888", fontWeight: 700 }}>
+                  No customer reviews yet — be the first to review!
+                </span>
+              )}
             </div>
 
             <button
