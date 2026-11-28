@@ -94,7 +94,12 @@ class CloudflareQueryBuilder {
         method = 'DELETE';
       }
 
-      const res = await fetch(url, { method, headers, body });
+      const fetchOptions = { method, headers };
+      if (body !== undefined) {
+        fetchOptions.body = body;
+      }
+
+      const res = await fetch(url, fetchOptions);
       const json = await res.json().catch(() => ({ data: null, error: { message: res.statusText } }));
 
       if (!res.ok) {

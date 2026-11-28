@@ -269,7 +269,7 @@ export default function SupportChat() {
       const isTableRow = line.startsWith('|') && line.endsWith('|');
 
       if (isTableRow) {
-        const isAlignRow = /^\|[\s:\-\|]+$/.test(line);
+        const isAlignRow = /^\|[\s:\-|]+$/.test(line);
         if (isAlignRow) {
           continue;
         }

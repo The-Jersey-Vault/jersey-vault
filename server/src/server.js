@@ -78,7 +78,7 @@ app.use((req, res, next) => {
 // Logging suspicious activity (anomalous headers, traversal attempts, malformed inputs)
 app.use((req, res, next) => {
   const url = req.originalUrl || req.url;
-  const isSuspicious = /(\.\.[\/\\]|wp-login|eval\(|<script|select.*from|<.*>)/i.test(url);
+  const isSuspicious = /(\.\.[/\\]|wp-login|eval\(|<script|select.*from|<.*>)/i.test(url);
   if (isSuspicious) {
     console.warn(`[SECURITY ALERT] Suspicious request detected from IP ${req.ip} targeting ${url} at ${new Date().toISOString()}`);
   }

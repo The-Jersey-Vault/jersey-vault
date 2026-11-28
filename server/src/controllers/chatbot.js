@@ -258,7 +258,7 @@ function getLocalResponse(message, orderDetails, matchedJerseys, searchTerms) {
   // 4. Generic tracking query (where is my order, etc.)
   if (msg.includes('where') || msg.includes('track') || msg.includes('order') || msg.includes('status') || msg.includes('delivery') || msg.includes('shipped') || msg.includes('dispatch')) {
     return `To check your shipment status, please share your **Order ID** (found in the invoice email sent to you — starts with \`pay_\`, \`order_\`, or \`COD-\`).\n\n` +
-           `Once you provide the Order ID, I\'ll instantly fetch your order status. If it has been shipped, I will share the **Delhivery tracking link** so you can track it live.\n\n` +
+           `Once you provide the Order ID, I'll instantly fetch your order status. If it has been shipped, I will share the **Delhivery tracking link** so you can track it live.\n\n` +
            `You can also track directly on our **[Order Tracking Page](/tracking)** or visit the **[Delhivery tracking website](https://www.delhivery.com/track/package/)**.`;
   }
 
