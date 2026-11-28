@@ -74,3 +74,6 @@ meesho_session/
 server/src/integrations/meesho/.session/
 *.storageState.json
 storageState.json
+
+
+.unlighthouse

@@ -43,6 +43,9 @@ export default function BrandLogo({ onClick, style = {}, logoSize, textSize }) {
         src={logo} 
         alt="JerseyVault logo" 
         className="brand-logo-img"
+        width="40"
+        height="46"
+        loading="eager"
       />
       <span className="brand-logo-text">
         JERSEY<span style={{ color: "#39ff14" }}>VAULT</span>

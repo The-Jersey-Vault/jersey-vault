@@ -178,13 +178,25 @@ ReactGA.initialize([
   }
 ]);
 
-// Initialize Microsoft Clarity securely
-if (!window.clarityInitialized) {
-  try {
-    clarity.init("x5jhqrw2dq");
-    window.clarityInitialized = true;
-  } catch (e) {
-    console.error("Clarity init failed", e);
+// Initialize Microsoft Clarity after first interaction or idle time to prevent blocking main thread
+if (typeof window !== "undefined" && !window.clarityInitialized) {
+  const initClarity = () => {
+    if (!window.clarityInitialized) {
+      window.clarityInitialized = true;
+      try {
+        clarity.init("x5jhqrw2dq");
+      } catch (e) {
+        console.error("Clarity init failed", e);
+      }
+    }
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(initClarity, { timeout: 3000 });
+  } else {
+    window.addEventListener('load', () => {
+      setTimeout(initClarity, 1500);
+    }, { once: true });
   }
 }
 

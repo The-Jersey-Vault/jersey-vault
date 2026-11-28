@@ -135,6 +135,10 @@ export default function AnnouncementPopup() {
           <img
             src={POPUP_CONFIG.image}
             alt="SHOP WORLD CUP KITS NOW"
+            width="600"
+            height="795"
+            loading="lazy"
+            decoding="async"
             style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px', cursor: 'pointer' }}
             onError={(e) => {
               e.currentTarget.style.display = 'none';

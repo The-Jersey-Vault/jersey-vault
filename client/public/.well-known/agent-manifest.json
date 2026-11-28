@@ -1,0 +1,10 @@
+{
+  "name": "The Jersey Vault",
+  "description": "Authentic football and cricket jerseys in India",
+  "url": "https://www.thejerseyvault.in",
+  "capabilities": [
+    "browse_jerseys",
+    "view_product_details",
+    "track_order"
+  ]
+}

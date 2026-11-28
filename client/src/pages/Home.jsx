@@ -118,7 +118,7 @@ const ProductCarousel = memo(function ProductCarousel({ imageUrl, alt, style, cl
 
   return (
     <div className="product-carousel-wrapper" style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", userSelect: "none", ...style }}>
-      <div 
+      <div
         className="image-slider-container"
         onScroll={handleScroll}
         onClick={onClick}
@@ -138,7 +138,7 @@ const ProductCarousel = memo(function ProductCarousel({ imageUrl, alt, style, cl
         }}
       >
         {images.map((img, idx) => (
-          <div 
+          <div
             key={idx}
             className="image-slider-item"
             style={{
@@ -150,9 +150,9 @@ const ProductCarousel = memo(function ProductCarousel({ imageUrl, alt, style, cl
               WebkitUserSelect: "none"
             }}
           >
-            <img 
-              src={img} 
-              alt={`${alt} - ${idx + 1}`} 
+            <img
+              src={img}
+              alt={`${alt} - ${idx + 1}`}
               className={className}
               draggable="false"
               style={{
@@ -253,7 +253,7 @@ const ProductCarousel = memo(function ProductCarousel({ imageUrl, alt, style, cl
         </button>
       )}
 
-      <div 
+      <div
         className="carousel-dots"
         style={{
           position: "absolute",
@@ -697,7 +697,7 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
     };
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     if (searchQuery.trim().length > 2) {
       const delayFn = setTimeout(() => {
         ReactGA.event("search", { search_term: searchQuery.trim() });
@@ -780,7 +780,7 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
       try {
         const slug = generateProductSlug(jersey.name);
         window.history.replaceState({}, "", `/product/${slug}`);
-      } catch (_) {}
+      } catch (_) { }
     }
     ReactGA.event("view_item", {
       currency: "INR",
@@ -799,12 +799,12 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
     setShowSizeChart(false);
     try {
       if (isStandaloneProductPage) {
-         navigate(collectionSlug ? `/collections/${collectionSlug}` : "/");
+        navigate(collectionSlug ? `/collections/${collectionSlug}` : "/");
       } else {
-         const returnUrl = collectionSlug ? `/collections/${collectionSlug}` : "/";
-         window.history.replaceState({}, "", returnUrl);
+        const returnUrl = collectionSlug ? `/collections/${collectionSlug}` : "/";
+        window.history.replaceState({}, "", returnUrl);
       }
-    } catch (_) {}
+    } catch (_) { }
   }, [isStandaloneProductPage, collectionSlug, navigate]);
 
   const handleCopyShareLink = useCallback((jersey, e) => {
@@ -867,7 +867,7 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
         if (!cancelled) setLoadingProducts(false);
         return;
       }
-      
+
       const collectionData = collectionSlug ? COLLECTION_MAPPING[collectionSlug] : null;
       let fetchedData = null;
 
@@ -1043,9 +1043,9 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
         (j.name || "").toLowerCase().includes(searchQuery.trim().toLowerCase());
 
       const matchesFilter =
-        activeFilter === "ALL" || 
+        activeFilter === "ALL" ||
         (activeFilter === "FEATURED"
-          ? j.featured === true 
+          ? j.featured === true
           : activeFilter === "26/27 KITS"
             ? (Boolean(j.is_26_27) || (j.type || "").toUpperCase() === "26/27 KITS" || (j.type || "").toUpperCase() === "26/27" || (j.category || "").toUpperCase() === "26/27 KITS" || (j.name || "").includes("26/27") || (j.name || "").includes("2026/27"))
             : activeFilter === "CLEARANCE SALE"
@@ -1220,7 +1220,7 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
     } else if (typeof target === "string" && target.trim().length > 0) {
       const q = target.trim().toLowerCase();
       matchedTeam = teamsList.find(t => t.name && (t.name.toLowerCase() === q || q.includes(t.name.toLowerCase()) || t.name.toLowerCase().includes(q)));
-      
+
       if (!matchedTeam) {
         const matchingJersey = jerseys.find(j => (j.name || "").toLowerCase().includes(q));
         if (matchingJersey && matchingJersey.team_id) {
@@ -1429,8 +1429,8 @@ export default function JerseyStore({ collectionSlug, productSlug, isStandaloneP
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="The Jersey Vault | Premium Football Jerseys in India" />
           <meta name="twitter:description" content="Buy premium quality player version, fan version, and retro football jerseys online in India." />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({"@context":"https://schema.org","@type":"WebSite","name":"The Jersey Vault","url":"https://www.thejerseyvault.in/","potentialAction":{"@type":"SearchAction","target":"https://www.thejerseyvault.in/?search={search_term_string}","query-input":"required name=search_term_string"}}) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({"@context":"https://schema.org","@type":"OnlineStore","name":"The Jersey Vault","url":"https://www.thejerseyvault.in/","logo":"https://www.thejerseyvault.in/logo192.png","image":"https://www.thejerseyvault.in/logo192.png","description":"Online store for premium player version and fan version football jerseys in India with pan-India delivery and COD.","sameAs":["https://www.instagram.com/the_jerseyvault/"],"contactPoint":{"@type":"ContactPoint","telephone":"+91-7029786817","contactType":"Customer Support","contactOption":"WhatsApp","areaServed":"IN","availableLanguage":["English","Hindi"]}}) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", "name": "The Jersey Vault", "url": "https://www.thejerseyvault.in/", "potentialAction": { "@type": "SearchAction", "target": "https://www.thejerseyvault.in/?search={search_term_string}", "query-input": "required name=search_term_string" } }) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "OnlineStore", "name": "The Jersey Vault", "url": "https://www.thejerseyvault.in/", "logo": "https://www.thejerseyvault.in/logo192.png", "image": "https://www.thejerseyvault.in/logo192.png", "description": "Online store for premium player version and fan version football jerseys in India with pan-India delivery and COD.", "sameAs": ["https://www.instagram.com/the_jerseyvault/"], "contactPoint": { "@type": "ContactPoint", "telephone": "+91-7029786817", "contactType": "Customer Support", "contactOption": "WhatsApp", "areaServed": "IN", "availableLanguage": ["English", "Hindi"] } }) }} />
         </Helmet>
       )}
       <div id="jv-root" style={{ fontFamily: "'Barlow Condensed', sans-serif", background: "#0a0a0a", minHeight: "100vh", color: "#fff", overflowX: "hidden" }}>
@@ -3078,966 +3078,986 @@ letter-spacing: 4px !important;
         {/* NAVBAR */}
         <header>
           <nav className="site-nav" aria-label="Main Navigation">
-          <button type="button" className={`hamburger${mobileMenuOpen ? " open" : ""}`} onClick={() => setMobileMenuOpen(o => !o)} aria-label="Toggle menu" style={{ marginLeft: 0 }}>
-            {mobileMenuOpen ? (
-              <svg width="26" height="26" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="2" y1="2" x2="20" y2="20" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                <line x1="20" y1="2" x2="2" y2="20" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.4" strokeLinecap="round">
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </button>
-          <BrandLogo style={{ marginLeft: 0, paddingLeft: 0 }} />
-          <div className="desktop-search">
-            <div style={{ position: 'relative', width: '100%' }}>
-              <input
-                className="search-input"
-                placeholder="SEARCH CLUBS OR PLAYERS..."
-                aria-label="Search jerseys"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 300)}
-                onKeyDown={e => {
-                  if (e.key === "Enter") {
-                    handleSelectSearchJersey(searchQuery);
-                  }
-                }}
-              />
-              {showSuggestions && searchQuery.trim().length > 0 && (
-                <div style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  right: 0,
-                  background: '#0a0a0a',
-                  border: '1px solid #2a2a2a',
-                  borderTop: 'none',
-                  borderRadius: '0 0 8px 8px',
-                  maxHeight: '250px',
-                  overflowY: 'auto',
-                  zIndex: 100,
-                  marginTop: '-4px'
-                }}>
-                  {jerseys
-                    .filter(j => j.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
-                    .slice(0, 8)
-                    .map(jersey => (
-                      <div
-                        key={jersey.id}
-                        onClick={() => handleSelectSearchJersey(jersey)}
-                        style={{
-                          padding: '8px 12px',
-                          cursor: 'pointer',
-                          borderBottom: '1px solid #111',
-                          transition: 'background 0.2s',
-                          fontSize: '13px',
-                          color: '#bbb',
-                          userSelect: 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.background = '#111'}
-                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                      >
-                        {jersey.image_url && (
-                          <img src={getFirstImage(jersey.image_url)} alt={jersey.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '2px', flexShrink: 0 }} />
-                        )}
-                        <span>{jersey.name}</span>
-                      </div>
-                    ))}
-                </div>
-              )}
-            </div>
-          </div>
-          {/* FIX: NavLinks is now a proper component */}
-          <div className="desktop-nav-links">
-            <NavLinks
-              user={user}
-              isAdmin={isAdmin}
-              handleLogout={handleLogout}
-              scrollToShop={scrollToShop}
-              navigate={navigate}
-              setMobileMenuOpen={setMobileMenuOpen}
-              setCartOpen={setCartOpen}
-            />
-          </div>
-          <div className="wc26-video-wrap" onClick={() => { setActiveFilter("26/27 KITS"); setTimeout(() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }} style={{ cursor: 'pointer' }} title="26/27 Kits">
-            <video
-              ref={(el) => {
-                if (el) {
-                  el.muted = true;
-                  el.defaultMuted = true;
-                  const p = el.play();
-                  if (p !== undefined) p.catch(() => {});
-                }
-              }}
-              src={laliga26Video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-            />
-          </div>
-          <div className="nav-right">
-            {/* SEARCH ICON */}
-            <div className="mobile-search-btn">
-              <button type="button"
-                aria-label="Open search"
-                className="icon-action-btn"
-                onClick={() => {
-                  setMobileMenuOpen(true);
-
-                  setTimeout(() => {
-                    const el = document.querySelector(".h-search-input");
-                    el?.focus();
-                  }, 100);
-                }}
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="7" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <button type="button" className={`hamburger${mobileMenuOpen ? " open" : ""}`} onClick={() => setMobileMenuOpen(o => !o)} aria-label="Toggle menu" style={{ marginLeft: 0 }}>
+              {mobileMenuOpen ? (
+                <svg width="26" height="26" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="2" y1="2" x2="20" y2="20" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                  <line x1="20" y1="2" x2="2" y2="20" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
-              </button>
-            </div>
-            {/* CART BUTTON */}
-            <button type="button"
-              aria-label="Open cart"
-              className="icon-action-btn icon-cart-btn"
-              onClick={() => { ReactGA.event("view_cart", { currency: "INR" }); setCartOpen(true); }}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.0" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </svg>
-              {cartCount > 0 && (
-                <span className="cart-icon-badge">{cartCount}</span>
+              ) : (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.4" strokeLinecap="round">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
               )}
             </button>
-          </div>
-          <div className={`mobile-menu${mobileMenuOpen ? " open" : ""}`}>
-            <div style={{ position: 'relative', marginBottom: '8px' }}>
-              <input
-                className="search-input h-search-input mobile-search-gap"
-                placeholder="SEARCH CLUBS OR PLAYERS..."
-                aria-label="Search jerseys"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 300)}
-                onKeyDown={e => {
-                  if (e.key === "Enter") {
-                    handleSelectSearchJersey(searchQuery);
+            <BrandLogo style={{ marginLeft: 0, paddingLeft: 0 }} />
+            <div className="desktop-search">
+              <div style={{ position: 'relative', width: '100%' }}>
+                <input
+                  className="search-input"
+                  placeholder="SEARCH CLUBS OR PLAYERS..."
+                  aria-label="Search jerseys"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 300)}
+                  onKeyDown={e => {
+                    if (e.key === "Enter") {
+                      handleSelectSearchJersey(searchQuery);
+                    }
+                  }}
+                />
+                {showSuggestions && searchQuery.trim().length > 0 && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    right: 0,
+                    background: '#0a0a0a',
+                    border: '1px solid #2a2a2a',
+                    borderTop: 'none',
+                    borderRadius: '0 0 8px 8px',
+                    maxHeight: '250px',
+                    overflowY: 'auto',
+                    zIndex: 100,
+                    marginTop: '-4px'
+                  }}>
+                    {jerseys
+                      .filter(j => j.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
+                      .slice(0, 8)
+                      .map(jersey => (
+                        <div
+                          key={jersey.id}
+                          onClick={() => handleSelectSearchJersey(jersey)}
+                          style={{
+                            padding: '8px 12px',
+                            cursor: 'pointer',
+                            borderBottom: '1px solid #111',
+                            transition: 'background 0.2s',
+                            fontSize: '13px',
+                            color: '#bbb',
+                            userSelect: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px'
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = '#111'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >
+                          {jersey.image_url && (
+                            <img src={getFirstImage(jersey.image_url)} alt={jersey.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '2px', flexShrink: 0 }} />
+                          )}
+                          <span>{jersey.name}</span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* FIX: NavLinks is now a proper component */}
+            <div className="desktop-nav-links">
+              <NavLinks
+                user={user}
+                isAdmin={isAdmin}
+                handleLogout={handleLogout}
+                scrollToShop={scrollToShop}
+                navigate={navigate}
+                setMobileMenuOpen={setMobileMenuOpen}
+                setCartOpen={setCartOpen}
+              />
+            </div>
+            <div className="wc26-video-wrap" onClick={() => { setActiveFilter("26/27 KITS"); setTimeout(() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }, 100); }} style={{ cursor: 'pointer' }} title="26/27 Kits">
+              <video
+                ref={(el) => {
+                  if (el) {
+                    el.muted = true;
+                    el.defaultMuted = true;
+                    const p = el.play();
+                    if (p !== undefined) p.catch(() => { });
                   }
                 }}
+                src={laliga26Video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
               />
-              {showSuggestions && searchQuery.trim().length > 0 && (
-                <div style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  right: 0,
-                  background: '#0a0a0a',
-                  border: '1px solid #2a2a2a',
-                  borderTop: 'none',
-                  borderRadius: '0 0 8px 8px',
-                  maxHeight: '250px',
-                  overflowY: 'auto',
-                  zIndex: 100,
-                  marginTop: '-4px'
-                }}>
-                  {jerseys
-                    .filter(j => j.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
-                    .slice(0, 8)
-                    .map(jersey => (
-                      <div
-                        key={jersey.id}
-                        onClick={() => handleSelectSearchJersey(jersey)}
-                        style={{
-                          padding: '8px 12px',
-                          cursor: 'pointer',
-                          borderBottom: '1px solid #111',
-                          transition: 'background 0.2s',
-                          fontSize: '13px',
-                          color: '#bbb',
-                          userSelect: 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.background = '#111'}
-                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                      >
-                        {jersey.image_url && (
-                          <img src={getFirstImage(jersey.image_url)} alt={jersey.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '2px', flexShrink: 0 }} />
-                        )}
-                        <span>{jersey.name}</span>
-                      </div>
-                    ))}
+            </div>
+            <div className="nav-right">
+              {/* SEARCH ICON */}
+              <div className="mobile-search-btn">
+                <button type="button"
+                  aria-label="Open search"
+                  className="icon-action-btn"
+                  onClick={() => {
+                    setMobileMenuOpen(true);
+
+                    setTimeout(() => {
+                      const el = document.querySelector(".h-search-input");
+                      el?.focus();
+                    }, 100);
+                  }}
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="7" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </button>
+              </div>
+              {/* CART BUTTON */}
+              <button type="button"
+                aria-label="Open cart"
+                className="icon-action-btn icon-cart-btn"
+                onClick={() => { ReactGA.event("view_cart", { currency: "INR" }); setCartOpen(true); }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.0" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+                {cartCount > 0 && (
+                  <span className="cart-icon-badge">{cartCount}</span>
+                )}
+              </button>
+            </div>
+            <div className={`mobile-menu${mobileMenuOpen ? " open" : ""}`}>
+              <div style={{ position: 'relative', marginBottom: '8px' }}>
+                <input
+                  className="search-input h-search-input mobile-search-gap"
+                  placeholder="SEARCH CLUBS OR PLAYERS..."
+                  aria-label="Search jerseys"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 300)}
+                  onKeyDown={e => {
+                    if (e.key === "Enter") {
+                      handleSelectSearchJersey(searchQuery);
+                    }
+                  }}
+                />
+                {showSuggestions && searchQuery.trim().length > 0 && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    right: 0,
+                    background: '#0a0a0a',
+                    border: '1px solid #2a2a2a',
+                    borderTop: 'none',
+                    borderRadius: '0 0 8px 8px',
+                    maxHeight: '250px',
+                    overflowY: 'auto',
+                    zIndex: 100,
+                    marginTop: '-4px'
+                  }}>
+                    {jerseys
+                      .filter(j => j.name.toLowerCase().includes(searchQuery.trim().toLowerCase()))
+                      .slice(0, 8)
+                      .map(jersey => (
+                        <div
+                          key={jersey.id}
+                          onClick={() => handleSelectSearchJersey(jersey)}
+                          style={{
+                            padding: '8px 12px',
+                            cursor: 'pointer',
+                            borderBottom: '1px solid #111',
+                            transition: 'background 0.2s',
+                            fontSize: '13px',
+                            color: '#bbb',
+                            userSelect: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px'
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = '#111'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >
+                          {jersey.image_url && (
+                            <img src={getFirstImage(jersey.image_url)} alt={jersey.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '2px', flexShrink: 0 }} />
+                          )}
+                          <span>{jersey.name}</span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+              {/* ── DROPDOWN ACCORDIONS FOR CATEGORIES, TEAMS & SORT BY ── */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, width: "100%", margin: "8px 0" }}>
+
+                {/* 1. CATEGORIES ACCORDION */}
+                <div style={{ borderBottom: "1px solid #1a1a1a" }}>
+                  <button
+                    type="button"
+                    onClick={() => setMenuCategoriesOpen(o => !o)}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "10px 0",
+                      color: "#fff",
+                      fontSize: 16,
+                      fontWeight: 900,
+                      letterSpacing: 2,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ color: "#39ff14" }}>⚡</span> CATEGORIES
+                    </span>
+                    <span style={{ color: "#39ff14", fontSize: 12 }}>{menuCategoriesOpen ? "▲" : "▼"}</span>
+                  </button>
+                  {menuCategoriesOpen && (
+                    <div style={{ padding: "4px 0 12px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+                      {[
+                        { key: "ALL", label: "ALL JERSEYS" },
+                        { key: "FAN VERSION", label: "FAN VERSION" },
+                        { key: "PLAYER VERSION", label: "PLAYER VERSION" },
+                        { key: "26/27 KITS", label: "26/27 KITS ⚽" },
+                        { key: "CLEARANCE SALE", label: "CLEARANCE SALE 🔥" },
+                        { key: "FEATURED", label: `${featuredCategoryName.toUpperCase()} 🏆` },
+                        { key: "RETRO", label: "RETRO JERSEYS 📜" },
+                      ].map(cat => (
+                        <button
+                          key={cat.key}
+                          type="button"
+                          onClick={() => {
+                            setActiveFilter(cat.key);
+                            setMobileMenuOpen(false);
+                            setTimeout(() => document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" }), 100);
+                          }}
+                          style={{
+                            textAlign: "left",
+                            fontSize: 14,
+                            fontWeight: 700,
+                            letterSpacing: 2,
+                            color: activeFilter === cat.key ? "#39ff14" : "#bbb",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "3px 0"
+                          }}
+                        >
+                          {activeFilter === cat.key ? "▶ " : ""}{cat.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            {/* ── DROPDOWN ACCORDIONS FOR CATEGORIES, TEAMS & SORT BY ── */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 4, width: "100%", margin: "8px 0" }}>
-              
-              {/* 1. CATEGORIES ACCORDION */}
-              <div style={{ borderBottom: "1px solid #1a1a1a" }}>
-                <button
-                  type="button"
-                  onClick={() => setMenuCategoriesOpen(o => !o)}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "10px 0",
-                    color: "#fff",
-                    fontSize: 16,
-                    fontWeight: 900,
-                    letterSpacing: 2,
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer"
-                  }}
-                >
-                  <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ color: "#39ff14" }}>⚡</span> CATEGORIES
-                  </span>
-                  <span style={{ color: "#39ff14", fontSize: 12 }}>{menuCategoriesOpen ? "▲" : "▼"}</span>
-                </button>
-                {menuCategoriesOpen && (
-                  <div style={{ padding: "4px 0 12px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
-                    {[
-                      { key: "ALL", label: "ALL JERSEYS" },
-                      { key: "FAN VERSION", label: "FAN VERSION" },
-                      { key: "PLAYER VERSION", label: "PLAYER VERSION" },
-                      { key: "26/27 KITS", label: "26/27 KITS ⚽" },
-                      { key: "CLEARANCE SALE", label: "CLEARANCE SALE 🔥" },
-                      { key: "FEATURED", label: `${featuredCategoryName.toUpperCase()} 🏆` },
-                      { key: "RETRO", label: "RETRO JERSEYS 📜" },
-                    ].map(cat => (
-                      <button
-                        key={cat.key}
-                        type="button"
-                        onClick={() => {
-                          setActiveFilter(cat.key);
-                          setMobileMenuOpen(false);
-                          setTimeout(() => document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" }), 100);
-                        }}
-                        style={{
-                          textAlign: "left",
-                          fontSize: 14,
-                          fontWeight: 700,
-                          letterSpacing: 2,
-                          color: activeFilter === cat.key ? "#39ff14" : "#bbb",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          padding: "3px 0"
-                        }}
-                      >
-                        {activeFilter === cat.key ? "▶ " : ""}{cat.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              {/* 2. TEAMS ACCORDION */}
-              <div style={{ borderBottom: "1px solid #1a1a1a" }}>
-                <button
-                  type="button"
-                  onClick={() => setMenuTeamsOpen(o => !o)}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "10px 0",
-                    color: "#fff",
-                    fontSize: 16,
-                    fontWeight: 900,
-                    letterSpacing: 2,
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer"
-                  }}
-                >
-                  <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ color: "#39ff14" }}>🛡️</span> TEAMS {teamsList.length > 0 ? `(${teamsList.length})` : ""}
-                  </span>
-                  <span style={{ color: "#39ff14", fontSize: 12 }}>{menuTeamsOpen ? "▲" : "▼"}</span>
-                </button>
-                {menuTeamsOpen && (
-                  <div style={{ padding: "4px 0 12px 14px", display: "flex", flexDirection: "column", gap: 8, maxHeight: 220, overflowY: "auto" }}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigate("/teams");
-                        setMobileMenuOpen(false);
-                      }}
-                      style={{
-                        textAlign: "left",
-                        fontSize: 13,
-                        fontWeight: 900,
-                        letterSpacing: 2,
-                        color: "#39ff14",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        marginBottom: 4
-                      }}
-                    >
-                      VIEW ALL TEAMS PAGE →
-                    </button>
-                    {teamsList.map(t => (
+                {/* 2. TEAMS ACCORDION */}
+                <div style={{ borderBottom: "1px solid #1a1a1a" }}>
+                  <button
+                    type="button"
+                    onClick={() => setMenuTeamsOpen(o => !o)}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "10px 0",
+                      color: "#fff",
+                      fontSize: 16,
+                      fontWeight: 900,
+                      letterSpacing: 2,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ color: "#39ff14" }}>🛡️</span> TEAMS {teamsList.length > 0 ? `(${teamsList.length})` : ""}
+                    </span>
+                    <span style={{ color: "#39ff14", fontSize: 12 }}>{menuTeamsOpen ? "▲" : "▼"}</span>
+                  </button>
+                  {menuTeamsOpen && (
+                    <div style={{ padding: "4px 0 12px 14px", display: "flex", flexDirection: "column", gap: 8, maxHeight: 220, overflowY: "auto" }}>
                       <button
-                        key={t.id}
                         type="button"
                         onClick={() => {
-                          navigate(`/?team=${t.id}`);
+                          navigate("/teams");
                           setMobileMenuOpen(false);
                         }}
                         style={{
                           textAlign: "left",
                           fontSize: 13,
-                          fontWeight: 600,
-                          letterSpacing: 1,
-                          color: "#bbb",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                          padding: "2px 0"
-                        }}
-                      >
-                        {t.logo_url ? (
-                          <img src={resolveImageUrl(t.logo_url)} alt="" style={{ width: 18, height: 18, objectFit: "contain", borderRadius: "50%", background: "#fff", padding: "1px" }} />
-                        ) : (
-                          <span style={{ fontSize: 14 }}>🛡️</span>
-                        )}
-                        <span>{t.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* 3. SORT BY ACCORDION */}
-              <div style={{ borderBottom: "1px solid #1a1a1a" }}>
-                <button
-                  type="button"
-                  onClick={() => setMenuSortOpen(o => !o)}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "10px 0",
-                    color: "#fff",
-                    fontSize: 16,
-                    fontWeight: 900,
-                    letterSpacing: 2,
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer"
-                  }}
-                >
-                  <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ color: "#39ff14" }}>↕️</span> SORT BY
-                  </span>
-                  <span style={{ color: "#39ff14", fontSize: 12 }}>{menuSortOpen ? "▲" : "▼"}</span>
-                </button>
-                {menuSortOpen && (
-                  <div style={{ padding: "4px 0 12px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
-                    {[
-                      { key: "FEATURED", label: "FEATURED (DEFAULT)" },
-                      { key: "PRICE_LOW_HIGH", label: "PRICE: LOW TO HIGH" },
-                      { key: "PRICE_HIGH_LOW", label: "PRICE: HIGH TO LOW" },
-                      { key: "NAME_ASC", label: "NAME: A TO Z" },
-                      { key: "NEWEST", label: "NEWEST ARRIVALS" },
-                    ].map(s => (
-                      <button
-                        key={s.key}
-                        type="button"
-                        onClick={() => {
-                          setSortBy(s.key);
-                          setMobileMenuOpen(false);
-                          setTimeout(() => document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" }), 100);
-                        }}
-                        style={{
-                          textAlign: "left",
-                          fontSize: 13,
-                          fontWeight: 700,
+                          fontWeight: 900,
                           letterSpacing: 2,
-                          color: sortBy === s.key ? "#39ff14" : "#bbb",
+                          color: "#39ff14",
                           background: "none",
                           border: "none",
                           cursor: "pointer",
-                          padding: "3px 0"
+                          marginBottom: 4
                         }}
                       >
-                        {sortBy === s.key ? "▶ " : ""}{s.label}
+                        VIEW ALL TEAMS PAGE →
                       </button>
-                    ))}
-                  </div>
-                )}
+                      {teamsList.map(t => (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => {
+                            navigate(`/?team=${t.id}`);
+                            setMobileMenuOpen(false);
+                          }}
+                          style={{
+                            textAlign: "left",
+                            fontSize: 13,
+                            fontWeight: 600,
+                            letterSpacing: 1,
+                            color: "#bbb",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                            padding: "2px 0"
+                          }}
+                        >
+                          {t.logo_url ? (
+                            <img src={resolveImageUrl(t.logo_url)} alt="" style={{ width: 18, height: 18, objectFit: "contain", borderRadius: "50%", background: "#fff", padding: "1px" }} />
+                          ) : (
+                            <span style={{ fontSize: 14 }}>🛡️</span>
+                          )}
+                          <span>{t.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. SORT BY ACCORDION */}
+                <div style={{ borderBottom: "1px solid #1a1a1a" }}>
+                  <button
+                    type="button"
+                    onClick={() => setMenuSortOpen(o => !o)}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "10px 0",
+                      color: "#fff",
+                      fontSize: 16,
+                      fontWeight: 900,
+                      letterSpacing: 2,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ color: "#39ff14" }}>↕️</span> SORT BY
+                    </span>
+                    <span style={{ color: "#39ff14", fontSize: 12 }}>{menuSortOpen ? "▲" : "▼"}</span>
+                  </button>
+                  {menuSortOpen && (
+                    <div style={{ padding: "4px 0 12px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+                      {[
+                        { key: "FEATURED", label: "FEATURED (DEFAULT)" },
+                        { key: "PRICE_LOW_HIGH", label: "PRICE: LOW TO HIGH" },
+                        { key: "PRICE_HIGH_LOW", label: "PRICE: HIGH TO LOW" },
+                        { key: "NAME_ASC", label: "NAME: A TO Z" },
+                        { key: "NEWEST", label: "NEWEST ARRIVALS" },
+                      ].map(s => (
+                        <button
+                          key={s.key}
+                          type="button"
+                          onClick={() => {
+                            setSortBy(s.key);
+                            setMobileMenuOpen(false);
+                            setTimeout(() => document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" }), 100);
+                          }}
+                          style={{
+                            textAlign: "left",
+                            fontSize: 13,
+                            fontWeight: 700,
+                            letterSpacing: 2,
+                            color: sortBy === s.key ? "#39ff14" : "#bbb",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "3px 0"
+                          }}
+                        >
+                          {sortBy === s.key ? "▶ " : ""}{s.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
               </div>
 
+              {/* FIX: NavLinks component used in mobile menu too */}
+              <NavLinks
+                user={user}
+                isAdmin={isAdmin}
+                handleLogout={handleLogout}
+                scrollToShop={scrollToShop}
+                navigate={navigate}
+                setMobileMenuOpen={setMobileMenuOpen}
+                setCartOpen={setCartOpen}
+              />
             </div>
-
-            {/* FIX: NavLinks component used in mobile menu too */}
-            <NavLinks
-              user={user}
-              isAdmin={isAdmin}
-              handleLogout={handleLogout}
-              scrollToShop={scrollToShop}
-              navigate={navigate}
-              setMobileMenuOpen={setMobileMenuOpen}
-              setCartOpen={setCartOpen}
-            />
-          </div>
           </nav>
         </header>
         <main id="main-content" style={{ display: isStandaloneProductPage ? "none" : "block" }}>
 
-        <Ticker />
-        <BrandLogos />
-        <div className="section-divider" />
+          <Ticker />
+          <BrandLogos />
+          <div className="section-divider" />
 
-        {/* HERO SLIDESHOW */}
-        <section
-          className="hero-section hero-carousel-root"
-          aria-label="Hero Slideshow"
-          style={{
-            opacity: heroVisible ? 1 : 0,
-            transition: heroVisible ? "none" : "opacity 0.8s ease",
-          }}
-          onTouchStart={(e) => {
-            heroTouchStartX.current = e.touches[0].clientX;
-            setIsHeroTouching(true);
-          }}
-          onTouchEnd={(e) => {
-            if (heroTouchStartX.current !== null) {
-              const diffX = e.changedTouches[0].clientX - heroTouchStartX.current;
-              if (diffX > 40) {
-                setCurrentHeroSlide(prev => (prev - 1 + heroSlides.length) % heroSlides.length);
-              } else if (diffX < -40) {
-                setCurrentHeroSlide(prev => (prev + 1) % heroSlides.length);
+          {/* HERO SLIDESHOW */}
+          <section
+            className="hero-section hero-carousel-root"
+            aria-label="Hero Slideshow"
+            style={{
+              opacity: heroVisible ? 1 : 0,
+              transition: heroVisible ? "none" : "opacity 0.8s ease",
+            }}
+            onTouchStart={(e) => {
+              heroTouchStartX.current = e.touches[0].clientX;
+              setIsHeroTouching(true);
+            }}
+            onTouchEnd={(e) => {
+              if (heroTouchStartX.current !== null) {
+                const diffX = e.changedTouches[0].clientX - heroTouchStartX.current;
+                if (diffX > 40) {
+                  setCurrentHeroSlide(prev => (prev - 1 + heroSlides.length) % heroSlides.length);
+                } else if (diffX < -40) {
+                  setCurrentHeroSlide(prev => (prev + 1) % heroSlides.length);
+                }
+                heroTouchStartX.current = null;
               }
-              heroTouchStartX.current = null;
-            }
-            setIsHeroTouching(false);
-          }}
-        >
-          {heroSlides.map((slide, idx) => {
-            const isActive = currentHeroSlide === idx;
-            return (
-              <div
-                key={slide.id}
-                className={`hero-slide ${isActive ? "active" : ""}`}
-                onClick={slide.isFirstSlide ? undefined : () => navigate(slide.targetUrl)}
-                style={{
-                  cursor: slide.isFirstSlide ? "default" : "pointer",
-                  opacity: isActive ? 1 : 0,
-                  pointerEvents: isActive ? "auto" : "none",
-                  transition: "opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)",
-                }}
-              >
-                {/* Slide 1: Legend with Overlay & Hero Buttons */}
-                {slide.isFirstSlide ? (
-                  <>
-                    <div
-                      className="hero-slide-bg"
-                      style={{
-                        backgroundImage: `url(${slide.image})`,
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center center",
-                      }}
-                    />
-                    <div className="hero-overlay" />
-                    <div className="hero-slide-content slide-1-content">
-                      <p className="hero-eyebrow">INDIA'S PREMIUM VAULT</p>
-                      <h1 style={{ lineHeight: 0.9, animation: "breathe 3s ease-in-out 1s infinite", position: "relative", display: "inline-block", zIndex: 2 }}>
-                        <span style={{ display: "block", position: "relative", marginBottom: 4 }}><CartoonFlameText text="WEAR YOUR" /></span>
-                        <span className="hero-legend-text">LEGEND</span>
-                      </h1>
-                      <p className="hero-subtitle">Premium football &amp; cricket jerseys in India. Top-tier fan versions &amp; elite player issue kits.</p>
-                      <div className="hero-cta-row">
-                        <button type="button" className="hero-btn-primary" onClick={scrollToShop} aria-label="Shop Now">
-                          SHOP NOW
-                        </button>
-                        <button type="button" className="hero-btn-secondary" onClick={() => navigate("/teams")} aria-label="View Teams">
-                          VIEW TEAMS
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  /* Slides 2-5: Full-bleed kit photo with title + Shop Now CTA */
-                  <>
-                    <img
-                      src={slide.image}
-                      alt={slide.title || "26/27 Kits"}
-                      className={`hero-slide-img ${isShopNowHovered ? "blurred" : ""}`}
-                      loading={idx === 1 ? "eager" : "lazy"}
-                      decoding="async"
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center center",
-                        display: "block",
-                        pointerEvents: "none",
-                        imageRendering: "-webkit-optimize-contrast",
-                      }}
-                    />
-                    {/* Left overlay typography & CTA sliding in from infinity */}
-                    <div
-                      className="hero-slide-kit-track"
-                      style={{
-                        left: slide.alignLeft || "clamp(12px, 3.5vw, 44px)",
-                        maxWidth: "clamp(280px, 52vw, 820px)",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        textAlign: "left",
-                      }}
-                    >
-                      {/* 1. Official 26/27 Drop label */}
-                      <p
+              setIsHeroTouching(false);
+            }}
+          >
+            {heroSlides.map((slide, idx) => {
+              const isActive = currentHeroSlide === idx;
+              return (
+                <div
+                  key={slide.id}
+                  className={`hero-slide ${isActive ? "active" : ""}`}
+                  onClick={slide.isFirstSlide ? undefined : () => navigate(slide.targetUrl)}
+                  style={{
+                    cursor: slide.isFirstSlide ? "default" : "pointer",
+                    opacity: isActive ? 1 : 0,
+                    pointerEvents: isActive ? "auto" : "none",
+                    transition: "opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)",
+                  }}
+                >
+                  {/* Slide 1: Legend with Overlay & Hero Buttons */}
+                  {slide.isFirstSlide ? (
+                    <>
+                      <div
+                        className="hero-slide-bg"
                         style={{
-                          margin: 0,
-                          padding: 0,
-                          textAlign: "left",
-                          marginBottom: "clamp(4px, 0.8vw, 12px)",
-                          color: "#39ff14",
-                          fontFamily: "'Barlow Condensed', sans-serif",
-                          fontWeight: 800,
-                          fontSize: "clamp(12px, 1.5vw, 22px)",
-                          letterSpacing: "clamp(3px, 0.5vw, 6.5px)",
-                          textTransform: "uppercase",
-                          textShadow: "0 2px 10px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.9)",
-                          opacity: 0.95,
-                          whiteSpace: "nowrap",
+                          backgroundImage: `url(${slide.image})`,
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center center",
                         }}
-                      >
-                        OFFICIAL 26/27 DROP
-                      </p>
-
-                      {/* 2. Big team kit heading - increased a lot */}
-                      <h2
-                        style={{
-                          margin: 0,
-                          padding: 0,
-                          textAlign: "left",
-                          color: "#ffffff",
-                          fontFamily: "'Barlow Condensed', sans-serif",
-                          fontWeight: 900,
-                          fontSize: "clamp(44px, 7.8vw, 124px)",
-                          lineHeight: 0.84,
-                          letterSpacing: "clamp(-1px, 0.1vw, 1.5px)",
-                          textTransform: "uppercase",
-                          textShadow: "0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 0.9)",
-                        }}
-                      >
-                        <span style={{ display: "block", textAlign: "left" }}>{slide.titleLine1}</span>
-                        <span style={{ display: "block", textAlign: "left" }}>{slide.titleLine2}</span>
-                      </h2>
-
-                      {/* 3. Horizontal line + Subtitle - strictly left aligned */}
-                      {slide.subtitle && (
-                        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left", marginTop: "clamp(6px, 0.9vw, 14px)" }}>
-                          <div
-                            style={{
-                              width: "clamp(180px, 85%, 440px)",
-                              height: "2px",
-                              background: "rgba(255, 255, 255, 0.85)",
-                              margin: 0,
-                              marginBottom: "clamp(5px, 0.7vw, 10px)",
-                              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.7)",
-                              alignSelf: "flex-start",
-                            }}
-                          />
-                          <p
-                            style={{
-                              margin: 0,
-                              padding: 0,
-                              textAlign: "left",
-                              color: "#ffffff",
-                              fontFamily: "'Barlow Condensed', sans-serif",
-                              fontWeight: 700,
-                              fontSize: "clamp(12px, 1.7vw, 24px)",
-                              letterSpacing: "clamp(2px, 0.35vw, 4.5px)",
-                              textTransform: "uppercase",
-                              textShadow: "0 2px 10px rgba(0, 0, 0, 0.95)",
-                            }}
-                          >
-                            {slide.subtitle}
-                          </p>
+                      />
+                      <div className="hero-overlay" />
+                      <div className="hero-slide-content slide-1-content">
+                        <p className="hero-eyebrow">INDIA'S PREMIUM VAULT</p>
+                        <h1 style={{ lineHeight: 0.9, animation: "breathe 3s ease-in-out 1s infinite", position: "relative", display: "inline-block", zIndex: 2 }}>
+                          <span style={{ display: "block", position: "relative", marginBottom: 4 }}><CartoonFlameText text="WEAR YOUR" /></span>
+                          <span className="hero-legend-text">LEGEND</span>
+                        </h1>
+                        <p className="hero-subtitle">Premium football &amp; cricket jerseys in India. Top-tier fan versions &amp; elite player issue kits.</p>
+                        <div className="hero-cta-row">
+                          <button type="button" className="hero-btn-primary" onClick={scrollToShop} aria-label="Shop Now">
+                            SHOP NOW
+                          </button>
+                          <button type="button" className="hero-btn-secondary" onClick={() => navigate("/teams")} aria-label="View Teams">
+                            VIEW TEAMS
+                          </button>
                         </div>
-                      )}
-
-                      {/* 4. Shop Now CTA button */}
-                      <div style={{ marginTop: "clamp(14px, 2vw, 28px)", alignSelf: "flex-start" }}>
-                        <Link
-                          to={slide.targetUrl}
-                          className="hero-kit-shop-btn"
-                          onClick={(e) => e.stopPropagation()}
-                          onMouseEnter={(e) => {
-                            setIsShopNowHovered(true);
-                            e.currentTarget.style.background = "transparent";
-                            e.currentTarget.style.color = "#ffffff";
-                            e.currentTarget.style.letterSpacing = "clamp(3.5px, 0.7vw, 7px)";
-                            e.currentTarget.style.transform = "translateY(-1px)";
-                          }}
-                          onMouseLeave={(e) => {
-                            setIsShopNowHovered(false);
-                            e.currentTarget.style.background = "#ffffff";
-                            e.currentTarget.style.color = "#000000";
-                            e.currentTarget.style.letterSpacing = "clamp(2.5px, 0.5vw, 5px)";
-                            e.currentTarget.style.transform = "translateY(0)";
-                          }}
-                          onTouchStart={() => setIsShopNowHovered(true)}
-                          onTouchEnd={() => setTimeout(() => setIsShopNowHovered(false), 200)}
-                          onTouchCancel={() => setIsShopNowHovered(false)}
+                      </div>
+                    </>
+                  ) : (
+                    /* Slides 2-5: Full-bleed kit photo with title + Shop Now CTA */
+                    <>
+                      <img
+                        src={slide.image}
+                        alt={slide.title || "26/27 Kits"}
+                        className={`hero-slide-img ${isShopNowHovered ? "blurred" : ""}`}
+                        loading={idx === 1 ? "eager" : "lazy"}
+                        decoding="async"
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "center center",
+                          display: "block",
+                          pointerEvents: "none",
+                          imageRendering: "-webkit-optimize-contrast",
+                        }}
+                      />
+                      {/* Left overlay typography & CTA sliding in from infinity */}
+                      <div
+                        className="hero-slide-kit-track"
+                        style={{
+                          left: slide.alignLeft || "clamp(12px, 3.5vw, 44px)",
+                          maxWidth: "clamp(280px, 52vw, 820px)",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "flex-start",
+                          textAlign: "left",
+                        }}
+                      >
+                        {/* 1. Official 26/27 Drop label */}
+                        <p
                           style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "clamp(5px, 0.6vw, 8px)",
-                            background: "#ffffff",
-                            color: "#000000",
+                            margin: 0,
+                            padding: 0,
+                            textAlign: "left",
+                            marginBottom: "clamp(4px, 0.8vw, 12px)",
+                            color: "#39ff14",
+                            fontFamily: "'Barlow Condensed', sans-serif",
+                            fontWeight: 800,
+                            fontSize: "clamp(12px, 1.5vw, 22px)",
+                            letterSpacing: "clamp(3px, 0.5vw, 6.5px)",
+                            textTransform: "uppercase",
+                            textShadow: "0 2px 10px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.9)",
+                            opacity: 0.95,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          OFFICIAL 26/27 DROP
+                        </p>
+
+                        {/* 2. Big team kit heading - increased a lot */}
+                        <h2
+                          style={{
+                            margin: 0,
+                            padding: 0,
+                            textAlign: "left",
+                            color: "#ffffff",
                             fontFamily: "'Barlow Condensed', sans-serif",
                             fontWeight: 900,
-                            fontSize: "clamp(11px, 1.25vw, 16px)",
-                            letterSpacing: "clamp(2.5px, 0.5vw, 5px)",
-                            textDecoration: "none",
+                            fontSize: "clamp(44px, 7.8vw, 124px)",
+                            lineHeight: 0.84,
+                            letterSpacing: "clamp(-1px, 0.1vw, 1.5px)",
                             textTransform: "uppercase",
-                            padding: "clamp(8px, 1.1vw, 14px) clamp(20px, 2.4vw, 36px)",
-                            border: "2px solid #ffffff",
-                            boxShadow: "0 4px 18px rgba(0, 0, 0, 0.5)",
-                            transition: "background 0.22s ease, color 0.22s ease, letter-spacing 0.22s ease, transform 0.22s ease",
+                            textShadow: "0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 0.9)",
                           }}
-                          aria-label={`Shop Now for ${slide.id}`}
                         >
-                          SHOP NOW
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                            <polyline points="12 5 19 12 12 19" />
-                          </svg>
-                        </Link>
+                          <span style={{ display: "block", textAlign: "left" }}>{slide.titleLine1}</span>
+                          <span style={{ display: "block", textAlign: "left" }}>{slide.titleLine2}</span>
+                        </h2>
+
+                        {/* 3. Horizontal line + Subtitle - strictly left aligned */}
+                        {slide.subtitle && (
+                          <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left", marginTop: "clamp(6px, 0.9vw, 14px)" }}>
+                            <div
+                              style={{
+                                width: "clamp(180px, 85%, 440px)",
+                                height: "2px",
+                                background: "rgba(255, 255, 255, 0.85)",
+                                margin: 0,
+                                marginBottom: "clamp(5px, 0.7vw, 10px)",
+                                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.7)",
+                                alignSelf: "flex-start",
+                              }}
+                            />
+                            <p
+                              style={{
+                                margin: 0,
+                                padding: 0,
+                                textAlign: "left",
+                                color: "#ffffff",
+                                fontFamily: "'Barlow Condensed', sans-serif",
+                                fontWeight: 700,
+                                fontSize: "clamp(12px, 1.7vw, 24px)",
+                                letterSpacing: "clamp(2px, 0.35vw, 4.5px)",
+                                textTransform: "uppercase",
+                                textShadow: "0 2px 10px rgba(0, 0, 0, 0.95)",
+                              }}
+                            >
+                              {slide.subtitle}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* 4. Shop Now CTA button */}
+                        <div style={{ marginTop: "clamp(14px, 2vw, 28px)", alignSelf: "flex-start" }}>
+                          <Link
+                            to={slide.targetUrl}
+                            className="hero-kit-shop-btn"
+                            onClick={(e) => e.stopPropagation()}
+                            onMouseEnter={(e) => {
+                              setIsShopNowHovered(true);
+                              e.currentTarget.style.background = "transparent";
+                              e.currentTarget.style.color = "#ffffff";
+                              e.currentTarget.style.letterSpacing = "clamp(3.5px, 0.7vw, 7px)";
+                              e.currentTarget.style.transform = "translateY(-1px)";
+                            }}
+                            onMouseLeave={(e) => {
+                              setIsShopNowHovered(false);
+                              e.currentTarget.style.background = "#ffffff";
+                              e.currentTarget.style.color = "#000000";
+                              e.currentTarget.style.letterSpacing = "clamp(2.5px, 0.5vw, 5px)";
+                              e.currentTarget.style.transform = "translateY(0)";
+                            }}
+                            onTouchStart={() => setIsShopNowHovered(true)}
+                            onTouchEnd={() => setTimeout(() => setIsShopNowHovered(false), 200)}
+                            onTouchCancel={() => setIsShopNowHovered(false)}
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "clamp(5px, 0.6vw, 8px)",
+                              background: "#ffffff",
+                              color: "#000000",
+                              fontFamily: "'Barlow Condensed', sans-serif",
+                              fontWeight: 900,
+                              fontSize: "clamp(11px, 1.25vw, 16px)",
+                              letterSpacing: "clamp(2.5px, 0.5vw, 5px)",
+                              textDecoration: "none",
+                              textTransform: "uppercase",
+                              padding: "clamp(8px, 1.1vw, 14px) clamp(20px, 2.4vw, 36px)",
+                              border: "2px solid #ffffff",
+                              boxShadow: "0 4px 18px rgba(0, 0, 0, 0.5)",
+                              transition: "background 0.22s ease, color 0.22s ease, letter-spacing 0.22s ease, transform 0.22s ease",
+                            }}
+                            aria-label={`Shop Now for ${slide.id}`}
+                          >
+                            SHOP NOW
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                              <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            );
-          })}
+                    </>
+                  )}
+                </div>
+              );
+            })}
 
-          {/* Sleek Previous (<) / Next (>) Navigation Arrows with direct touch handlers */}
-          <button
-            type="button"
-            className="hero-nav-arrow hero-nav-prev"
-            onTouchStart={(e) => e.stopPropagation()}
-            onTouchEnd={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              setCurrentHeroSlide(prev => (prev - 1 + heroSlides.length) % heroSlides.length);
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setCurrentHeroSlide(prev => (prev - 1 + heroSlides.length) % heroSlides.length);
-            }}
-            aria-label="Previous Slide"
-            title="Previous Slide (<)"
-          >
-            <svg width="28" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            className="hero-nav-arrow hero-nav-next"
-            onTouchStart={(e) => e.stopPropagation()}
-            onTouchEnd={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              setCurrentHeroSlide(prev => (prev + 1) % heroSlides.length);
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setCurrentHeroSlide(prev => (prev + 1) % heroSlides.length);
-            }}
-            aria-label="Next Slide"
-            title="Next Slide (>)"
-          >
-            <svg width="28" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
+            {/* Sleek Previous (<) / Next (>) Navigation Arrows with direct touch handlers */}
+            <button
+              type="button"
+              className="hero-nav-arrow hero-nav-prev"
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setCurrentHeroSlide(prev => (prev - 1 + heroSlides.length) % heroSlides.length);
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentHeroSlide(prev => (prev - 1 + heroSlides.length) % heroSlides.length);
+              }}
+              aria-label="Previous Slide"
+              title="Previous Slide (<)"
+            >
+              <svg width="28" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="hero-nav-arrow hero-nav-next"
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setCurrentHeroSlide(prev => (prev + 1) % heroSlides.length);
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentHeroSlide(prev => (prev + 1) % heroSlides.length);
+              }}
+              aria-label="Next Slide"
+              title="Next Slide (>)"
+            >
+              <svg width="28" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
 
-          {/* Scrolling Dots Indicator at middle bottom of slides - identical to jersey image section */}
-          <div
-            className="hero-dots-bar carousel-dots"
-            style={{
-              position: "absolute",
-              bottom: "clamp(10px, 1.8vw, 18px)",
-              left: "50%",
-              transform: "translateX(-50%)",
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              zIndex: 50,
-              padding: "6px 12px",
-              background: "rgba(0, 0, 0, 0.4)",
-              borderRadius: "16px",
-              backdropFilter: "blur(4px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              pointerEvents: "auto",
-            }}
-          >
-            {heroSlides.map((s, idx) => (
-              <button
-                type="button"
-                key={s.id}
-                className={`hero-dot-item ${currentHeroSlide === idx ? "active" : ""}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurrentHeroSlide(idx);
-                }}
-                style={{
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: "transparent",
-                }}
-                aria-label={`Go to slide ${idx + 1}`}
-              >
-                <span
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    display: "block",
-                    pointerEvents: "none",
-                    background: currentHeroSlide === idx ? "#39ff14" : "rgba(255, 255, 255, 0.4)",
-                    transition: "background 0.2s, transform 0.2s, box-shadow 0.2s",
-                    transform: currentHeroSlide === idx ? "scale(1.25)" : "scale(1)",
-                    boxShadow: currentHeroSlide === idx ? "0 0 8px rgba(57, 255, 20, 0.85)" : "none",
+            {/* Scrolling Dots Indicator at middle bottom of slides - identical to jersey image section */}
+            <div
+              className="hero-dots-bar carousel-dots"
+              style={{
+                position: "absolute",
+                bottom: "clamp(10px, 1.8vw, 18px)",
+                left: "50%",
+                transform: "translateX(-50%)",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                zIndex: 50,
+                padding: "6px 12px",
+                background: "rgba(0, 0, 0, 0.4)",
+                borderRadius: "16px",
+                backdropFilter: "blur(4px)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                pointerEvents: "auto",
+              }}
+            >
+              {heroSlides.map((s, idx) => (
+                <button
+                  type="button"
+                  key={s.id}
+                  className={`hero-dot-item ${currentHeroSlide === idx ? "active" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentHeroSlide(idx);
                   }}
-                />
-              </button>
-            ))}
-          </div>
-
-          <div className="hero-divider" />
-        </section>
-
-        {/* STATS */}
-        <section className="stats-grid" aria-label="Store Statistics">
-          {[["100+", "JERSEYS"], ["5K+", "CUSTOMERS"], ["100%", "AUTHENTIC"]].map(([num, label]) => (
-            <div key={label} className="stat-cell">
-              <div className="stat-num">{num}</div>
-              <div className="stat-label">{label}</div>
-            </div>
-          ))}
-        </section>
-        <div className="section-divider" />
-
-        {/* SHOP */}
-        <section id="shop" style={{ padding: "60px 16px" }}>
-          {/* Team Section Banner above jersey listings */}
-          {teamBannerData && (
-            <div className="team-section-banner-wrap">
-              <img
-                src={teamBannerData.image}
-                alt={teamBannerData.title}
-                className="team-section-banner-img"
-              />
-              <div className="team-section-banner-overlay">
-                <div className="team-section-banner-meta">
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    borderRadius: "50%",
+                    border: "none",
+                    padding: 0,
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "transparent",
+                  }}
+                  aria-label={`Go to slide ${idx + 1}`}
+                >
                   <span
-                    className="team-section-banner-badge"
                     style={{
-                      borderColor: teamBannerData.accent,
-                      color: teamBannerData.accent,
-                      boxShadow: `0 0 14px ${teamBannerData.accent}55`
+                      width: "8px",
+                      height: "8px",
+                      borderRadius: "50%",
+                      display: "block",
+                      pointerEvents: "none",
+                      background: currentHeroSlide === idx ? "#39ff14" : "rgba(255, 255, 255, 0.4)",
+                      transition: "background 0.2s, transform 0.2s, box-shadow 0.2s",
+                      transform: currentHeroSlide === idx ? "scale(1.25)" : "scale(1)",
+                      boxShadow: currentHeroSlide === idx ? "0 0 8px rgba(57, 255, 20, 0.85)" : "none",
                     }}
+                  />
+                </button>
+              ))}
+            </div>
+
+            <div className="hero-divider" />
+          </section>
+
+          {/* STATS */}
+          <section className="stats-grid" aria-label="Store Statistics">
+            {[["100+", "JERSEYS"], ["5K+", "CUSTOMERS"], ["100%", "AUTHENTIC"]].map(([num, label]) => (
+              <div key={label} className="stat-cell">
+                <div className="stat-num">{num}</div>
+                <div className="stat-label">{label}</div>
+              </div>
+            ))}
+          </section>
+          <div className="section-divider" />
+
+          {/* SHOP */}
+          <section id="shop" style={{ padding: "60px 16px" }}>
+            {/* Team Section Banner above jersey listings */}
+            {teamBannerData && (
+              <div className="team-section-banner-wrap">
+                <img
+                  src={teamBannerData.image}
+                  alt={teamBannerData.title}
+                  className="team-section-banner-img"
+                />
+                <div className="team-section-banner-overlay">
+                  <div className="team-section-banner-meta">
+                    <span
+                      className="team-section-banner-badge"
+                      style={{
+                        borderColor: teamBannerData.accent,
+                        color: teamBannerData.accent,
+                        boxShadow: `0 0 14px ${teamBannerData.accent}55`
+                      }}
+                    >
+                      OFFICIAL 26/27 DROP
+                    </span>
+                    <h3 className="team-section-banner-heading">
+                      {teamBannerData.title}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="shop-header-outer">
+              {/* ROW 1: Title, Home Button & Right Border Arrow Indicator */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, flexWrap: "wrap", gap: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                  <h2 className="shop-section-title" style={{ margin: 0 }}>
+                    <span style={{ color: "#39ff14" }}>/ </span>{sectionTitle}
+                  </h2>
+                  {(activeTeamName || collectionSlug || searchParams.get("team") || (sectionTitle && sectionTitle.toUpperCase().includes("JERSEYS"))) && (
+                    <button
+                      type="button"
+                      className="heading-home-btn"
+                      onClick={() => {
+                        setActiveTeamName("");
+                        setActiveFilter("ALL");
+                        setSearchQuery("");
+                        setSearchParams({});
+                        navigate("/");
+                        setTimeout(() => {
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }, 50);
+                      }}
+                      title="Back to Home Page"
+                      aria-label="Back to Home Page"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                      </svg>
+                      <span>SHOP ALL</span>
+                    </button>
+                  )}
+                </div>
+                <div
+                  className="mobile-scroll-arrow-hint"
+                  style={{ marginTop: 6 }}
+                  onClick={() => {
+                    const el = document.querySelector(".filter-bar");
+                    if (el) el.scrollBy({ left: 120, behavior: "smooth" });
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#39ff14" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "bounceRight 1.2s ease-in-out infinite" }}>
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* ROW 2 (desktop only combined, mobile split): Filter bar + Sort */}
+              <div className="shop-controls-row">
+                {/* FILTER BAR — 100% native smooth horizontal scroll */}
+                <div className="filter-bar">
+                  {filterButtons.slice(0, 3).concat(
+                    filterButtons.slice(3, 4),
+                    { key: "FEATURED", label: featuredCategoryName.toUpperCase() },
+                    filterButtons.slice(4)
+                  ).map(({ key, label }) => (
+                    <button
+                      type="button"
+                      key={key}
+                      className={`filter-btn${activeFilter === key ? " active" : ""}${key === "FEATURED" ? " wc26-btn" : ""}${key === "26/27 KITS" ? " kits2627-btn" : ""}`}
+                      onClick={() => setActiveFilter(key)}
+                      style={key === "FEATURED" ? {
+                        "--wc26-bg": `url(${wc26Bg})`,
+                        backgroundImage: `url(${wc26Bg})`,
+                        backgroundSize: "400%",
+                        backgroundPosition: "50% 50%",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "transparent",
+                        textShadow: "none"
+                      } : undefined}
+                    >
+                      {key === "26/27 KITS" ? (
+                        <span
+                          className="kits2627-graphic"
+                          aria-label="26/27 KITS"
+                          style={{ backgroundImage: `url(${kits2627Img})` }}
+                        />
+                      ) : (
+                        <span style={{ display: "inline-block", opacity: key === "FEATURED" ? 0 : 1, transform: activeFilter === key ? "skewX(8deg)" : "none" }}>
+                          {label}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+
+                {/* SORT BY — custom themed dropdown */}
+                <div className="sort-dropdown-wrap shop-sort-wrap" style={{ position: "relative", flexShrink: 0 }}>
+                  <button
+                    className="sort-dropdown-btn"
+                    onClick={() => setSortOpen(o => !o)}
+                    aria-haspopup="listbox"
+                    aria-expanded={sortOpen}
+                    type="button"
                   >
-                    OFFICIAL 26/27 DROP
-                  </span>
-                  <h3 className="team-section-banner-heading">
-                    {teamBannerData.title}
-                  </h3>
+                    {/* Hamburger icon */}
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#39ff14" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
+                      <line x1="3" y1="6" x2="21" y2="6" />
+                      <line x1="3" y1="12" x2="21" y2="12" />
+                      <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                    <span className="sort-dropdown-label">SORT BY</span>
+                    <span className="sort-dropdown-value">{
+                      sortBy === "FEATURED" ? "FEATURED" :
+                        sortBy === "PRICE_LOW_HIGH" ? "PRICE: LOW → HIGH" :
+                          sortBy === "PRICE_HIGH_LOW" ? "PRICE: HIGH → LOW" :
+                            sortBy === "NAME_ASC" ? "NAME: A → Z" :
+                              "NEWEST"
+                    }</span>
+                    <svg className={`sort-dropdown-chevron${sortOpen ? " open" : ""}`} width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#39ff14" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                  {sortOpen && (
+                    <ul className="sort-dropdown-menu" role="listbox">
+                      {[
+                        { key: "FEATURED", label: "FEATURED" },
+                        { key: "PRICE_LOW_HIGH", label: "PRICE: LOW → HIGH" },
+                        { key: "PRICE_HIGH_LOW", label: "PRICE: HIGH → LOW" },
+                        { key: "NAME_ASC", label: "NAME: A → Z" },
+                        { key: "NEWEST", label: "NEWEST ARRIVALS" },
+                      ].map(opt => (
+                        <li
+                          key={opt.key}
+                          role="option"
+                          aria-selected={sortBy === opt.key}
+                          className={`sort-dropdown-item${sortBy === opt.key ? " active" : ""}`}
+                          onClick={() => { setSortBy(opt.key); setSortOpen(false); }}
+                        >
+                          {sortBy === opt.key && <span className="sort-dropdown-tick">✓</span>}
+                          {opt.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>
-          )}
 
-          <div className="shop-header-outer">
-            {/* ROW 1: Title, Home Button & Right Border Arrow Indicator */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, flexWrap: "wrap", gap: 10 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-                <h2 className="shop-section-title" style={{ margin: 0 }}>
-                  <span style={{ color: "#39ff14" }}>/ </span>{sectionTitle}
-                </h2>
-                {(activeTeamName || collectionSlug || searchParams.get("team") || (sectionTitle && sectionTitle.toUpperCase().includes("JERSEYS"))) && (
-                  <button
-                    type="button"
-                    className="heading-home-btn"
-                    onClick={() => {
-                      setActiveTeamName("");
-                      setActiveFilter("ALL");
-                      setSearchQuery("");
-                      setSearchParams({});
-                      navigate("/");
-                      setTimeout(() => {
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }, 50);
-                    }}
-                    title="Back to Home Page"
-                    aria-label="Back to Home Page"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                      <line x1="3" y1="6" x2="21" y2="6" />
-                      <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-                    <span>SHOP ALL</span>
-                  </button>
-                )}
-              </div>
-              <div 
-                className="mobile-scroll-arrow-hint"
-                style={{ marginTop: 6 }}
-                onClick={() => {
-                  const el = document.querySelector(".filter-bar");
-                  if (el) el.scrollBy({ left: 120, behavior: "smooth" });
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#39ff14" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "bounceRight 1.2s ease-in-out infinite" }}>
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </div>
-            </div>
-
-            {/* ROW 2 (desktop only combined, mobile split): Filter bar + Sort */}
-            <div className="shop-controls-row">
-              {/* FILTER BAR — 100% native smooth horizontal scroll */}
-              <div className="filter-bar">
-                {filterButtons.slice(0, 3).concat(
-                  filterButtons.slice(3, 4),
-                  { key: "FEATURED", label: featuredCategoryName.toUpperCase() },
-                  filterButtons.slice(4)
-                ).map(({ key, label }) => (
-                  <button
-                    type="button"
-                    key={key}
-                    className={`filter-btn${activeFilter === key ? " active" : ""}${key === "FEATURED" ? " wc26-btn" : ""}${key === "26/27 KITS" ? " kits2627-btn" : ""}`}
-                    onClick={() => setActiveFilter(key)}
-                    style={key === "FEATURED" ? {
-                      "--wc26-bg": `url(${wc26Bg})`,
-                      backgroundImage: `url(${wc26Bg})`,
-                      backgroundSize: "400%",
-                      backgroundPosition: "50% 50%",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      color: "transparent",
-                      textShadow: "none"
-                    } : undefined}
-                  >
-                    {key === "26/27 KITS" ? (
-                      <span
-                        className="kits2627-graphic"
-                        aria-label="26/27 KITS"
-                        style={{ backgroundImage: `url(${kits2627Img})` }}
-                      />
-                    ) : (
-                      <span style={{ display: "inline-block", opacity: key === "FEATURED" ? 0 : 1, transform: activeFilter === key ? "skewX(8deg)" : "none" }}>
-                        {label}
-                      </span>
-                    )}
-                  </button>
+            {loadingProducts ? (
+              <div className="card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 6 }}>
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} style={{ background: "#0f0f0f", border: "1px solid #151515" }}>
+                    <div className="skeleton" style={{ height: 220 }} />
+                    <div style={{ padding: 16 }}>
+                      <div className="skeleton" style={{ height: 18, marginBottom: 10, width: "60%" }} />
+                      <div className="skeleton" style={{ height: 14, width: "40%" }} />
+                    </div>
+                  </div>
                 ))}
               </div>
-
-              {/* SORT BY — custom themed dropdown */}
-              <div className="sort-dropdown-wrap shop-sort-wrap" style={{ position: "relative", flexShrink: 0 }}>
-                <button
-                  className="sort-dropdown-btn"
-                  onClick={() => setSortOpen(o => !o)}
-                  aria-haspopup="listbox"
-                  aria-expanded={sortOpen}
-                  type="button"
-                >
-                  {/* Hamburger icon */}
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#39ff14" strokeWidth="2.5" strokeLinecap="round" style={{ flexShrink: 0 }}>
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <line x1="3" y1="12" x2="21" y2="12"/>
-                    <line x1="3" y1="18" x2="21" y2="18"/>
-                  </svg>
-                  <span className="sort-dropdown-label">SORT BY</span>
-                  <span className="sort-dropdown-value">{
-                    sortBy === "FEATURED" ? "FEATURED" :
-                    sortBy === "PRICE_LOW_HIGH" ? "PRICE: LOW → HIGH" :
-                    sortBy === "PRICE_HIGH_LOW" ? "PRICE: HIGH → LOW" :
-                    sortBy === "NAME_ASC" ? "NAME: A → Z" :
-                    "NEWEST"
-                  }</span>
-                  <svg className={`sort-dropdown-chevron${sortOpen ? " open" : ""}`} width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#39ff14" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18 9"/>
-                  </svg>
-                </button>
-                {sortOpen && (
-                  <ul className="sort-dropdown-menu" role="listbox">
-                    {[
-                      { key: "FEATURED", label: "FEATURED" },
-                      { key: "PRICE_LOW_HIGH", label: "PRICE: LOW → HIGH" },
-                      { key: "PRICE_HIGH_LOW", label: "PRICE: HIGH → LOW" },
-                      { key: "NAME_ASC", label: "NAME: A → Z" },
-                      { key: "NEWEST", label: "NEWEST ARRIVALS" },
-                    ].map(opt => (
-                      <li
-                        key={opt.key}
-                        role="option"
-                        aria-selected={sortBy === opt.key}
-                        className={`sort-dropdown-item${sortBy === opt.key ? " active" : ""}`}
-                        onClick={() => { setSortBy(opt.key); setSortOpen(false); }}
-                      >
-                        {sortBy === opt.key && <span className="sort-dropdown-tick">✓</span>}
-                        {opt.label}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+            ) : filtered.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "80px 0", color: "#222" }}>
+                <div style={{ fontSize: 56 }}>🔍</div>
+                <p style={{ marginTop: 16, letterSpacing: 4, fontSize: 13 }}>NO RESULTS FOUND</p>
               </div>
             </div>
           </div>
@@ -4055,9 +4075,9 @@ letter-spacing: 4px !important;
               ))}
             </div>
           ) : filtered.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "80px 0", color: "#222" }}>
+            <div style={{ textAlign: "center", padding: "80px 0", color: "#a3a3a3" }}>
               <div style={{ fontSize: 56 }}>🔍</div>
-              <p style={{ marginTop: 16, letterSpacing: 4, fontSize: 13 }}>NO RESULTS FOUND</p>
+              <p style={{ marginTop: 16, letterSpacing: 4, fontSize: 13, color: "#a3a3a3" }}>NO RESULTS FOUND</p>
             </div>
           ) : (
             <div ref={gridRef} className="card-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 6 }}>
@@ -4093,244 +4113,226 @@ letter-spacing: 4px !important;
                       )}
                     </div>
                   </div>
-                  <div style={{ marginTop: "auto" }}>
-                    {jersey.stock === 0 ? (
-                      <button type="button" className="add-btn" disabled>
-                        OUT OF STOCK
-                      </button>
-                    ) : (
-                      <button type="button"
-                        className="add-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openQuickView(jersey);
+                ))}
+              </div>
+            )}
+
+            {/* CATEGORY PAGINATION CONTROLS */}
+            {totalPages > 1 && (
+              <div style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 12,
+                marginTop: 36,
+                paddingTop: 20,
+                borderTop: "1px solid #151515"
+              }}>
+                {/* Pagination Nav Buttons */}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+                  {/* PREV ARROW BUTTON */}
+                  <button
+                    type="button"
+                    disabled={validCurrentPage === 1}
+                    onClick={() => {
+                      setCurrentPage(prev => Math.max(prev - 1, 1));
+                      document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    style={{
+                      background: validCurrentPage === 1 ? "#0a0a0a" : "#141414",
+                      border: `1px solid ${validCurrentPage === 1 ? "#222" : "#39ff14"}`,
+                      color: validCurrentPage === 1 ? "#333" : "#39ff14",
+                      width: 40,
+                      height: 40,
+                      borderRadius: 4,
+                      fontSize: 24,
+                      fontWeight: 900,
+                      lineHeight: 1,
+                      cursor: validCurrentPage === 1 ? "not-allowed" : "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      transition: "all 0.2s ease"
+                    }}
+                    aria-label="Previous Page"
+                  >
+                    «
+                  </button>
+
+                  {/* PAGE NUMBERS */}
+                  {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(pageNum => {
+                    const isActive = pageNum === validCurrentPage;
+                    return (
+                      <button
+                        key={pageNum}
+                        type="button"
+                        onClick={() => {
+                          setCurrentPage(pageNum);
+                          document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        style={{
+                          background: isActive ? "#39ff14" : "#0d0d0d",
+                          border: `1px solid ${isActive ? "#39ff14" : "#222"}`,
+                          color: isActive ? "#000" : "#bbb",
+                          minWidth: 40,
+                          height: 40,
+                          padding: "0 10px",
+                          borderRadius: 4,
+                          fontFamily: "'Barlow Condensed', sans-serif",
+                          fontWeight: 900,
+                          fontSize: 16,
+                          letterSpacing: 1,
+                          cursor: "pointer",
+                          boxShadow: isActive ? "0 0 16px rgba(57,255,20,0.4)" : "none",
+                          transition: "all 0.2s ease"
                         }}
                       >
-                        SELECT SIZE
+                        {pageNum}
                       </button>
-                    )}
-                  </div>
+                    );
+                  })}
+
+                  {/* NEXT ARROW BUTTON */}
+                  <button
+                    type="button"
+                    disabled={validCurrentPage === totalPages}
+                    onClick={() => {
+                      setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                      document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    style={{
+                      background: validCurrentPage === totalPages ? "#0a0a0a" : "#141414",
+                      border: `1px solid ${validCurrentPage === totalPages ? "#222" : "#39ff14"}`,
+                      color: validCurrentPage === totalPages ? "#333" : "#39ff14",
+                      width: 40,
+                      height: 40,
+                      borderRadius: 4,
+                      fontSize: 24,
+                      fontWeight: 900,
+                      lineHeight: 1,
+                      cursor: validCurrentPage === totalPages ? "not-allowed" : "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      transition: "all 0.2s ease"
+                    }}
+                    aria-label="Next Page"
+                  >
+                    »
+                  </button>
+                </div>
+
+                {/* PAGE INFO SUBTITLE */}
+                <div style={{ color: "#a3a3a3", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>
+                  SHOWING {(validCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(validCurrentPage * ITEMS_PER_PAGE, filtered.length)} OF {filtered.length} JERSEYS (PAGE {validCurrentPage} OF {totalPages})
+                </div>
+              </div>
+            )}
+          </section>
+          <div className="section-divider" />
+
+          {/* FEATURES */}
+          <section style={{ background: "#070707", padding: "60px 16px", borderTop: "1px solid #111" }}>
+            <h2 style={{ fontSize: 30, fontWeight: 900, fontStyle: "italic", textAlign: "center", marginBottom: 40, letterSpacing: 2 }}>WHY CHOOSE <span style={{ color: "#39ff14" }}>JERSEYVAULT</span></h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 1 }}>
+              {[
+                ["🏅", "PREMIUM QUALITY", "High-grade breathable materials & precise embroidery detailing"],
+                ["🚚", "PAN-INDIA SHIPPING", "Cash on Delivery available with reliable tracking"],
+                ["↩️", "EASY EXCHANGES", "Hassle-free size exchanges for peace of mind"],
+                ["🔒", "SECURE PAYMENTS", "100% safe checkout via Razorpay & UPI"],
+              ].map(([icon, title, desc]) => (
+                <div key={title} style={{ background: "#0a0a0a", border: "1px solid #111", padding: "28px 24px", textAlign: "center", transition: "border-color 0.3s, background 0.3s" }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#39ff14"; e.currentTarget.style.background = "#0c0c0c"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "#111"; e.currentTarget.style.background = "#0a0a0a"; }}>
+                  <div style={{ fontSize: 32, marginBottom: 12 }}>{icon}</div>
+                  <div style={{ fontWeight: 900, letterSpacing: 3, fontSize: 13, marginBottom: 8, color: "#ddd" }}>{title}</div>
+                  <div style={{ color: "#a3a3a3", fontSize: 13, fontFamily: "'Barlow',sans-serif", lineHeight: 1.6 }}>{desc}</div>
                 </div>
               ))}
             </div>
-          )}
+          </section>
+          <div className="section-divider" />
 
-          {/* CATEGORY PAGINATION CONTROLS */}
-          {totalPages > 1 && (
-            <div style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 12,
-              marginTop: 36,
-              paddingTop: 20,
-              borderTop: "1px solid #151515"
-            }}>
-              {/* Pagination Nav Buttons */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-                {/* PREV ARROW BUTTON */}
-                <button
-                  type="button"
-                  disabled={validCurrentPage === 1}
-                  onClick={() => {
-                    setCurrentPage(prev => Math.max(prev - 1, 1));
-                    document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  style={{
-                    background: validCurrentPage === 1 ? "#0a0a0a" : "#141414",
-                    border: `1px solid ${validCurrentPage === 1 ? "#222" : "#39ff14"}`,
-                    color: validCurrentPage === 1 ? "#333" : "#39ff14",
-                    width: 40,
-                    height: 40,
-                    borderRadius: 4,
-                    fontSize: 24,
-                    fontWeight: 900,
-                    lineHeight: 1,
-                    cursor: validCurrentPage === 1 ? "not-allowed" : "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.2s ease"
-                  }}
-                  aria-label="Previous Page"
-                >
-                  «
-                </button>
+          {/* COLLECTION OR FINAL SEO CONTENT BLOCK */}
+          {collectionSlug && COLLECTION_MAPPING[collectionSlug] ? (
+            <section style={{ background: "#050505", padding: "60px 24px", textAlign: "left" }}>
+              <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+                {/* Breadcrumbs */}
+                <nav aria-label="breadcrumb" style={{ marginBottom: "24px", fontSize: "13px", fontFamily: "'Barlow', sans-serif" }}>
+                  <Link to="/" style={{ color: "#39ff14", textDecoration: "none" }}>Home</Link>
+                  <span style={{ margin: "0 8px", color: "#555" }}>/</span>
+                  <Link to="/collections" style={{ color: "#39ff14", textDecoration: "none" }}>Collections</Link>
+                  <span style={{ margin: "0 8px", color: "#555" }}>/</span>
+                  <span style={{ color: "#aaa" }}>{COLLECTION_MAPPING[collectionSlug].title}</span>
+                </nav>
 
-                {/* PAGE NUMBERS */}
-                {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(pageNum => {
-                  const isActive = pageNum === validCurrentPage;
-                  return (
-                    <button
-                      key={pageNum}
-                      type="button"
-                      onClick={() => {
-                        setCurrentPage(pageNum);
-                        document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      style={{
-                        background: isActive ? "#39ff14" : "#0d0d0d",
-                        border: `1px solid ${isActive ? "#39ff14" : "#222"}`,
-                        color: isActive ? "#000" : "#bbb",
-                        minWidth: 40,
-                        height: 40,
-                        padding: "0 10px",
-                        borderRadius: 4,
-                        fontFamily: "'Barlow Condensed', sans-serif",
-                        fontWeight: 900,
-                        fontSize: 16,
-                        letterSpacing: 1,
-                        cursor: "pointer",
-                        boxShadow: isActive ? "0 0 16px rgba(57,255,20,0.4)" : "none",
-                        transition: "all 0.2s ease"
-                      }}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
+                <h2 style={{ fontSize: 32, fontWeight: 900, fontStyle: "italic", marginBottom: 24, letterSpacing: 1, color: "#fff" }}>
+                  {COLLECTION_MAPPING[collectionSlug].h1}
+                </h2>
 
-                {/* NEXT ARROW BUTTON */}
-                <button
-                  type="button"
-                  disabled={validCurrentPage === totalPages}
-                  onClick={() => {
-                    setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                    document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  style={{
-                    background: validCurrentPage === totalPages ? "#0a0a0a" : "#141414",
-                    border: `1px solid ${validCurrentPage === totalPages ? "#222" : "#39ff14"}`,
-                    color: validCurrentPage === totalPages ? "#333" : "#39ff14",
-                    width: 40,
-                    height: 40,
-                    borderRadius: 4,
-                    fontSize: 24,
-                    fontWeight: 900,
-                    lineHeight: 1,
-                    cursor: validCurrentPage === totalPages ? "not-allowed" : "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.2s ease"
-                  }}
-                  aria-label="Next Page"
-                >
-                  »
-                </button>
-              </div>
+                {COLLECTION_MAPPING[collectionSlug].longDescription ? (
+                  <div style={{ color: "#bbb", fontSize: 15, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8, marginBottom: 40 }} dangerouslySetInnerHTML={{ __html: COLLECTION_MAPPING[collectionSlug].longDescription }} />
+                ) : (
+                  <p style={{ color: "#aaa", fontSize: 14, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8 }}>
+                    {COLLECTION_MAPPING[collectionSlug].desc}
+                  </p>
+                )}
 
-              {/* PAGE INFO SUBTITLE */}
-              <div style={{ color: "#a3a3a3", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>
-                SHOWING {(validCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(validCurrentPage * ITEMS_PER_PAGE, filtered.length)} OF {filtered.length} JERSEYS (PAGE {validCurrentPage} OF {totalPages})
-              </div>
-            </div>
-          )}
-        </section>
-        <div className="section-divider" />
-
-        {/* FEATURES */}
-        <section style={{ background: "#070707", padding: "60px 16px", borderTop: "1px solid #111" }}>
-          <h2 style={{ fontSize: 30, fontWeight: 900, fontStyle: "italic", textAlign: "center", marginBottom: 40, letterSpacing: 2 }}>WHY CHOOSE <span style={{ color: "#39ff14" }}>JERSEYVAULT</span></h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 1 }}>
-            {[
-              ["🏅", "PREMIUM QUALITY", "High-grade breathable materials & precise embroidery detailing"],
-              ["🚚", "PAN-INDIA SHIPPING", "Cash on Delivery available with reliable tracking"],
-              ["↩️", "EASY EXCHANGES", "Hassle-free size exchanges for peace of mind"],
-              ["🔒", "SECURE PAYMENTS", "100% safe checkout via Razorpay & UPI"],
-            ].map(([icon, title, desc]) => (
-              <div key={title} style={{ background: "#0a0a0a", border: "1px solid #111", padding: "28px 24px", textAlign: "center", transition: "border-color 0.3s, background 0.3s" }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = "#39ff14"; e.currentTarget.style.background = "#0c0c0c"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "#111"; e.currentTarget.style.background = "#0a0a0a"; }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>{icon}</div>
-                <div style={{ fontWeight: 900, letterSpacing: 3, fontSize: 13, marginBottom: 8, color: "#ddd" }}>{title}</div>
-                <div style={{ color: "#a3a3a3", fontSize: 13, fontFamily: "'Barlow',sans-serif", lineHeight: 1.6 }}>{desc}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-        <div className="section-divider" />
-
-        {/* COLLECTION OR FINAL SEO CONTENT BLOCK */}
-        {collectionSlug && COLLECTION_MAPPING[collectionSlug] ? (
-          <section style={{ background: "#050505", padding: "60px 24px", textAlign: "left" }}>
-            <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-              {/* Breadcrumbs */}
-              <nav aria-label="breadcrumb" style={{ marginBottom: "24px", fontSize: "13px", fontFamily: "'Barlow', sans-serif" }}>
-                <Link to="/" style={{ color: "#39ff14", textDecoration: "none" }}>Home</Link> 
-                <span style={{ margin: "0 8px", color: "#555" }}>/</span>
-                <Link to="/collections" style={{ color: "#39ff14", textDecoration: "none" }}>Collections</Link>
-                <span style={{ margin: "0 8px", color: "#555" }}>/</span>
-                <span style={{ color: "#aaa" }}>{COLLECTION_MAPPING[collectionSlug].title}</span>
-              </nav>
-
-              <h2 style={{ fontSize: 32, fontWeight: 900, fontStyle: "italic", marginBottom: 24, letterSpacing: 1, color: "#fff" }}>
-                {COLLECTION_MAPPING[collectionSlug].h1}
-              </h2>
-              
-              {COLLECTION_MAPPING[collectionSlug].longDescription ? (
-                <div style={{ color: "#bbb", fontSize: 15, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8, marginBottom: 40 }} dangerouslySetInnerHTML={{ __html: COLLECTION_MAPPING[collectionSlug].longDescription }} />
-              ) : (
-                <p style={{ color: "#aaa", fontSize: 14, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8 }}>
-                  {COLLECTION_MAPPING[collectionSlug].desc}
-                </p>
-              )}
-              
-              {COLLECTION_MAPPING[collectionSlug].faqs && (
-                <div style={{ marginTop: 40, borderTop: "1px solid #222", paddingTop: 40 }}>
-                  <h3 style={{ fontSize: 24, fontWeight: 900, fontStyle: "italic", marginBottom: 24, color: "#fff" }}>Frequently Asked Questions</h3>
-                  {COLLECTION_MAPPING[collectionSlug].faqs.map((faq, i) => (
-                    <div key={i} style={{ marginBottom: 24 }}>
-                      <h4 style={{ fontSize: 18, fontWeight: 700, color: "#39ff14", marginBottom: 8, fontFamily: "'Barlow',sans-serif" }}>{faq.q}</h4>
-                      <p style={{ fontSize: 15, color: "#aaa", fontFamily: "'Barlow',sans-serif", lineHeight: 1.6 }}>{faq.a}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Related Collections & Guides Placeholder (Semantic Hub) */}
-              <div style={{ marginTop: 60, display: "flex", flexWrap: "wrap", gap: "40px", borderTop: "1px solid #222", paddingTop: 40 }}>
-                <div style={{ flex: "1 1 300px" }}>
-                  <h4 style={{ fontSize: 20, fontWeight: 900, fontStyle: "italic", borderBottom: "1px solid #333", paddingBottom: 12, marginBottom: 16, color: "#fff" }}>Related Collections</h4>
-                  <ul style={{ listStyle: "none", padding: 0, margin: 0, fontFamily: "'Barlow', sans-serif" }}>
-                    {Object.keys(COLLECTION_MAPPING).filter(k => k !== collectionSlug).sort(() => 0.5 - Math.random()).slice(0, 6).map(k => (
-                      <li key={k} style={{ marginBottom: 10 }}>
-                        <Link to={`/collections/${k}`} style={{ color: "#888", textDecoration: "none", transition: "color 0.2s" }} onMouseOver={e => e.target.style.color = "#39ff14"} onMouseOut={e => e.target.style.color = "#888"}>
-                          ➔ {COLLECTION_MAPPING[k].title}
-                        </Link>
-                      </li>
+                {COLLECTION_MAPPING[collectionSlug].faqs && (
+                  <div style={{ marginTop: 40, borderTop: "1px solid #222", paddingTop: 40 }}>
+                    <h3 style={{ fontSize: 24, fontWeight: 900, fontStyle: "italic", marginBottom: 24, color: "#fff" }}>Frequently Asked Questions</h3>
+                    {COLLECTION_MAPPING[collectionSlug].faqs.map((faq, i) => (
+                      <div key={i} style={{ marginBottom: 24 }}>
+                        <h4 style={{ fontSize: 18, fontWeight: 700, color: "#39ff14", marginBottom: 8, fontFamily: "'Barlow',sans-serif" }}>{faq.q}</h4>
+                        <p style={{ fontSize: 15, color: "#aaa", fontFamily: "'Barlow',sans-serif", lineHeight: 1.6 }}>{faq.a}</p>
+                      </div>
                     ))}
-                  </ul>
-                </div>
-                <div style={{ flex: "1 1 300px" }}>
-                  <h4 style={{ fontSize: 20, fontWeight: 900, fontStyle: "italic", borderBottom: "1px solid #333", paddingBottom: 12, marginBottom: 16, color: "#fff" }}>Related Guides</h4>
-                  <ul style={{ listStyle: "none", padding: 0, margin: 0, fontFamily: "'Barlow', sans-serif" }}>
-                    <li style={{ marginBottom: 10 }}><Link to="/pages/care-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Complete Care Guide</Link></li>
-                    <li style={{ marginBottom: 10 }}><Link to="/pages/size-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Accurate Size Guide</Link></li>
-                    <li style={{ marginBottom: 10 }}><Link to="/pages/retro-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Retro Shirts Buying Guide</Link></li>
-                    <li style={{ marginBottom: 10 }}><Link to="/pages/player-vs-fan" style={{ color: "#888", textDecoration: "none" }}>➔ Player vs Fan Version Differences</Link></li>
-                    <li style={{ marginBottom: 10 }}><Link to="/pages/materials-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Fabric & Materials Guide</Link></li>
-                  </ul>
-                </div>
-              </div>
+                  </div>
+                )}
 
-            </div>
-          </section>
-        ) : (
-          <section style={{ background: "#050505", padding: "60px 24px", textAlign: "center" }}>
-            <div style={{ maxWidth: 800, margin: "0 auto" }}>
-              <h2 style={{ fontSize: 24, fontWeight: 900, fontStyle: "italic", marginBottom: 16, letterSpacing: 2, color: "#fff" }}>
-                YOUR DESTINATION FOR <span style={{ color: "#39ff14" }}>PREMIUM FOOTBALL JERSEYS</span> IN INDIA
-              </h2>
-              <p style={{ color: "#aaa", fontSize: 14, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8, marginBottom: 12 }}>
-                Whether you're gearing up for match day or expanding your collection, finding reliable football kits shouldn't be difficult. We specialize in delivering high-grade fan version and elite player version jerseys directly to fans across India. Every shirt in our catalog is crafted with premium quality materials and detailed embroidery designed to last.
-              </p>
-              <p style={{ color: "#aaa", fontSize: 14, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8 }}>
-                Explore our extensive range of club jerseys spanning giants like Real Madrid, Barcelona, Manchester United, Arsenal, Liverpool, Chelsea, PSG, Bayern Munich, AC Milan, and Inter Milan. Prefer international football? Support your nation with kits from Argentina, Brazil, Portugal, and France. With Cash on Delivery available and hassle-free size exchanges, you can shop for both modern designs and classic retro jerseys with complete peace of mind.
-              </p>
-            </div>
-          </section>
-        )}
+                {/* Related Collections & Guides Placeholder (Semantic Hub) */}
+                <div style={{ marginTop: 60, display: "flex", flexWrap: "wrap", gap: "40px", borderTop: "1px solid #222", paddingTop: 40 }}>
+                  <div style={{ flex: "1 1 300px" }}>
+                    <h4 style={{ fontSize: 20, fontWeight: 900, fontStyle: "italic", borderBottom: "1px solid #333", paddingBottom: 12, marginBottom: 16, color: "#fff" }}>Related Collections</h4>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0, fontFamily: "'Barlow', sans-serif" }}>
+                      {Object.keys(COLLECTION_MAPPING).filter(k => k !== collectionSlug).sort(() => 0.5 - Math.random()).slice(0, 6).map(k => (
+                        <li key={k} style={{ marginBottom: 10 }}>
+                          <Link to={`/collections/${k}`} style={{ color: "#888", textDecoration: "none", transition: "color 0.2s" }} onMouseOver={e => e.target.style.color = "#39ff14"} onMouseOut={e => e.target.style.color = "#888"}>
+                            ➔ {COLLECTION_MAPPING[k].title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div style={{ flex: "1 1 300px" }}>
+                    <h4 style={{ fontSize: 20, fontWeight: 900, fontStyle: "italic", borderBottom: "1px solid #333", paddingBottom: 12, marginBottom: 16, color: "#fff" }}>Related Guides</h4>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0, fontFamily: "'Barlow', sans-serif" }}>
+                      <li style={{ marginBottom: 10 }}><Link to="/pages/care-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Complete Care Guide</Link></li>
+                      <li style={{ marginBottom: 10 }}><Link to="/pages/size-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Accurate Size Guide</Link></li>
+                      <li style={{ marginBottom: 10 }}><Link to="/pages/retro-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Retro Shirts Buying Guide</Link></li>
+                      <li style={{ marginBottom: 10 }}><Link to="/pages/player-vs-fan" style={{ color: "#888", textDecoration: "none" }}>➔ Player vs Fan Version Differences</Link></li>
+                      <li style={{ marginBottom: 10 }}><Link to="/pages/materials-guide" style={{ color: "#888", textDecoration: "none" }}>➔ Fabric & Materials Guide</Link></li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+          ) : (
+            <section style={{ background: "#050505", padding: "60px 24px", textAlign: "center" }}>
+              <div style={{ maxWidth: 800, margin: "0 auto" }}>
+                <h2 style={{ fontSize: 24, fontWeight: 900, fontStyle: "italic", marginBottom: 16, letterSpacing: 2, color: "#fff" }}>
+                  YOUR DESTINATION FOR <span style={{ color: "#39ff14" }}>PREMIUM FOOTBALL JERSEYS</span> IN INDIA
+                </h2>
+                <p style={{ color: "#aaa", fontSize: 14, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8, marginBottom: 12 }}>
+                  Whether you're gearing up for match day or expanding your collection, finding reliable football kits shouldn't be difficult. We specialize in delivering high-grade fan version and elite player version jerseys directly to fans across India. Every shirt in our catalog is crafted with premium quality materials and detailed embroidery designed to last.
+                </p>
+                <p style={{ color: "#aaa", fontSize: 14, fontFamily: "'Barlow',sans-serif", lineHeight: 1.8 }}>
+                  Explore our extensive range of club jerseys spanning giants like Real Madrid, Barcelona, Manchester United, Arsenal, Liverpool, Chelsea, PSG, Bayern Munich, AC Milan, and Inter Milan. Prefer international football? Support your nation with kits from Argentina, Brazil, Portugal, and France. With Cash on Delivery available and hassle-free size exchanges, you can shop for both modern designs and classic retro jerseys with complete peace of mind.
+                </p>
+              </div>
+            </section>
+          )}
 
         </main>
         {/* FOOTER */}
@@ -4362,30 +4364,30 @@ letter-spacing: 4px !important;
                   className="modal-back-btn"
                   onClick={closeQuickView}
                   style={{
-                  position: "absolute",
-                  top: "10px",
-                  left: "10px",
-                  zIndex: 100,
-                  background: "rgba(0, 0, 0, 0.85)",
-                  border: "1px solid #39ff14",
-                  color: "#39ff14",
-                  padding: "4px 10px",
-                  borderRadius: "3px",
-                  fontSize: "11px",
-                  fontWeight: 900,
-                  fontFamily: "'Barlow Condensed', sans-serif",
-                  letterSpacing: "1px",
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  boxShadow: "0 0 8px rgba(57, 255, 20, 0.3)",
-                  backdropFilter: "blur(4px)"
-                }}
-              >
-                <span style={{ fontSize: "12px", lineHeight: 1 }}>←</span>
-                <span>BACK</span>
-              </button>
+                    position: "absolute",
+                    top: "10px",
+                    left: "10px",
+                    zIndex: 100,
+                    background: "rgba(0, 0, 0, 0.85)",
+                    border: "1px solid #39ff14",
+                    color: "#39ff14",
+                    padding: "4px 10px",
+                    borderRadius: "3px",
+                    fontSize: "11px",
+                    fontWeight: 900,
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    letterSpacing: "1px",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    boxShadow: "0 0 8px rgba(57, 255, 20, 0.3)",
+                    backdropFilter: "blur(4px)"
+                  }}
+                >
+                  <span style={{ fontSize: "12px", lineHeight: 1 }}>←</span>
+                  <span>BACK</span>
+                </button>
               )}
               <div className="modal-img-wrap" style={{ position: "relative" }}>
                 <ProductCarousel
@@ -4435,7 +4437,7 @@ letter-spacing: 4px !important;
                       onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
                     >
                       <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff">
-                        <path d="M12.012 2c-5.508 0-9.989 4.478-9.989 9.984 0 1.762.459 3.483 1.332 5.004L2 22l5.161-1.344a9.96 9.96 0 004.851 1.256h.004c5.507 0 9.988-4.478 9.988-9.984 0-2.668-1.039-5.176-2.925-7.062A9.925 9.925 0 0012.012 2zm5.721 14.286c-.24.673-1.398 1.282-1.92 1.348-.48.06-1.096.084-3.54-.924-2.772-1.144-4.56-3.96-4.696-4.14-.136-.18-1.12-1.488-1.12-2.844 0-1.356.708-2.016.96-2.292.24-.264.528-.336.708-.336.18 0 .36.004.516.012.168.008.396-.064.62.472.24.576.816 1.992.888 2.136.072.144.12.312.024.504-.096.192-.144.312-.288.48-.144.168-.304.376-.432.504-.144.144-.294.3-.126.588.168.288.75 1.238 1.61 2.004 1.106.985 2.038 1.29 2.326 1.434.288.144.48.216.552.336.072.12.072.696-.168 1.368z"/>
+                        <path d="M12.012 2c-5.508 0-9.989 4.478-9.989 9.984 0 1.762.459 3.483 1.332 5.004L2 22l5.161-1.344a9.96 9.96 0 004.851 1.256h.004c5.507 0 9.988-4.478 9.988-9.984 0-2.668-1.039-5.176-2.925-7.062A9.925 9.925 0 0012.012 2zm5.721 14.286c-.24.673-1.398 1.282-1.92 1.348-.48.06-1.096.084-3.54-.924-2.772-1.144-4.56-3.96-4.696-4.14-.136-.18-1.12-1.488-1.12-2.844 0-1.356.708-2.016.96-2.292.24-.264.528-.336.708-.336.18 0 .36.004.516.012.168.008.396-.064.62.472.24.576.816 1.992.888 2.136.072.144.12.312.024.504-.096.192-.144.312-.288.48-.144.168-.304.376-.432.504-.144.144-.294.3-.126.588.168.288.75 1.238 1.61 2.004 1.106.985 2.038 1.29 2.326 1.434.288.144.48.216.552.336.072.12.072.696-.168 1.368z" />
                       </svg>
                     </button>
 
@@ -4543,7 +4545,7 @@ letter-spacing: 4px !important;
                 <div style={{ marginTop: 22 }}>
                   <div className="size-label" style={{ marginBottom: 8 }}>SELECT QUANTITY</div>
 
-                  <div 
+                  <div
                     className="modal-qty-control"
                     style={{
                       display: "inline-flex",
@@ -4713,15 +4715,15 @@ letter-spacing: 4px !important;
                       {selectedJersey?.description && selectedJersey.description.trim() !== ""
                         ? selectedJersey.description
                         : (() => {
-                            const name = (selectedJersey?.name || "").toUpperCase();
-                            const cat = (selectedJersey?.category || "").toUpperCase();
-                            const subCat = (selectedJersey?.sub_category || "").toUpperCase();
-                            const type = (selectedJersey?.type || "").toUpperCase();
-                            const isPlayer = cat.includes("PLAYER") || subCat.includes("PLAYER") || type.includes("PLAYER") || name.includes("PLAYER");
-                            return isPlayer
-                              ? "Authentic Match / Player Edition jersey engineered with Thailand superior ultra-lightweight Dry-Fit performance fabric, heat-transferred authentic rubberised 3D club crests, and precision athletic slim-fit tailoring as worn on pitch by professional players."
-                              : "Premium Fan Edition football jersey imported from Thailand. Features breathable Dry-Fit fabric technology for maximum comfort, high-density embroidered club logos, and comes complete with matching shorts included.";
-                          })()
+                          const name = (selectedJersey?.name || "").toUpperCase();
+                          const cat = (selectedJersey?.category || "").toUpperCase();
+                          const subCat = (selectedJersey?.sub_category || "").toUpperCase();
+                          const type = (selectedJersey?.type || "").toUpperCase();
+                          const isPlayer = cat.includes("PLAYER") || subCat.includes("PLAYER") || type.includes("PLAYER") || name.includes("PLAYER");
+                          return isPlayer
+                            ? "Authentic Match / Player Edition jersey engineered with Thailand superior ultra-lightweight Dry-Fit performance fabric, heat-transferred authentic rubberised 3D club crests, and precision athletic slim-fit tailoring as worn on pitch by professional players."
+                            : "Premium Fan Edition football jersey imported from Thailand. Features breathable Dry-Fit fabric technology for maximum comfort, high-density embroidered club logos, and comes complete with matching shorts included.";
+                        })()
                       }
                     </div>
                   </div>
@@ -4875,7 +4877,7 @@ letter-spacing: 4px !important;
                         <label style={{ display: "block", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", color: "#aaa", marginBottom: "6px" }}>
                           ADD PHOTOS (OPTIONAL):
                         </label>
-                        
+
                         <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
                           <label
                             style={{
@@ -5226,7 +5228,7 @@ letter-spacing: 4px !important;
                 </svg>
               </button>
               <div style={{ position: "relative", background: "#0a0a0a" }}>
-                
+
                 {/* Header (Neon Green Bar) */}
                 <div style={{
                   background: "#39ff14",
@@ -5280,8 +5282,8 @@ letter-spacing: 4px !important;
                           borderBottom: "1px solid #222",
                           transition: "background 0.2s"
                         }}
-                        onMouseEnter={e => e.currentTarget.style.background = "rgba(57,255,20,0.05)"}
-                        onMouseLeave={e => e.currentTarget.style.background = idx % 2 === 0 ? "#070707" : "#0c0c0c"}
+                          onMouseEnter={e => e.currentTarget.style.background = "rgba(57,255,20,0.05)"}
+                          onMouseLeave={e => e.currentTarget.style.background = idx % 2 === 0 ? "#070707" : "#0c0c0c"}
                         >
                           <td style={{ padding: "12px 8px", fontWeight: "900", color: "#39ff14", fontSize: "16px", border: "1px solid #222" }}>{row.size}</td>
                           <td style={{ padding: "12px 8px", fontWeight: "700", border: "1px solid #222" }}>{row.fan}</td>
@@ -5325,11 +5327,11 @@ letter-spacing: 4px !important;
         {/* CART PANEL */}
         {cartOpen && (
           <div className="cart-overlay">
-            <button 
-              type="button" 
-              className="cart-backdrop" 
-              aria-label="Close cart" 
-              onClick={() => setCartOpen(false)} 
+            <button
+              type="button"
+              className="cart-backdrop"
+              aria-label="Close cart"
+              onClick={() => setCartOpen(false)}
               onTouchEnd={(e) => { e.preventDefault(); setCartOpen(false); }}
             />
             <div className="cart-panel" ref={cartPanelRef}>
@@ -5440,7 +5442,7 @@ letter-spacing: 4px !important;
                       <span className="checkout-arrow">→</span>
                     </button>
                   </div>
-                  
+
                   <p className="cart-secure-note" style={{ textAlign: "center" }}>✦ SECURED BY RAZORPAY ✦</p>
                 </div>
               )}
@@ -5448,83 +5450,83 @@ letter-spacing: 4px !important;
           </div>
         )}
       </div>
-        {/* TOAST POPUP NOTIFICATION */}
-        {toast && (
-          <div 
-            role="button"
-            tabIndex={0}
-            aria-label={toast.isCart !== false ? "Product added to cart notification. Click to view cart" : "Notification"}
-            onClick={() => {
+      {/* TOAST POPUP NOTIFICATION */}
+      {toast && (
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label={toast.isCart !== false ? "Product added to cart notification. Click to view cart" : "Notification"}
+          onClick={() => {
+            if (toast.isCart !== false) setCartOpen(true);
+            setToast(null);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
               if (toast.isCart !== false) setCartOpen(true);
               setToast(null);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                if (toast.isCart !== false) setCartOpen(true);
-                setToast(null);
-              }
-            }}
-            style={{
-              position: "fixed",
-              bottom: 92,
-              right: 24,
-              zIndex: 300,
-              background: "#0d0d0d",
-              border: "2px solid #39ff14",
-              padding: "14px 22px",
-              borderRadius: "4px",
-              boxShadow: "0 0 30px rgba(57,255,20,0.45), 0 10px 35px rgba(0,0,0,0.9)",
-              cursor: toast.isCart !== false ? "pointer" : "default",
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              animation: "toastIn 0.3s cubic-bezier(0.23,1,0.32,1)",
-              transition: "transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease",
-              userSelect: "none"
-            }}
-            onMouseEnter={e => {
-              if (toast.isCart !== false) {
-                e.currentTarget.style.transform = "translateY(-2px) scale(1.04)";
-                e.currentTarget.style.boxShadow = "0 0 45px rgba(57,255,20,0.7), 0 12px 40px rgba(0,0,0,0.95)";
-                e.currentTarget.style.background = "#111111";
-              }
-            }}
-            onMouseLeave={e => {
-              if (toast.isCart !== false) {
-                e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow = "0 0 30px rgba(57,255,20,0.45), 0 10px 35px rgba(0,0,0,0.9)";
-                e.currentTarget.style.background = "#0d0d0d";
-              }
-            }}
-          >
-            <span style={{ fontSize: 26, display: "flex", alignItems: "center" }}>
-              {toast.isCart !== false ? "🛒" : "🔗"}
-            </span>
-            <div>
-              <div style={{ color: "#39ff14", fontSize: 14, fontWeight: 900, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1.5, textTransform: "uppercase" }}>
-                {toast.isCart !== false ? "ADDED TO CART!" : "LINK COPIED!"}
-              </div>
-              <div style={{ color: "#eee", fontSize: 13, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginTop: 2, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                <span>{typeof toast === "string" ? toast : (toast.text || toast.message || "")}</span>
-                {toast.isCart !== false && (
-                  <span style={{ 
-                    background: "#39ff14", 
-                    color: "#000", 
-                    fontWeight: 900, 
-                    padding: "3px 9px", 
-                    borderRadius: "2px", 
-                    fontSize: 11,
-                    letterSpacing: 1,
-                    display: "inline-flex",
-                    alignItems: "center"
-                  }}>
-                    VIEW CART →
-                  </span>
-                )}
-              </div>
+            }
+          }}
+          style={{
+            position: "fixed",
+            bottom: 92,
+            right: 24,
+            zIndex: 300,
+            background: "#0d0d0d",
+            border: "2px solid #39ff14",
+            padding: "14px 22px",
+            borderRadius: "4px",
+            boxShadow: "0 0 30px rgba(57,255,20,0.45), 0 10px 35px rgba(0,0,0,0.9)",
+            cursor: toast.isCart !== false ? "pointer" : "default",
+            display: "flex",
+            alignItems: "center",
+            gap: 14,
+            animation: "toastIn 0.3s cubic-bezier(0.23,1,0.32,1)",
+            transition: "transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease",
+            userSelect: "none"
+          }}
+          onMouseEnter={e => {
+            if (toast.isCart !== false) {
+              e.currentTarget.style.transform = "translateY(-2px) scale(1.04)";
+              e.currentTarget.style.boxShadow = "0 0 45px rgba(57,255,20,0.7), 0 12px 40px rgba(0,0,0,0.95)";
+              e.currentTarget.style.background = "#111111";
+            }
+          }}
+          onMouseLeave={e => {
+            if (toast.isCart !== false) {
+              e.currentTarget.style.transform = "translateY(0) scale(1)";
+              e.currentTarget.style.boxShadow = "0 0 30px rgba(57,255,20,0.45), 0 10px 35px rgba(0,0,0,0.9)";
+              e.currentTarget.style.background = "#0d0d0d";
+            }
+          }}
+        >
+          <span style={{ fontSize: 26, display: "flex", alignItems: "center" }}>
+            {toast.isCart !== false ? "🛒" : "🔗"}
+          </span>
+          <div>
+            <div style={{ color: "#39ff14", fontSize: 14, fontWeight: 900, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1.5, textTransform: "uppercase" }}>
+              {toast.isCart !== false ? "ADDED TO CART!" : "LINK COPIED!"}
+            </div>
+            <div style={{ color: "#eee", fontSize: 13, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: 1, marginTop: 2, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <span>{typeof toast === "string" ? toast : (toast.text || toast.message || "")}</span>
+              {toast.isCart !== false && (
+                <span style={{
+                  background: "#39ff14",
+                  color: "#000",
+                  fontWeight: 900,
+                  padding: "3px 9px",
+                  borderRadius: "2px",
+                  fontSize: 11,
+                  letterSpacing: 1,
+                  display: "inline-flex",
+                  alignItems: "center"
+                }}>
+                  VIEW CART →
+                </span>
+              )}
             </div>
           </div>
-        )}
+        </div>
+      )}
       <AnnouncementPopup />
     </>
   );
