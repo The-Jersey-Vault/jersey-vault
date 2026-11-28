@@ -47,15 +47,17 @@ export async function calculateRate(req, res) {
 }
 
 export async function calculateLiveRateController(req, res) {
+  const rawMode = req.body?.payment_mode || req.body?.paymentMode;
+  const paymentMode = String(rawMode || 'PREPAID').trim().toUpperCase() === 'COD' ? 'COD' : 'PREPAID';
+  const subtotalNum = Math.max(0, Number(req.body?.subtotal) || 0);
+
   try {
     const {
       origin_pincode,
       destination_pincode,
-      payment_mode,
-      subtotal = 0
     } = req.body;
 
-    const destPin = destination_pincode || req.body.pincode;
+    const destPin = destination_pincode || req.body?.pincode;
 
     if (!destPin || !/^\d{6}$/.test(String(destPin).trim())) {
       return res.status(400).json({
@@ -67,8 +69,8 @@ export async function calculateLiveRateController(req, res) {
     const rateResult = await calculateLiveDeliveryRate({
       origin_pincode,
       destination_pincode: destPin,
-      payment_mode,
-      subtotal: Number(subtotal) || 0
+      payment_mode: paymentMode,
+      subtotal: subtotalNum
     });
 
     return res.status(200).json({
@@ -77,21 +79,14 @@ export async function calculateLiveRateController(req, res) {
     });
   } catch (error) {
     console.error('Error in calculateLiveRateController:', error);
-    const subtotalNum = Number(req.body?.subtotal) || 0;
-    const isCod = String(payment_mode).toUpperCase() === 'COD';
-    const fallbackFee = subtotalNum > 1099 ? 0 : (isCod ? 149 : 99);
-    return res.status(200).json({
-      success: true,
+    // When live rate lookup fails, return an honest service status without claiming unverified delivery
+    return res.status(503).json({
+      success: false,
+      message: 'Unable to calculate live shipping rate at this time. Please try again or proceed with standard checkout.',
       data: {
-        success: true,
-        serviceable: true,
-        delivery_fee: fallbackFee,
-        totalShipping: fallbackFee,
-        upfront_razorpay_amount: fallbackFee,
-        free_shipping_applied: subtotalNum > 1099,
-        label: subtotalNum > 1099 ? 'Free Shipping 🎉' : (isCod ? 'Standard COD Delivery (₹149)' : 'Standard Delivery (₹99)'),
-        estimated_days: '3-5 Business Days',
-        remarks: subtotalNum > 1099 ? 'Free Shipping Applied 🎉' : (isCod ? 'Standard COD Shipping Charge ₹149' : 'Standard Delivery Charge ₹99')
+        serviceable: false,
+        payment_mode: paymentMode,
+        error_type: 'CARRIER_UNAVAILABLE'
       }
     });
   }

@@ -108,8 +108,8 @@ def build_run(root: Path, run_dir: Path) -> dict | None:
                     match = re.search(r"## Eval Prompt\n\n([\s\S]*?)(?=\n##|$)", text)
                     if match:
                         prompt = match.group(1).strip()
-                except OSError:
-                    pass
+                except OSError as e:
+                    logger.debug("Could not read candidate transcript %s: %s", candidate, e)
                 if prompt:
                     break
 
@@ -302,8 +302,8 @@ def _kill_port(port: int) -> None:
             time.sleep(0.5)
     except subprocess.TimeoutExpired:
         pass
-    except FileNotFoundError:
-        print("Note: lsof not found, cannot check if port is in use", file=sys.stderr)
+    except FileNotFoundError as e:
+        logger.info("lsof not found on this system, port availability check skipped: %s", e)
 
 class ReviewHandler(BaseHTTPRequestHandler):
     """Serves the review HTML and handles feedback saves.

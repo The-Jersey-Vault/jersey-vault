@@ -127,8 +127,8 @@ def _next_comment_id(comments_path: Path) -> int:
     for c in dom.getElementsByTagName("w:comment"):
         try:
             ids.append(int(c.getAttribute("w:id")))
-        except ValueError:
-            pass
+        except (ValueError, TypeError):
+            continue
     return (max(ids) + 1) if ids else 0
 
 

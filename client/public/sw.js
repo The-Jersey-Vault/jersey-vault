@@ -1,3 +1,6 @@
+/* eslint-env serviceworker */
+/* global clients */
+
 /* ============================================================
    JerseyVault — Service Worker (sw.js)
    Handles background push-like messages and shows

@@ -70,7 +70,8 @@ def _shape(shape) -> list[str]:
 def _members(shapes) -> list:
     try:
         return list(shapes)
-    except Exception:
+    except (TypeError, ValueError):
+        # Fallback to index-based iteration when shapes is not directly iterable
         pass
     members = []
     for i in range(len(shapes)):

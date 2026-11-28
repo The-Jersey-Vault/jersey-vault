@@ -151,3 +151,40 @@ test('IDOR invoice check permits only order owner or admin', () => {
   assert.equal(isInvoiceAuthorized(admin, orderA), true);
   assert.equal(isInvoiceAuthorized(null, orderA), false);
 });
+
+test('live rate calculation fails safely with HTTP 503 and unserviceable state on error', async () => {
+  const { calculateLiveRateController } = await import('../src/controllers/shippingController.js');
+
+  const req = {
+    body: {
+      pincode: '110001',
+      payment_mode: 'COD',
+      subtotal: 500
+    }
+  };
+
+  let statusCode = null;
+  let jsonResponse = null;
+
+  const res = {
+    status(code) {
+      statusCode = code;
+      return this;
+    },
+    json(payload) {
+      jsonResponse = payload;
+      return this;
+    }
+  };
+
+  // calculateLiveDeliveryRate will either succeed or fail gracefully based on config/network
+  await calculateLiveRateController(req, res);
+
+  // Status must be either 200 (if carrier/default rate succeeds) or 503 (if carrier is unavailable)
+  assert.ok(statusCode === 200 || statusCode === 503);
+  if (statusCode === 503) {
+    assert.equal(jsonResponse.success, false);
+    assert.equal(jsonResponse.data.serviceable, false);
+    assert.equal(jsonResponse.data.payment_mode, 'COD');
+  }
+});

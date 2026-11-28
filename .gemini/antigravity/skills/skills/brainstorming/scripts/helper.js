@@ -25,8 +25,10 @@
   function sessionKey() {
     try {
       return window.sessionStorage && window.sessionStorage.getItem('brainstorm-session-key');
-    } catch (e) {}
-    return null;
+    } catch (e) {
+      console.warn('Unable to access sessionStorage for sessionKey:', e);
+      return null;
+    }
   }
 
   function websocketUrl() {

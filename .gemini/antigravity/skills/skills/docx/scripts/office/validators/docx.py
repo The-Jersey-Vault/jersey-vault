@@ -179,7 +179,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                 paragraphs = root.findall(f".//{{{self.WORD_2006_NAMESPACE}}}p")
                 count = len(paragraphs)
             except Exception as e:
-                print(f"Error counting paragraphs in unpacked document: {e}")
+                logger.warning(f"Error counting paragraphs in unpacked document: {e}")
 
         return count
 
@@ -202,7 +202,7 @@ class DOCXSchemaValidator(BaseSchemaValidator):
                 count = len(paragraphs)
 
         except Exception as e:
-            print(f"Error counting paragraphs in original document: {e}")
+            logger.warning(f"Error counting paragraphs in original document: {e}")
 
         return count
 

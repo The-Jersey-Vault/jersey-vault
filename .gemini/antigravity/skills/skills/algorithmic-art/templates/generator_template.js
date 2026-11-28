@@ -1,3 +1,4 @@
+/* global createCanvas, rect, width, height, createVector, randomSeed, noiseSeed, background, fill, noStroke, stroke, strokeWeight, color, push, pop, translate, rotate, TWO_PI, map, constrain, line, ellipse, beginShape, endShape, vertex, curveVertex */
 /**
  * ═══════════════════════════════════════════════════════════════════════════
  *                  P5.JS GENERATIVE ART - BEST PRACTICES
