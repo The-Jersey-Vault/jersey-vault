@@ -8,6 +8,7 @@ import { suggestEmailTypo } from "../utils/emailValidation";
 import ReactGA from "react-ga4";
 import BrandLogo from "../components/BrandLogo";
 import { getFirstImage } from "../utils/imageHelpers";
+import AddressSelector from "../components/AddressSelector";
 
 const steps = ["DELIVERY", "PAYMENT", "CONFIRM"];
 
@@ -63,7 +64,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState('idle');
   // idle | processing | verifying | success | failed | dismissed | error | recovering
-  const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", city: "", state: "", pincode: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", country: "India", address: "", city: "", state: "", pincode: "" });
   const [consents, setConsents] = useState({ terms: false, privacy: false, marketing: false });
   const [consentError, setConsentError] = useState("");
   const [errors, setErrors] = useState({});
@@ -142,8 +143,9 @@ export default function CheckoutPage() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) e.email = "Enter valid email";
     if (!user && password.length > 0 && password.length < 6) e.password = "Minimum 6 characters";
     if (!form.address.trim()) e.address = "Required";
-    if (!form.city.trim()) e.city = "Required";
-    if (!form.state.trim()) e.state = "Required";
+    if (!form.country || !form.country.trim()) e.country = "Select a country";
+    if (!form.state || !form.state.trim()) e.state = "Select a state/region";
+    if (!form.city || !form.city.trim()) e.city = "Select a city";
     if (!/^\d{6}$/.test(form.pincode)) e.pincode = "Enter valid 6-digit pincode";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -465,18 +467,12 @@ export default function CheckoutPage() {
               <div className="form-grid">
                 {(user ? [
                   { key: "phone", label: "PHONE NUMBER", placeholder: "9876543210", full: false },
-                  { key: "address", label: "STREET ADDRESS", placeholder: "Flat 4B, Park Street", full: true },
-                  { key: "city", label: "CITY", placeholder: "Kolkata", full: false },
-                  { key: "state", label: "STATE", placeholder: "West Bengal", full: false },
-                  { key: "pincode", label: "PINCODE", placeholder: "700001", full: false },
+                  { key: "address", label: "STREET ADDRESS", placeholder: "Flat / House No, Building, Street, Landmark", full: true },
                 ] : [
                   { key: "name", label: "FULL NAME", placeholder: "FULL NAME", full: false },
                   { key: "phone", label: "PHONE NUMBER", placeholder: "9876543210", full: false },
                   { key: "email", label: "EMAIL ADDRESS", placeholder: "you@email.com", full: true },
-                  { key: "address", label: "STREET ADDRESS", placeholder: "ADDRESS", full: true },
-                  { key: "city", label: "CITY", placeholder: "CITY", full: false },
-                  { key: "state", label: "STATE", placeholder: "STATE", full: false },
-                  { key: "pincode", label: "PINCODE", placeholder: "123456", full: false },
+                  { key: "address", label: "STREET ADDRESS", placeholder: "Flat / House No, Building, Street, Landmark", full: true },
                 ]).map(f => (
                   <div key={f.key} style={{ gridColumn: f.full ? "1/-1" : "auto" }}>
                     <label htmlFor={`field-${f.key}`} className="label">{f.label}</label>
@@ -494,41 +490,82 @@ export default function CheckoutPage() {
                           setWarnings(p => ({ ...p, email: suggestEmailTypo(val) }));
                         }
                       }}
-                      // Correct input modes for mobile keyboards
-                      inputMode={f.key === "phone" || f.key === "pincode" ? "numeric" : f.key === "email" ? "email" : "text"}
+                      inputMode={f.key === "phone" ? "numeric" : f.key === "email" ? "email" : "text"}
                       autoComplete={
                         f.key === "name" ? "name" :
                           f.key === "phone" ? "tel" :
                             f.key === "email" ? "email" :
-                              f.key === "address" ? "street-address" :
-                                f.key === "city" ? "address-level2" :
-                                  f.key === "state" ? "address-level1" :
-                                    f.key === "pincode" ? "postal-code" : "off"
+                              f.key === "address" ? "street-address" : "off"
                       }
                     />
                     {errors[f.key] ? (
                       <div className="checkout-field-error">{errors[f.key]}</div>
                     ) : f.key === "email" && warnings.email ? (
                       <div className="checkout-field-error" style={{ color: "#fbbf24" }}>{warnings.email}</div>
-                    ) : f.key === "pincode" ? (
-                      checkingShipping ? (
-                        <div style={{ color: "#a1a1aa", fontSize: 12, marginTop: 4, letterSpacing: 1 }}>
-                          ⚡ Checking Delhivery serviceability...
-                        </div>
-                      ) : delhiveryInfo ? (
-                        delhiveryInfo.serviceable ? (
-                          <div style={{ color: "#00ff44", fontSize: 12, marginTop: 4, letterSpacing: 0.5, fontFamily: "'Barlow', sans-serif" }}>
-                            ✓ Delhivery Serviceable {delhiveryInfo.city ? `(${delhiveryInfo.city})` : ''} · Shipping: {delhiveryInfo.freeShippingApplied ? 'FREE 🎉' : `₹${delhiveryInfo.totalShipping}`}
-                          </div>
-                        ) : (
-                          <div style={{ color: "#ff4444", fontSize: 12, marginTop: 4, letterSpacing: 0.5 }}>
-                            ⚠️ {delhiveryInfo.remarks || "Pincode not serviceable by Delhivery"}
-                          </div>
-                        )
-                      ) : null
                     ) : null}
                   </div>
                 ))}
+
+                {/* Searchable Dependent Country -> State -> City Dropdowns */}
+                <AddressSelector
+                  country={form.country || "India"}
+                  state={form.state || ""}
+                  city={form.city || ""}
+                  onCountryChange={(val) => {
+                    setForm(p => ({ ...p, country: val, state: "", city: "" }));
+                    setErrors(p => ({ ...p, country: "", state: "", city: "" }));
+                  }}
+                  onStateChange={(val) => {
+                    setForm(p => ({ ...p, state: val, city: "" }));
+                    setErrors(p => ({ ...p, state: "", city: "" }));
+                  }}
+                  onCityChange={(val) => {
+                    setForm(p => ({ ...p, city: val }));
+                    setErrors(p => ({ ...p, city: "" }));
+                  }}
+                  errors={{
+                    country: errors.country,
+                    state: errors.state,
+                    city: errors.city
+                  }}
+                />
+
+                {/* Pincode Field */}
+                <div style={{ gridColumn: "1/-1" }}>
+                  <label htmlFor="field-pincode" className="label">PINCODE (POSTAL CODE)</label>
+                  <input
+                    id="field-pincode"
+                    aria-label="PINCODE"
+                    className={`field ${errors.pincode ? "err" : ""}`}
+                    placeholder="6-digit postal code (e.g. 700001)"
+                    value={form.pincode}
+                    maxLength={6}
+                    onChange={e => {
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+                      setForm(p => ({ ...p, pincode: val }));
+                      setErrors(p => ({ ...p, pincode: "" }));
+                    }}
+                    inputMode="numeric"
+                    autoComplete="postal-code"
+                  />
+                  {errors.pincode ? (
+                    <div className="checkout-field-error">{errors.pincode}</div>
+                  ) : checkingShipping ? (
+                    <div style={{ color: "#a1a1aa", fontSize: 12, marginTop: 4, letterSpacing: 1 }}>
+                      ⚡ Checking Delhivery serviceability...
+                    </div>
+                  ) : delhiveryInfo ? (
+                    delhiveryInfo.serviceable ? (
+                      <div style={{ color: "#00ff44", fontSize: 12, marginTop: 4, letterSpacing: 0.5, fontFamily: "'Barlow', sans-serif" }}>
+                        ✓ Delhivery Serviceable {delhiveryInfo.city ? `(${delhiveryInfo.city})` : ''} · Shipping: {delhiveryInfo.freeShippingApplied ? 'FREE 🎉' : `₹${delhiveryInfo.totalShipping}`}
+                      </div>
+                    ) : (
+                      <div style={{ color: "#ff4444", fontSize: 12, marginTop: 4, letterSpacing: 0.5 }}>
+                        ⚠️ {delhiveryInfo.remarks || "Pincode not serviceable by Delhivery"}
+                      </div>
+                    )
+                  ) : null}
+                </div>
               </div>
 
               {/* Password field for guest users only */}
