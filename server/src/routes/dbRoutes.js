@@ -140,8 +140,8 @@ router.get('/:table', createDbReadAccessMiddleware(verifyAdminForMutations), asy
 
     const items = await getR2Table(table);
 
-    const filtered = applyFilters(items, req.query);
-    const result = publicRead ? projectPublicDbRows(table, filtered) : filtered;
+    const projected = publicRead ? projectPublicDbRows(table, items) : items;
+    const result = applyFilters(projected, req.query);
 
     if (req.query.single === 'true') {
       if (result.length === 0) {

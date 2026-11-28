@@ -261,11 +261,11 @@ const ProductCarousel = memo(function ProductCarousel({ imageUrl, alt, style, cl
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
-          gap: "6px",
+          gap: "8px",
           zIndex: 2,
           padding: "4px 8px",
           background: "rgba(0,0,0,0.4)",
-          borderRadius: "10px"
+          borderRadius: "16px"
         }}
       >
         {images.map((_, idx) => (
@@ -274,18 +274,32 @@ const ProductCarousel = memo(function ProductCarousel({ imageUrl, alt, style, cl
             type="button"
             onClick={(e) => handleDotClick(e, idx)}
             style={{
-              width: "6px",
-              height: "6px",
+              width: "24px",
+              height: "24px",
               borderRadius: "50%",
               border: "none",
               padding: 0,
               cursor: "pointer",
-              background: activeIndex === idx ? "#39ff14" : "rgba(255,255,255,0.4)",
-              transition: "background 0.2s, transform 0.2s",
-              transform: activeIndex === idx ? "scale(1.2)" : "scale(1)"
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "transparent"
             }}
             aria-label={`Go to slide ${idx + 1}`}
-          />
+          >
+            <span
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                display: "block",
+                pointerEvents: "none",
+                background: activeIndex === idx ? "#39ff14" : "rgba(255,255,255,0.4)",
+                transition: "background 0.2s, transform 0.2s",
+                transform: activeIndex === idx ? "scale(1.2)" : "scale(1)"
+              }}
+            />
+          </button>
         ))}
       </div>
     </div>
@@ -2799,7 +2813,7 @@ letter-spacing: 4px !important;
     }
   }
   .stat-num { font-size:30px; font-weight:900; color:#39ff14; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; }
-  .stat-label { font-size:12px; letter-spacing:4px; color:#777; margin-top:4px; font-weight:700; }
+  .stat-label { font-size:12px; letter-spacing:4px; color:#a3a3a3; margin-top:4px; font-weight:700; }
   .card-body { padding:16px 16px 0; flex:1; }
   .card-title { font-size:15px; font-weight:900; letter-spacing:1px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; line-height:1.2; min-height:54px; }
   .card-price { font-size:24px; font-weight:900; color:#39ff14; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; }
@@ -3503,7 +3517,7 @@ letter-spacing: 4px !important;
           </div>
           </nav>
         </header>
-        <main style={{ display: isStandaloneProductPage ? "none" : "block" }}>
+        <main id="main-content" style={{ display: isStandaloneProductPage ? "none" : "block" }}>
 
         <Ticker />
         <BrandLogos />
@@ -3725,7 +3739,7 @@ letter-spacing: 4px !important;
                             boxShadow: "0 4px 18px rgba(0, 0, 0, 0.5)",
                             transition: "background 0.22s ease, color 0.22s ease, letter-spacing 0.22s ease, transform 0.22s ease",
                           }}
-                          aria-label={`Shop ${slide.id}`}
+                          aria-label={`Shop Now for ${slide.id}`}
                         >
                           SHOP NOW
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
@@ -3793,11 +3807,11 @@ letter-spacing: 4px !important;
               transform: "translateX(-50%)",
               display: "flex",
               alignItems: "center",
-              gap: "6px",
+              gap: "12px",
               zIndex: 50,
-              padding: "4px 8px",
+              padding: "6px 12px",
               background: "rgba(0, 0, 0, 0.4)",
-              borderRadius: "10px",
+              borderRadius: "16px",
               backdropFilter: "blur(4px)",
               border: "1px solid rgba(255, 255, 255, 0.08)",
               pointerEvents: "auto",
@@ -3813,19 +3827,33 @@ letter-spacing: 4px !important;
                   setCurrentHeroSlide(idx);
                 }}
                 style={{
-                  width: "6px",
-                  height: "6px",
+                  width: "28px",
+                  height: "28px",
                   borderRadius: "50%",
                   border: "none",
                   padding: 0,
                   cursor: "pointer",
-                  background: currentHeroSlide === idx ? "#39ff14" : "rgba(255, 255, 255, 0.4)",
-                  transition: "background 0.2s, transform 0.2s, box-shadow 0.2s",
-                  transform: currentHeroSlide === idx ? "scale(1.25)" : "scale(1)",
-                  boxShadow: currentHeroSlide === idx ? "0 0 8px rgba(57, 255, 20, 0.85)" : "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "transparent",
                 }}
                 aria-label={`Go to slide ${idx + 1}`}
-              />
+              >
+                <span
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    display: "block",
+                    pointerEvents: "none",
+                    background: currentHeroSlide === idx ? "#39ff14" : "rgba(255, 255, 255, 0.4)",
+                    transition: "background 0.2s, transform 0.2s, box-shadow 0.2s",
+                    transform: currentHeroSlide === idx ? "scale(1.25)" : "scale(1)",
+                    boxShadow: currentHeroSlide === idx ? "0 0 8px rgba(57, 255, 20, 0.85)" : "none",
+                  }}
+                />
+              </button>
             ))}
           </div>
 
@@ -4193,7 +4221,7 @@ letter-spacing: 4px !important;
               </div>
 
               {/* PAGE INFO SUBTITLE */}
-              <div style={{ color: "#666", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>
+              <div style={{ color: "#a3a3a3", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>
                 SHOWING {(validCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(validCurrentPage * ITEMS_PER_PAGE, filtered.length)} OF {filtered.length} JERSEYS (PAGE {validCurrentPage} OF {totalPages})
               </div>
             </div>
@@ -4216,7 +4244,7 @@ letter-spacing: 4px !important;
                 onMouseLeave={e => { e.currentTarget.style.borderColor = "#111"; e.currentTarget.style.background = "#0a0a0a"; }}>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>{icon}</div>
                 <div style={{ fontWeight: 900, letterSpacing: 3, fontSize: 13, marginBottom: 8, color: "#ddd" }}>{title}</div>
-                <div style={{ color: "#666", fontSize: 13, fontFamily: "'Barlow',sans-serif", lineHeight: 1.6 }}>{desc}</div>
+                <div style={{ color: "#a3a3a3", fontSize: 13, fontFamily: "'Barlow',sans-serif", lineHeight: 1.6 }}>{desc}</div>
               </div>
             ))}
           </div>
@@ -4311,11 +4339,11 @@ letter-spacing: 4px !important;
           <p style={{ color: "#888", fontSize: 13, fontFamily: "'Barlow',sans-serif", maxWidth: 600, margin: "0 auto 16px", lineHeight: 1.5 }}>
             The Jersey Vault is your ultimate destination to buy premium football &amp; sports jerseys in India. From fan versions to elite player issue kits, find top gear for clubs like Real Madrid, Barcelona, Manchester United, Arsenal, and international giants like Argentina and Brazil. Enjoy detailed embroidery, reliable quality, and Cash on Delivery across the nation.
           </p>
-          <p style={{ color: "#555", fontSize: 12, letterSpacing: 3 }}>© 2026 JERSEYVAULT. ALL RIGHTS RESERVED.</p>
+          <p style={{ color: "#a3a3a3", fontSize: 12, letterSpacing: 3 }}>© 2026 JERSEYVAULT. ALL RIGHTS RESERVED.</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 16, flexWrap: "wrap" }}>
             {[["PRIVACY", "/privacy"], ["TERMS", "/terms"], ["CONTACT", "/contact"], ["FAQ", "/faq"]].map(([l, h]) => (
-              <Link key={l} to={h} style={{ color: "#555", fontSize: 12, letterSpacing: 3, cursor: "pointer", transition: "color 0.2s", textDecoration: "none" }}
-                onMouseEnter={e => e.target.style.color = "#39ff14"} onMouseLeave={e => e.target.style.color = "#555"}>{l}</Link>
+              <Link key={l} to={h} style={{ color: "#a3a3a3", fontSize: 12, letterSpacing: 3, cursor: "pointer", transition: "color 0.2s", textDecoration: "none" }}
+                onMouseEnter={e => e.target.style.color = "#39ff14"} onMouseLeave={e => e.target.style.color = "#a3a3a3"}>{l}</Link>
             ))}
           </div>
         </footer>
